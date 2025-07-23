@@ -5,53 +5,81 @@
 
 .prefix-selector-empty {
     padding: 1rem;
-    border: 1px dashed #718096; /* border-gray-600 */
+    border: 1px dashed #718096;
     border-radius: 0.375rem;
     text-align: center;
-    color: #a0a0a0; /* text-gray-400 */
+    color: #a0a0a0;
 }
 
 .prefix-selector-heading {
-    font-size: 1.125rem; /* text-lg */
-    font-weight: 600; /* font-semibold */
-    color: #e2e8f0; /* text-gray-200 */
-    margin-bottom: 0.5rem; /* mb-2 */
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #e2e8f0;
+    margin-bottom: 0.5rem;
+    text-align: center;
 }
 
 .prefix-selector-options {
     padding: 1rem;
-    background-color: rgba(17, 24, 39, 0.5); /* bg-gray-900/50 */
+    background-color: rgba(17, 24, 39, 0.5);
     border-radius: 0.375rem;
-    border: 1px solid #4a5568; /* border-gray-700 */
-    display: flex; /* space-y-2 converted to flex column with gap */
+    border: 1px solid #4a5568;
+    display: flex;
     flex-direction: column;
-    gap: 0.5rem; /* space-y-2 */
+    gap: 0.5rem;
 }
 
 .prefix-selector-option-label {
     display: flex;
     align-items: center;
-    padding: 0.5rem;
+    padding: 0.6rem 0.8rem;
     border-radius: 0.375rem;
     transition: background-color 0.2s ease-in-out;
     cursor: pointer;
+    position: relative; /* Required for tooltip positioning */
 }
 
 .prefix-selector-option-label:hover {
-    background-color: #4a5568; /* hover:bg-gray-700 */
+    background-color: #4a5568;
+}
+
+/* Tooltip Styling */
+.prefix-selector-option-label::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%) scale(0.9); /* Start slightly smaller */
+    transform-origin: bottom;
+    background-color: #1a202c;
+    color: #fff;
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.375rem;
+    border: 1px solid #63b3ed; /* Highlight border */
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    z-index: 10;
+    white-space: pre-wrap; /* Allow wrapping for long descriptions */
+    width: max-content;
+    max-width: 300px; /* Prevent tooltip from getting too wide */
+    margin-bottom: 8px; /* Space between the item and the tooltip */
+    pointer-events: none; /* Tooltip should not be interactive */
+    opacity: 0; /* Hidden by default */
+    transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
+}
+
+.prefix-selector-option-label:hover::after {
+    opacity: 1; /* Show on hover */
+    transform: translateX(-50%) scale(1); /* Scale to full size */
 }
 
 .prefix-selector-checkbox {
-    height: 1.25rem; /* h-5 */
-    width: 1.25rem; /* w-5 */
-    border-radius: 0.25rem; /* rounded */
-    background-color: #4a5568; /* bg-gray-600 */
-    border: 1px solid #718096; /* border-gray-500 */
-    color: #3182ce; /* text-blue-500 */
-    /* Focus styles need more advanced CSS or JS for custom checkboxes */
+    height: 1.25rem;
+    width: 1.25rem;
+    border-radius: 0.25rem;
+    background-color: #4a5568;
+    border: 1px solid #718096;
 }
 
-.prefix-selector-option-text {
-    margin-left: 0.75rem; /* ml-3 */
-    color: #cbd5e0; /* text-gray-300 */
+.prefix-selector-option-id {
+    margin-left: 0.75rem;
 }

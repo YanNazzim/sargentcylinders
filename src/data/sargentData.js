@@ -62,7 +62,7 @@ const cylinderPrefixCategories = [
       { id: "DG1-60-", description: "Degree Level 1 Removable Disposable Construction Core" },
       { id: "DG1-63-", description: "Degree Level 1 Removable Core" },
       { id: "DG1-64-", description: "Degree Level 1 Removable Construction Keyed LFIC" },
-      { id: "DG1-65-", description: "Degree Level 1 Unassembled/Uncombined Core" },
+      { id: "DG1-65-", description: "Degree Level 1 Unassembled/uncombinated Core" },
     ]
   },
   {
@@ -73,7 +73,7 @@ const cylinderPrefixCategories = [
       { id: "DG2-60-", description: "Degree Level 2 Removable Disposable Construction Core" },
       { id: "DG2-63-", description: "Degree Level 2 Removable Core" },
       { id: "DG2-64-", description: "Degree Level 2 Removable Construction Keyed LFIC" },
-      { id: "DG2-65-", description: "Degree Level 2 Unassembled/Uncombined Core" },
+      { id: "DG2-65-", description: "Degree Level 2 Unassembled/uncombinated Core" },
     ]
   },
   {
@@ -84,7 +84,7 @@ const cylinderPrefixCategories = [
       { id: "DG3-60-", description: "Degree Level 3 Removable Disposable Construction Core" },
       { id: "DG3-63-", description: "Degree Level 3 Removable Core" },
       { id: "DG3-64-", description: "Degree Level 3 Removable Construction Keyed LFIC" },
-      { id: "DG3-65", description: "Degree Level 3 Unassembled/Uncombined Core" },
+      { id: "DG3-65", description: "Degree Level 3 Unassembled/uncombinated Core" },
     ]
   },
   {

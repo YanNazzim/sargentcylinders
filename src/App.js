@@ -4,6 +4,7 @@ import CylinderFinder from './components/CylinderFinder';
 import Placeholder from './components/Placeholder';
 import { LockIcon, KeyIcon, WrenchIcon } from './components/Icons'; // Import icons
 import './App.css'; // Import global app styles
+import { images } from './images/images';
 
 // Component: NavButton (kept internal for simplicity, or could be moved)
 const NavButton = ({ toolId, label, icon, activeTool, setActiveTool }) => (
@@ -37,6 +38,7 @@ export default function App() {
   return (
     <div className="app-container"> {/* Replaced bg-gray-900 min-h-screen w-full text-white font-sans p-4 sm:p-8 flex flex-col items-center */}
       <header className="app-header"> {/* Replaced w-full max-w-4xl mx-auto mb-8 */}
+        <img className="logo" src={images.sargentlogo} alt='logo'/>
         <h1 className="app-title">Sargent Cylinders</h1> {/* Replaced text-4xl font-extrabold text-center mb-2 text-white */}
         <p className="app-subtitle">Keys, Bits, and cores.. OH MY</p> {/* Replaced text-center text-gray-400 */}
       </header>

@@ -1,34 +1,44 @@
 /* src/components/HardwareSelector.css */
 .hardware-selector-container {
     width: 100%;
-    margin-bottom: 1rem; /* Added margin for spacing */
+    margin-bottom: 0; /* Managed by grid gap in parent */
 }
 
 .hardware-selector-label {
     display: block;
-    font-size: 0.875rem; /* text-sm */
-    font-weight: 500; /* font-medium */
-    color: #a0a0a0; /* text-gray-400 */
-    margin-bottom: 0.25rem; /* mb-1 */
+    font-size: 0.9rem; /* Slightly larger text */
+    font-weight: 500;
+    color: #a0a0a0;
+    margin-bottom: 0.5rem; /* More space between label and select */
+    text-align: center; /* Centering for the label */
 }
 
 .hardware-selector-select {
     width: 100%;
-    padding: 0.75rem; /* p-3 */
-    background-color: #4a5568; /* bg-gray-700 */
-    border: 1px solid #718096; /* border border-gray-600 */
-    border-radius: 0.375rem; /* rounded-md */
-    color: #fff; /* text-white */
-    transition: all 0.2s ease-in-out; /* transition */
+    padding: 0.75rem 1rem; /* Increased horizontal padding for aesthetics */
+    background-color: #4a5568;
+    border: 1px solid #718096;
+    border-radius: 0.375rem;
+    color: #fff;
+    appearance: none; /* Remove default select arrow */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23cbd5e0%22%20d%3D%22M287%2C114.7L159.2%2C216.4c-5.4%2C4.1-12.7%2C4.1-18.1%2C0L5.4%2C114.7c-5.4-4.1-5.4-10.8%2C0-14.9h276.5C292.4%2C103.9%2C292.4%2C110.6%2C287%2C114.7z%22%2F%3E%3C%2Fsvg%3E'); /* Custom SVG arrow */
+    background-repeat: no-repeat;
+    background-position: right 1rem center; /* Position arrow */
+    background-size: 0.8em; /* Size arrow */
+    transition: all 0.2s ease-in-out;
+    cursor: pointer;
 }
 
 .hardware-selector-select:focus {
     outline: none;
-    box-shadow: 0 0 0 2px #3182ce; /* focus:ring-2 focus:ring-blue-500 */
-    border-color: #3182ce; /* focus:border-blue-500 */
+    box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.5); /* Stronger focus ring */
+    border-color: #3182ce;
 }
 
 .hardware-selector-select:disabled {
-    opacity: 0.6;
+    opacity: 0.5; /* More visible disabled state */
     cursor: not-allowed;
+    background-color: #3a4452; /* Slightly different background for disabled */
 }

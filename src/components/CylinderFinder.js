@@ -2,21 +2,22 @@
 import React, { useState, useMemo } from 'react';
 import { sargentData, cylinderPrefixCategories } from '../data/sargentData';
 import HardwareSelector from './HardwareSelector';
-import PrefixSelector from './PrefixSelector'; // For device-tied prefixes
-import CategorizedPrefixSelector from './CategorizedPrefixSelector'; // For cylinder options
+import PrefixSelector from './PrefixSelector';
+import CategorizedPrefixSelector from './CategorizedPrefixSelector';
 import ResultsDisplay from './ResultsDisplay';
 import './CylinderFinder.css';
 
 function CylinderFinder() {
+    const [step, setStep] = useState(1);
     const [category, setCategory] = useState('');
     const [series, setSeries] = useState('');
     const [model, setModel] = useState('');
     const [selectedPrefixes, setSelectedPrefixes] = useState([]);
-    const [showResults, setShowResults] = useState(false); // New state to control results visibility
+    const [showResults, setShowResults] = useState(false);
+    const [searchTerm, setSearchTerm] = useState('');
 
-    // --- Derived Data for Selectors ---
     const categories = useMemo(() => sargentData.hardware.map(h => h.category), []);
-    
+
     const seriesOptions = useMemo(() => {
         if (!category) return [];
         return sargentData.hardware.find(h => h.category === category)?.series.map(s => s.name) || [];
@@ -35,7 +36,6 @@ function CylinderFinder() {
         return seriesData?.models.find(m => m.modelNumber === model) || null;
     }, [category, series, model]);
 
-    // --- Filter prefixes into two categories for display ---
     const deviceTiedPrefixes = useMemo(() => {
         if (!activeModelData) return [];
         return activeModelData.prefixes.filter(p => p.isDeviceSpecific);
@@ -43,51 +43,31 @@ function CylinderFinder() {
 
     const cylinderOptionsCategories = useMemo(() => {
         if (!activeModelData) return [];
-        
-        // Filter `cylinderPrefixCategories` to only show categories that have relevant prefixes
-        // for the currently active model and are not device-specific.
-        return cylinderPrefixCategories.map(cat => ({
+        const nonDeviceSpecificPrefixesForModel = activeModelData.prefixes.filter(p => !p.isDeviceSpecific);
+        const activePrefixIds = new Set(nonDeviceSpecificPrefixesForModel.map(p => p.id));
+        const categorizedResult = cylinderPrefixCategories.map(cat => ({
             ...cat,
-            prefixes: cat.prefixes.filter(p => 
-                activeModelData.prefixes.some(ap => ap.id === p.id && !ap.isDeviceSpecific)
-            )
-        })).filter(cat => cat.prefixes.length > 0); // Only show categories with actual prefixes
+            prefixes: cat.prefixes.filter(p => activePrefixIds.has(p.id))
+        })).filter(cat => cat.prefixes.length > 0);
+        return categorizedResult;
     }, [activeModelData]);
 
-
-    // --- Logic for Calculating Results ---
     const finalCylinders = useMemo(() => {
         if (!activeModelData) return [];
-        
         let cylinders = [];
         let baseCylinderToAdd = activeModelData.baseCylinder ? { ...activeModelData.baseCylinder } : null;
-
-        // Check for LFIC (60-related) prefixes that change base cylinder to #42
-        const lficPrefixes = [
-            "60-", "63-", "64-", // LFIC category
-            "DG1-60-", "DG1-63-", "DG1-64-", // Degree 1 LFIC
-            "DG2-60-", "DG2-63-", "DG2-64-", // Degree 2 LFIC
-            "DG3-60-", "DG3-63-", "DG3-64-", // Degree 3 LFIC
-            "10-63-", // Signature LFIC
-            "11-60-", "11-63-", "11-64-" // XC LFIC
-        ];
-
-        // Check for SFIC (70-related) prefixes that change base cylinder to #43
-        const sficPrefixes = [
-            "70-", "72-", "73-", "65-73-", "65-73-7P-", "73-7P-", // SFIC category
-            "11-70-7P-", "11-72-7P-", "11-73-7P-", "11-65-73-7P-" // XC SFIC
-        ];
-
+        const lficPrefixes = ["60-", "63-", "64-", "DG1-60-", "DG1-63-", "DG1-64-", "DG2-60-", "DG2-63-", "DG2-64-", "DG3-60-", "DG3-63-", "DG3-64-", "10-63-", "11-60-", "11-63-", "11-64-"];
+        const sficPrefixes = ["70-", "72-", "73-", "65-73-", "65-73-7P-", "73-7P-", "11-70-7P-", "11-72-7P-", "11-73-7P-", "11-65-73-7P-"];
         const hasLficPrefix = selectedPrefixes.some(prefixId => lficPrefixes.includes(prefixId));
         const hasSficPrefix = selectedPrefixes.some(prefixId => sficPrefixes.includes(prefixId));
 
         if (baseCylinderToAdd) {
             if (hasLficPrefix) {
                 baseCylinderToAdd.partNumber = "#42";
-                baseCylinderToAdd.notes = baseCylinderToAdd.notes ? `${baseCylinderToAdd.notes} (Modified for LFIC compatibility)` : "Base cylinder for this model (Modified for LFIC compatibility).";
+                baseCylinderToAdd.notes = `${baseCylinderToAdd.notes} (Modified for LFIC compatibility)`;
             } else if (hasSficPrefix) {
                 baseCylinderToAdd.partNumber = "#43";
-                baseCylinderToAdd.notes = baseCylinderToAdd.notes ? `${baseCylinderToAdd.notes} (Modified for SFIC compatibility)` : "Base cylinder for this model (Modified for SFIC compatibility).";
+                baseCylinderToAdd.notes = `${baseCylinderToAdd.notes} (Modified for SFIC compatibility)`;
             }
             cylinders.push(baseCylinderToAdd);
         }
@@ -95,141 +75,133 @@ function CylinderFinder() {
         selectedPrefixes.forEach(prefixId => {
             const prefixData = activeModelData.prefixes.find(p => p.id === prefixId);
             if (prefixData && prefixData.addsCylinder) {
-                // Ensure we don't duplicate the modified base cylinder if the prefix itself adds it
-                // This logic might need refinement based on exact data structure and desired output
-                const isBaseCylinderModifiedByThisPrefix = 
-                    (hasLficPrefix && lficPrefixes.includes(prefixId)) || 
-                    (hasSficPrefix && sficPrefixes.includes(prefixId));
-
+                const isBaseCylinderModifiedByThisPrefix = (hasLficPrefix && lficPrefixes.includes(prefixId)) || (hasSficPrefix && sficPrefixes.includes(prefixId));
                 if (!isBaseCylinderModifiedByThisPrefix || !baseCylinderToAdd) {
-                     cylinders.push(prefixData.addsCylinder);
+                    cylinders.push(prefixData.addsCylinder);
                 }
             }
         });
 
-        return cylinders;
+        const uniqueCylinders = [];
+        const seenPartNumbers = new Set();
+        cylinders.forEach(cyl => {
+            if (!seenPartNumbers.has(cyl.partNumber)) {
+                uniqueCylinders.push(cyl);
+                seenPartNumbers.add(cyl.partNumber);
+            }
+        });
+        return uniqueCylinders;
     }, [activeModelData, selectedPrefixes]);
 
-    // --- Event Handlers ---
     const handleCategoryChange = (value) => {
         setCategory(value);
         setSeries('');
         setModel('');
         setSelectedPrefixes([]);
-        setShowResults(false); // Hide results on new selection
+        setShowResults(false);
     };
-    
+
     const handleSeriesChange = (value) => {
         setSeries(value);
         setModel('');
         setSelectedPrefixes([]);
-        setShowResults(false); // Hide results on new selection
+        setShowResults(false);
     };
 
     const handleModelChange = (value) => {
         setModel(value);
         setSelectedPrefixes([]);
-        setShowResults(false); // Hide results on new selection
+        setShowResults(false);
     };
 
     const handlePrefixChange = (prefixId) => {
-        setSelectedPrefixes(prev => 
-            prev.includes(prefixId) 
-                ? prev.filter(id => id !== prefixId) 
+        setSelectedPrefixes(prev =>
+            prev.includes(prefixId)
+                ? prev.filter(id => id !== prefixId)
                 : [...prev, prefixId]
         );
-        setShowResults(false); // Hide results if prefixes change, user needs to re-evaluate
+        setShowResults(false);
     };
-    
+
     const handleReset = () => {
         setCategory('');
         setSeries('');
         setModel('');
         setSelectedPrefixes([]);
-        setShowResults(false); // Hide results on reset
+        setShowResults(false);
+        setStep(1);
     };
 
-    const handleShowResults = () => {
-        setShowResults(true); // Explicitly show results
+    const handleNextStep = () => {
+        if (model) {
+            setStep(2);
+        }
     };
 
-    // Determine if the prefix selection area should even be displayed
-    const shouldShowPrefixSelection = activeModelData && 
-                                     (deviceTiedPrefixes.length > 0 || cylinderOptionsCategories.length > 0);
+    const handleFindCylinders = () => {
+        setShowResults(true);
+    };
 
-  return (
-    <div className="cylinder-finder-card">
-      <div className="cylinder-finder-header">
-        <h2 className="cylinder-finder-title">Sargent Cylinder Finder</h2>
-        <button onClick={handleReset} className="cylinder-finder-reset-button">Reset</button>
-      </div>
-      
-      <div className="cylinder-finder-selectors">
-        <HardwareSelector label="Hardware Category" options={categories} value={category} onChange={handleCategoryChange} />
-        <HardwareSelector label="Product Series" options={seriesOptions} value={series} onChange={handleSeriesChange} disabled={!category} />
-        <HardwareSelector label="Model Number" options={modelOptions} value={model} onChange={handleModelChange} disabled={!series} />
-      </div>
+    return (
+        <div className="cylinder-finder-card">
+            <div className="cylinder-finder-header">
+                <h2 className="cylinder-finder-title">Sargent Cylinder Finder</h2>
+                <button onClick={handleReset} className="cylinder-finder-reset-button">Reset</button>
+            </div>
 
-      {activeModelData && (
-        <> {/* Use a fragment to group conditional content */}
-            {shouldShowPrefixSelection ? (
-                <div className="cylinder-finder-options-area"> {/* Grouping div for prefix selectors */}
-                    {/* Device-Tied Prefixes Section */}
+            <div className={`wizard-step ${step === 1 ? 'active' : ''}`}>
+                <div className="cylinder-finder-selectors">
+                    <HardwareSelector label="Hardware Category" options={categories} value={category} onChange={handleCategoryChange} />
+                    <HardwareSelector label="Product Series" options={seriesOptions} value={series} onChange={handleSeriesChange} disabled={!category} />
+                    <HardwareSelector label="Model Number" options={modelOptions} value={model} onChange={handleModelChange} disabled={!series} />
+                </div>
+                <div className="wizard-controls">
+                    <button onClick={handleNextStep} disabled={!model} className="wizard-next-button">Next</button>
+                </div>
+            </div>
+
+            <div className={`wizard-step ${step === 2 ? 'active' : ''}`}>
+                <div className="selected-hardware-note">
+                    Selected: {category} > {series} > {model}
+                </div>
+                <div className="cylinder-finder-options-area">
                     {deviceTiedPrefixes.length > 0 && (
                         <div className="prefix-section device-options-section">
-                            <h3 className="prefix-section-title">Device Options (might add cylinders)</h3>
-                            <p className="section-description">Select any special functions for your device here. These may affect the required cylinder type.</p>
-                            <PrefixSelector 
-                                prefixes={deviceTiedPrefixes} 
-                                selectedPrefixes={selectedPrefixes} 
-                                onChange={handlePrefixChange} 
+                            <h3 className="prefix-section-title">Device Options</h3>
+                            <PrefixSelector
+                                prefixes={deviceTiedPrefixes}
+                                selectedPrefixes={selectedPrefixes}
+                                onChange={handlePrefixChange}
                             />
                         </div>
                     )}
-
-                    {/* Cylinder Options Categories Section */}
                     {cylinderOptionsCategories.length > 0 && (
                         <div className="prefix-section cylinder-options-section">
-                            <h3 className="prefix-section-title">Cylinder Type & Keying Options</h3>
-                            <p className="section-description">Expand a category below to choose specific cylinder or keying system options. Only one category can be open at a time.</p>
+                            <h3 className="prefix-section-title">Cylinder Options</h3>
+                            <input
+                                type="text"
+                                placeholder="Search prefixes..."
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                                className="prefix-search-bar"
+                            />
                             <CategorizedPrefixSelector
-                                categories={cylinderOptionsCategories} 
-                                selectedPrefixes={selectedPrefixes} 
-                                onChange={handlePrefixChange} 
+                                categories={cylinderOptionsCategories}
+                                selectedPrefixes={selectedPrefixes}
+                                onChange={handlePrefixChange}
+                                searchTerm={searchTerm}
                             />
                         </div>
                     )}
                 </div>
-            ) : (
-                activeModelData.baseCylinder && (
-                    <p className="no-cylinder-info-message">This model does not require or offer additional cylinder prefixes, but has a base cylinder.</p>
-                )
-            )}
-
-            {/* Always show the "Show Results" button if a model is selected and there's something to display (base cylinder or prefixes) */}
-            {(activeModelData.baseCylinder || shouldShowPrefixSelection) && (
-                <div className="show-results-button-container">
-                    <button onClick={handleShowResults} className="show-results-button">
-                        Show Required Cylinders
-                    </button>
+                <div className="wizard-controls">
+                    <button onClick={() => setStep(1)} className="wizard-back-button">Back</button>
+                    <button onClick={handleFindCylinders} className="wizard-find-button">Find Cylinder</button>
                 </div>
-            )}
-
-            {/* Display ResultsDisplay only if showResults is true */}
-            {showResults && (
-                 <div className="cylinder-finder-results-area">
-                    <ResultsDisplay cylinders={finalCylinders} />
-                </div>
-            )}
-
-            {/* If no prefixes and no base cylinder at all for the selected model */}
-            {activeModelData && !activeModelData.baseCylinder && !shouldShowPrefixSelection && (
-                <p className="no-cylinder-info-message">This model does not require or offer any cylinder-related options.</p>
-            )}
-        </>
-      )}
-    </div>
-  );
+                {showResults && <ResultsDisplay cylinders={finalCylinders} />}
+            </div>
+        </div>
+    );
 }
 
 export default CylinderFinder;

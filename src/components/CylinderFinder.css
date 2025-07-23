@@ -1,206 +1,130 @@
 /* src/components/CylinderFinder.css */
 .cylinder-finder-card {
-    background-color: #2d3748; /* bg-gray-800 */
-    padding: 2rem; /* p-8 */
-    border-radius: 0.75rem; /* rounded-xl */
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); /* shadow-2xl */
+    background-color: #2d3748;
+    padding: 1.5rem;
+    border-radius: 0.75rem;
+    box-shadow: 0 15px 20px -5px rgba(0, 0, 0, 0.1), 0 8px 8px -5px rgba(0, 0, 0, 0.04);
     width: 100%;
-    max-width: 960px; /* max-w-4xl */
-    margin-left: auto; /* mx-auto */
-    margin-right: auto; /* mx-auto */
-    border: 1px solid #4a5568; /* border-gray-700 */
-}
-
-.cylinder-finder-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1.5rem; /* mb-6 */
-}
-
-.cylinder-finder-title {
-    font-size: 1.5rem; /* text-2xl */
-    font-weight: 700; /* font-bold */
-    color: #fff; /* text-white */
-}
-
-.cylinder-finder-reset-button {
-    padding: 0.5rem 1rem; /* px-4 py-2 */
-    background-color: #4a5568; /* bg-gray-600 */
-    color: #fff; /* text-white */
-    font-size: 0.875rem; /* text-sm */
-    font-weight: 600; /* font-semibold */
-    border-radius: 0.375rem; /* rounded-md */
-    transition: background-color 0.2s ease-in-out; /* transition */
-    border: none;
-    cursor: pointer;
-}
-
-.cylinder-finder-reset-button:hover {
-    background-color: #6a768e; /* hover:bg-gray-500 - slightly lighter gray */
-}
-
-.cylinder-finder-selectors {
-    display: grid;
-    grid-template-columns: 1fr; /* grid-cols-1 */
-    gap: 1.5rem; /* gap-6 */
-    margin-bottom: 2rem; /* mb-8 */
-}
-
-@media (min-width: 768px) { /* md:grid-cols-3 */
-    .cylinder-finder-selectors {
-        grid-template-columns: repeat(3, 1fr);
-    }
-}
-
-.cylinder-finder-results-area {
-    display: grid;
-    grid-template-columns: 1fr; /* grid-cols-1 */
-    gap: 2rem; /* gap-8 */
-}
-
-@media (min-width: 768px) { /* md:grid-cols-2 */
-    .cylinder-finder-results-area {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-.cylinder-finder-card {
-    background-color: #2d3748; /* bg-gray-800 */
-    padding: 2rem; /* p-8 */
-    border-radius: 0.75rem; /* rounded-xl */
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); /* shadow-2xl */
-    width: 100%;
-    max-width: 960px; /* max-w-4xl */
-    margin-left: auto; /* mx-auto */
-    margin-right: auto; /* mx-auto */
-    border: 1px solid #4a5568; /* border-gray-700 */
-}
-
-.cylinder-finder-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1.5rem; /* mb-6 */
-}
-
-.cylinder-finder-title {
-    font-size: 1.5rem; /* text-2xl */
-    font-weight: 700; /* font-bold */
-    color: #fff; /* text-white */
-}
-
-.cylinder-finder-reset-button {
-    padding: 0.5rem 1rem; /* px-4 py-2 */
-    background-color: #4a5568; /* bg-gray-600 */
-    color: #fff; /* text-white */
-    font-size: 0.875rem; /* text-sm */
-    font-weight: 600; /* font-semibold */
-    border-radius: 0.375rem; /* rounded-md */
-    transition: background-color 0.2s ease-in-out; /* transition */
-    border: none;
-    cursor: pointer;
-}
-
-.cylinder-finder-reset-button:hover {
-    background-color: #6a768e; /* hover:bg-gray-500 - slightly lighter gray */
-}
-
-.cylinder-finder-selectors {
-    display: grid;
-    grid-template-columns: 1fr; /* grid-cols-1 */
-    gap: 1.5rem; /* gap-6 */
-    margin-bottom: 2rem; /* mb-8 */
-}
-
-@media (min-width: 768px) { /* md:grid-cols-3 */
-    .cylinder-finder-selectors {
-        grid-template-columns: repeat(3, 1fr);
-    }
-}
-
-/* NEW STYLES: Grouping the prefix selectors for layout */
-.cylinder-finder-options-area {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 2rem; /* Gap between the two main prefix sections */
-    margin-bottom: 2rem; /* Space before the results button/area */
-}
-
-@media (min-width: 768px) { /* On medium screens and up, make them side-by-side */
-    .cylinder-finder-options-area {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-
-.prefix-section {
-    /* Base styles for any prefix section */
-    padding: 1.5rem; /* Increased padding slightly */
+    max-width: 960px;
+    margin: 0 auto;
     border: 1px solid #4a5568;
-    border-radius: 0.5rem; /* Slightly more rounded */
-    background-color: #1a202c; /* Slightly darker background to differentiate from card */
+    transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;
+    overflow: hidden;
 }
 
-.prefix-section-title {
-    font-size: 1.25rem; /* text-xl, slightly larger */
-    font-weight: 700; /* font-bold */
-    color: #e2e8f0; /* text-gray-200 */
-    margin-bottom: 0.75rem; /* mb-3 */
-    border-bottom: 1px solid #4a5568;
-    padding-bottom: 0.5rem;
+.cylinder-finder-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 25px 35px -8px rgba(0, 0, 0, 0.15), 0 15px 15px -8px rgba(0, 0, 0, 0.08);
 }
 
-.section-description {
-    font-size: 0.95rem; /* Slightly larger than text-sm */
-    color: #a0a0a0;
-    margin-bottom: 1rem;
-    line-height: 1.4;
+.cylinder-finder-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
 }
 
-.no-cylinder-info-message {
-    color: #a0a0a0;
+.cylinder-finder-title {
+    font-size: clamp(1.4rem, 4vw, 2rem);
+    font-weight: 700;
+    color: #fff;
     text-align: center;
-    padding: 2rem;
-    border: 1px dashed #4a5568;
+    flex-grow: 1;
+}
+
+.cylinder-finder-reset-button {
+    padding: 0.6rem 1.2rem;
+    background-color: #4a5568;
+    color: #fff;
+    font-size: 0.9rem;
+    font-weight: 600;
     border-radius: 0.375rem;
-    grid-column: 1 / -1; /* Make it span all columns in the grid */
-    margin-bottom: 2rem; /* Add spacing if this is the last element */
-}
-
-/* Specific styles for the show results button */
-.show-results-button-container {
-    text-align: center;
-    margin-top: 1rem; /* Space above button */
-    margin-bottom: 2rem; /* Space below button before results appear */
-}
-
-.show-results-button {
-    padding: 0.75rem 2rem;
-    font-size: 1.1rem;
-    font-weight: bold;
-    background-color: #3182ce; /* A prominent blue */
-    color: white;
-    border: none;
-    border-radius: 0.5rem;
-    cursor: pointer;
     transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border: none;
+    cursor: pointer;
+    white-space: nowrap;
 }
 
-.show-results-button:hover {
-    background-color: #2c6cb5; /* Darker blue on hover */
-    transform: translateY(-2px); /* Slight lift effect */
+.cylinder-finder-reset-button:hover {
+    background-color: #6a768e;
+    transform: translateY(-2px);
 }
 
-.show-results-button:active {
-    transform: translateY(0);
-}
-
-/* Adjust results area when it's the only one in the grid */
-.cylinder-finder-results-area {
-    display: flex; /* Changed from grid to flex for simplicity as it's often a single column now */
+.wizard-step {
+    display: none;
     flex-direction: column;
-    gap: 1rem; /* Adjust as needed */
-    margin-top: 1rem; /* Space from the button/previous section */
+    gap: 1.5rem;
+    animation: slide-out-left 0.5s forwards;
+}
+
+.wizard-step.active {
+    display: flex;
+    animation: slide-in-right 0.5s forwards;
+}
+
+.cylinder-finder-selectors {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.wizard-controls {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+}
+
+.wizard-next-button, .wizard-back-button, .wizard-find-button {
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.375rem;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.wizard-next-button {
+    background-color: #3182ce;
+    color: white;
+}
+
+.wizard-back-button {
+    background-color: #718096;
+    color: white;
+}
+
+.wizard-find-button {
+    background-color: #38a169;
+    color: white;
+}
+
+.selected-hardware-note {
+    background-color: #1a202c;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    border: 1px solid #4a5568;
+    font-weight: bold;
+    text-align: center;
+}
+
+@keyframes slide-in-right {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slide-out-left {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
 }

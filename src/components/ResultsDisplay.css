@@ -1,50 +1,68 @@
 /* src/components/ResultsDisplay.css */
 .results-display-container {
     width: 100%;
-    margin-top: 1rem; /* mt-4 */
+    margin-top: 2rem; /* More space above results */
+    animation: fadeIn 0.7s ease-out; /* Fade in animation for the whole container */
 }
 
 .results-display-heading {
-    font-size: 1.25rem; /* text-xl */
-    font-weight: 700; /* font-bold */
-    color: #fff; /* text-white */
-    margin-bottom: 0.75rem; /* mb-3 */
-    border-bottom: 2px solid #3182ce; /* border-b-2 border-blue-500 */
-    padding-bottom: 0.5rem; /* pb-2 */
+    font-size: clamp(1.1rem, 3vw, 1.4rem); /* Responsive font size */
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 1rem; /* More space below heading */
+    border-bottom: 2px solid #3182ce;
+    padding-bottom: 0.75rem; /* More padding below border */
+    text-align: center; /* Center the heading */
 }
 
 .results-display-empty-message {
-    color: #a0a0a0; /* text-gray-400 */
+    color: #a0a0a0;
+    text-align: center;
+    padding: 2rem;
+    border: 1px dashed #4a5568;
+    border-radius: 0.5rem;
+    font-style: italic;
+    background-color: #1a202c; /* Background for empty message */
+    animation: fadeIn 0.5s ease-out;
 }
 
 .results-display-list {
-    display: flex; /* space-y-4 converted to flex column with gap */
+    display: flex;
     flex-direction: column;
-    gap: 1rem; /* space-y-4 */
+    gap: 1rem; /* Space between result items */
 }
 
 .results-display-item {
-    background-color: #2d3748; /* bg-gray-800 */
-    padding: 1rem;
-    border-radius: 0.5rem; /* rounded-lg */
-    border: 1px solid #4a5568; /* border-gray-700 */
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* shadow-md */
+    background-color: #2d3748;
+    padding: 1.25rem; /* More padding */
+    border-radius: 0.6rem; /* Slightly more rounded */
+    border: 1px solid #4a5568;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Stronger shadow */
+    transition: transform 0.2s ease-out, box-shadow 0.2s ease-out; /* Subtle animation for items */
+}
+
+.results-display-item:hover {
+    transform: translateY(-3px); /* Lift item on hover */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); /* Stronger shadow on hover */
 }
 
 .results-display-item-part-number {
-    font-size: 1.125rem; /* text-lg */
-    font-weight: 600; /* font-semibold */
-    color: #63b3ed; /* text-blue-400 */
+    font-size: clamp(1rem, 2.5vw, 1.125rem); /* Responsive font size */
+    font-weight: 600;
+    color: #63b3ed;
+    margin-bottom: 0.25rem; /* Space between part number and type/notes */
 }
 
 .results-display-item-type {
-    font-size: 0.875rem; /* text-sm */
-    font-weight: 400; /* font-normal */
-    color: #a0a0a0; /* text-gray-400 */
+    font-size: clamp(0.8rem, 2vw, 0.875rem); /* Responsive font size */
+    font-weight: 400;
+    color: #a0a0a0;
+    display: block; /* Ensure it takes full width below part number */
 }
 
 .results-display-item-notes {
-    color: #cbd5e0; /* text-gray-300 */
-    margin-top: 0.25rem; /* mt-1 */
-    font-size: 0.875rem; /* text-sm */
+    color: #cbd5e0;
+    margin-top: 0.5rem; /* More space above notes */
+    font-size: clamp(0.8rem, 2vw, 0.875rem); /* Responsive font size */
+    line-height: 1.5; /* Improved readability */
 }
