@@ -60,14 +60,50 @@ function CylinderFinder() {
         if (!activeModelData) return [];
         
         let cylinders = [];
-        if (activeModelData.baseCylinder) {
-            cylinders.push({ ...activeModelData.baseCylinder, notes: activeModelData.baseCylinder.notes || 'Base cylinder for this model.' });
+        let baseCylinderToAdd = activeModelData.baseCylinder ? { ...activeModelData.baseCylinder } : null;
+
+        // Check for LFIC (60-related) prefixes that change base cylinder to #42
+        const lficPrefixes = [
+            "60-", "63-", "64-", // LFIC category
+            "DG1-60-", "DG1-63-", "DG1-64-", // Degree 1 LFIC
+            "DG2-60-", "DG2-63-", "DG2-64-", // Degree 2 LFIC
+            "DG3-60-", "DG3-63-", "DG3-64-", // Degree 3 LFIC
+            "10-63-", // Signature LFIC
+            "11-60-", "11-63-", "11-64-" // XC LFIC
+        ];
+
+        // Check for SFIC (70-related) prefixes that change base cylinder to #43
+        const sficPrefixes = [
+            "70-", "72-", "73-", "65-73-", "65-73-7P-", "73-7P-", // SFIC category
+            "11-70-7P-", "11-72-7P-", "11-73-7P-", "11-65-73-7P-" // XC SFIC
+        ];
+
+        const hasLficPrefix = selectedPrefixes.some(prefixId => lficPrefixes.includes(prefixId));
+        const hasSficPrefix = selectedPrefixes.some(prefixId => sficPrefixes.includes(prefixId));
+
+        if (baseCylinderToAdd) {
+            if (hasLficPrefix) {
+                baseCylinderToAdd.partNumber = "#42";
+                baseCylinderToAdd.notes = baseCylinderToAdd.notes ? `${baseCylinderToAdd.notes} (Modified for LFIC compatibility)` : "Base cylinder for this model (Modified for LFIC compatibility).";
+            } else if (hasSficPrefix) {
+                baseCylinderToAdd.partNumber = "#43";
+                baseCylinderToAdd.notes = baseCylinderToAdd.notes ? `${baseCylinderToAdd.notes} (Modified for SFIC compatibility)` : "Base cylinder for this model (Modified for SFIC compatibility).";
+            }
+            cylinders.push(baseCylinderToAdd);
         }
 
         selectedPrefixes.forEach(prefixId => {
             const prefixData = activeModelData.prefixes.find(p => p.id === prefixId);
             if (prefixData && prefixData.addsCylinder) {
-                cylinders.push(prefixData.addsCylinder);
+                // Ensure we don't duplicate the modified base cylinder if the prefix itself adds it
+                // This logic might need refinement based on exact data structure and desired output
+                const isBaseCylinderModifiedByThisPrefix = 
+                    (hasLficPrefix && lficPrefixes.includes(prefixId)) || 
+                    (hasSficPrefix && sficPrefixes.includes(prefixId));
+
+                if (!isBaseCylinderModifiedByThisPrefix || !baseCylinderToAdd) {
+                     cylinders.push(prefixData.addsCylinder);
+                }
             }
         });
 
