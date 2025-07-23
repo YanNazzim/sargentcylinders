@@ -11,12 +11,17 @@
     border: 1px solid #4a5568;
     background-color: #1a202c;
     color: #fff;
+    font-size: 1rem;
 }
 
 .category-group {
     margin-bottom: 0.75rem;
     border: 1px solid #4a5568;
     border-radius: 0.375rem;
+}
+
+.category-group.open:hover .category-content {
+    overflow: visible;
 }
 
 .category-header {
@@ -47,20 +52,33 @@
     border-top: 1px solid #4a5568;
 }
 
-/* This is the new rule to fix the tooltip clipping issue */
-.category-group.open:hover .category-content {
-    overflow: visible;
-}
-
 .prefix-list {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 0.5rem;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 0.75rem;
 }
 
-/* Tooltip Styling */
 .prefix-item-label {
-    position: relative; /* Required for tooltip positioning */
+    display: flex;
+    align-items: center;
+    padding: 0.6rem 0.8rem;
+    border-radius: 0.375rem;
+    transition: all 0.2s ease-in-out;
+    cursor: pointer;
+    position: relative;
+    border: 2px solid transparent;
+}
+
+.prefix-item-label:hover {
+    background-color: #4a5568;
+}
+
+.prefix-item-label.selected {
+    background-color: #3182ce;
+    border-color: #63b3ed;
+    transform: scale(1.05);
+    box-shadow: 0 0 15px rgba(49, 130, 206, 0.5);
+    color: #fff;
 }
 
 .prefix-item-label::after {
@@ -68,25 +86,78 @@
     position: absolute;
     bottom: 100%;
     left: 50%;
-    transform: translateX(-50%) scale(0.9); /* Start slightly smaller */
+    transform: translateX(-50%) scale(0.9);
     transform-origin: bottom;
     background-color: #1a202c;
     color: #fff;
     padding: 0.5rem 0.75rem;
     border-radius: 0.375rem;
-    border: 1px solid #63b3ed; /* Highlight border */
+    border: 1px solid #63b3ed;
     box-shadow: 0 4px 10px rgba(0,0,0,0.3);
     z-index: 100;
-    white-space: pre-wrap; /* Allow wrapping for long descriptions */
+    white-space: pre-wrap;
     width: max-content;
-    max-width: 300px; /* Prevent tooltip from getting too wide */
-    margin-bottom: 8px; /* Space between the item and the tooltip */
-    pointer-events: none; /* Tooltip should not be interactive */
-    opacity: 0; /* Hidden by default */
+    max-width: 300px;
+    margin-bottom: 8px;
+    pointer-events: none;
+    opacity: 0;
     transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
 }
 
 .prefix-item-label:hover::after {
-    opacity: 1; /* Show on hover */
-    transform: translateX(-50%) scale(1); /* Scale to full size */
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
+}
+
+.prefix-item-checkbox {
+    height: 1.25rem;
+    width: 1.25rem;
+    border-radius: 0.25rem;
+    background-color: #4a5568;
+    border: 1px solid #718096;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    outline: none;
+    position: relative;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+    flex-shrink: 0;
+}
+
+.prefix-item-checkbox:checked {
+    background-color: #3182ce;
+    border-color: #3182ce;
+}
+
+.prefix-item-checkbox:focus {
+    box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.5);
+}
+
+.prefix-item-checkbox::after {
+    content: '';
+    position: absolute;
+    left: 4px;
+    top: 0px;
+    width: 6px;
+    height: 12px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
+}
+
+.prefix-item-checkbox:checked::after {
+    opacity: 1;
+}
+
+.prefix-item-text {
+    margin-left: 0.75rem;
+    color: #cbd5e0;
+}
+
+.prefix-item-label.selected .prefix-item-text {
+    color: #fff;
+    font-weight: bold;
 }

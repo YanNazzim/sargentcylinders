@@ -12,7 +12,8 @@ function CylinderFinder() {
     const [category, setCategory] = useState('');
     const [series, setSeries] = useState('');
     const [model, setModel] = useState('');
-    const [selectedPrefixes, setSelectedPrefixes] = useState([]);
+    const [selectedDevicePrefixes, setSelectedDevicePrefixes] = useState([]);
+    const [selectedCylinderPrefix, setSelectedCylinderPrefix] = useState(null);
     const [showResults, setShowResults] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
 
@@ -54,12 +55,13 @@ function CylinderFinder() {
 
     const finalCylinders = useMemo(() => {
         if (!activeModelData) return [];
+        const allSelectedPrefixes = [...selectedDevicePrefixes, ...(selectedCylinderPrefix ? [selectedCylinderPrefix] : [])];
         let cylinders = [];
         let baseCylinderToAdd = activeModelData.baseCylinder ? { ...activeModelData.baseCylinder } : null;
         const lficPrefixes = ["60-", "63-", "64-", "DG1-60-", "DG1-63-", "DG1-64-", "DG2-60-", "DG2-63-", "DG2-64-", "DG3-60-", "DG3-63-", "DG3-64-", "10-63-", "11-60-", "11-63-", "11-64-"];
         const sficPrefixes = ["70-", "72-", "73-", "65-73-", "65-73-7P-", "73-7P-", "11-70-7P-", "11-72-7P-", "11-73-7P-", "11-65-73-7P-"];
-        const hasLficPrefix = selectedPrefixes.some(prefixId => lficPrefixes.includes(prefixId));
-        const hasSficPrefix = selectedPrefixes.some(prefixId => sficPrefixes.includes(prefixId));
+        const hasLficPrefix = allSelectedPrefixes.some(prefixId => lficPrefixes.includes(prefixId));
+        const hasSficPrefix = allSelectedPrefixes.some(prefixId => sficPrefixes.includes(prefixId));
 
         if (baseCylinderToAdd) {
             if (hasLficPrefix) {
@@ -72,7 +74,7 @@ function CylinderFinder() {
             cylinders.push(baseCylinderToAdd);
         }
 
-        selectedPrefixes.forEach(prefixId => {
+        allSelectedPrefixes.forEach(prefixId => {
             const prefixData = activeModelData.prefixes.find(p => p.id === prefixId);
             if (prefixData && prefixData.addsCylinder) {
                 const isBaseCylinderModifiedByThisPrefix = (hasLficPrefix && lficPrefixes.includes(prefixId)) || (hasSficPrefix && sficPrefixes.includes(prefixId));
@@ -91,31 +93,34 @@ function CylinderFinder() {
             }
         });
         return uniqueCylinders;
-    }, [activeModelData, selectedPrefixes]);
+    }, [activeModelData, selectedDevicePrefixes, selectedCylinderPrefix]);
 
     const handleCategoryChange = (value) => {
         setCategory(value);
         setSeries('');
         setModel('');
-        setSelectedPrefixes([]);
+        setSelectedDevicePrefixes([]);
+        setSelectedCylinderPrefix(null);
         setShowResults(false);
     };
 
     const handleSeriesChange = (value) => {
         setSeries(value);
         setModel('');
-        setSelectedPrefixes([]);
+        setSelectedDevicePrefixes([]);
+        setSelectedCylinderPrefix(null);
         setShowResults(false);
     };
 
     const handleModelChange = (value) => {
         setModel(value);
-        setSelectedPrefixes([]);
+        setSelectedDevicePrefixes([]);
+        setSelectedCylinderPrefix(null);
         setShowResults(false);
     };
 
-    const handlePrefixChange = (prefixId) => {
-        setSelectedPrefixes(prev =>
+    const handleDevicePrefixChange = (prefixId) => {
+        setSelectedDevicePrefixes(prev =>
             prev.includes(prefixId)
                 ? prev.filter(id => id !== prefixId)
                 : [...prev, prefixId]
@@ -123,11 +128,17 @@ function CylinderFinder() {
         setShowResults(false);
     };
 
+    const handleCylinderPrefixChange = (prefixId) => {
+        setSelectedCylinderPrefix(prev => (prev === prefixId ? null : prefixId));
+        setShowResults(false);
+    };
+
     const handleReset = () => {
         setCategory('');
         setSeries('');
         setModel('');
-        setSelectedPrefixes([]);
+        setSelectedDevicePrefixes([]);
+        setSelectedCylinderPrefix(null);
         setShowResults(false);
         setStep(1);
     };
@@ -170,8 +181,8 @@ function CylinderFinder() {
                             <h3 className="prefix-section-title">Device Options</h3>
                             <PrefixSelector
                                 prefixes={deviceTiedPrefixes}
-                                selectedPrefixes={selectedPrefixes}
-                                onChange={handlePrefixChange}
+                                selectedPrefixes={selectedDevicePrefixes}
+                                onChange={handleDevicePrefixChange}
                             />
                         </div>
                     )}
@@ -187,8 +198,8 @@ function CylinderFinder() {
                             />
                             <CategorizedPrefixSelector
                                 categories={cylinderOptionsCategories}
-                                selectedPrefixes={selectedPrefixes}
-                                onChange={handlePrefixChange}
+                                selectedPrefixes={[selectedCylinderPrefix]}
+                                onChange={handleCylinderPrefixChange}
                                 searchTerm={searchTerm}
                             />
                         </div>
