@@ -21,20 +21,23 @@ function CylinderFinder() {
 
     const seriesOptions = useMemo(() => {
         if (!category) return [];
-        return sargentData.hardware.find(h => h.category === category)?.series.map(s => s.name) || [];
+        const hardwareCategory = sargentData.hardware.find(h => h.category === category);
+        return hardwareCategory ? hardwareCategory.series.map(s => s.name) : [];
     }, [category]);
 
     const modelOptions = useMemo(() => {
         if (!category || !series) return [];
         const catData = sargentData.hardware.find(h => h.category === category);
-        return catData?.series.find(s => s.name === series)?.models.map(m => m.modelNumber) || [];
+        const seriesData = catData?.series.find(s => s.name === series);
+        return seriesData ? seriesData.models.map(m => `${m.modelNumber} - ${m.description}`) : [];
     }, [category, series]);
 
     const activeModelData = useMemo(() => {
         if (!category || !series || !model) return null;
+        const modelNumber = model.split(' - ')[0];
         const catData = sargentData.hardware.find(h => h.category === category);
         const seriesData = catData?.series.find(s => s.name === series);
-        return seriesData?.models.find(m => m.modelNumber === model) || null;
+        return seriesData?.models.find(m => m.modelNumber === modelNumber) || null;
     }, [category, series, model]);
 
     const deviceTiedPrefixes = useMemo(() => {
@@ -44,56 +47,95 @@ function CylinderFinder() {
 
     const cylinderOptionsCategories = useMemo(() => {
         if (!activeModelData) return [];
-        const nonDeviceSpecificPrefixesForModel = activeModelData.prefixes.filter(p => !p.isDeviceSpecific);
-        const activePrefixIds = new Set(nonDeviceSpecificPrefixesForModel.map(p => p.id));
-        const categorizedResult = cylinderPrefixCategories.map(cat => ({
+        const allModelPrefixes = new Set(activeModelData.prefixes.map(p => p.id));
+        return cylinderPrefixCategories.map(cat => ({
             ...cat,
-            prefixes: cat.prefixes.filter(p => activePrefixIds.has(p.id))
+            prefixes: cat.prefixes.filter(p => allModelPrefixes.has(p.id))
         })).filter(cat => cat.prefixes.length > 0);
-        return categorizedResult;
     }, [activeModelData]);
+
+    const getCylinderLengthDescription = (partNumber) => {
+        const lengths = {
+            '41': '1-1/8"', '42': '1-1/4"', '43': '1-3/8"', '44': '1-1/2"',
+            '46': '1-3/4"', '48': '2"', '50': '2-1/4"', '52': '2-1/2"',
+            '54': '2-3/4"', '56': '3"',
+        };
+        return lengths[partNumber.replace('#', '')] || '';
+    };
 
     const finalCylinders = useMemo(() => {
         if (!activeModelData) return [];
-        const allSelectedPrefixes = [...selectedDevicePrefixes, ...(selectedCylinderPrefix ? [selectedCylinderPrefix] : [])];
-        let cylinders = [];
-        let baseCylinderToAdd = activeModelData.baseCylinder ? { ...activeModelData.baseCylinder } : null;
+
         const lficPrefixes = ["60-", "63-", "64-", "DG1-60-", "DG1-63-", "DG1-64-", "DG2-60-", "DG2-63-", "DG2-64-", "DG3-60-", "DG3-63-", "DG3-64-", "10-63-", "11-60-", "11-63-", "11-64-"];
         const sficPrefixes = ["70-", "72-", "73-", "65-73-", "65-73-7P-", "73-7P-", "11-70-7P-", "11-72-7P-", "11-73-7P-", "11-65-73-7P-"];
-        const hasLficPrefix = allSelectedPrefixes.some(prefixId => lficPrefixes.includes(prefixId));
-        const hasSficPrefix = allSelectedPrefixes.some(prefixId => sficPrefixes.includes(prefixId));
+        
+        const hasLficPrefix = selectedCylinderPrefix && lficPrefixes.includes(selectedCylinderPrefix);
+        const hasSficPrefix = selectedCylinderPrefix && sficPrefixes.includes(selectedCylinderPrefix);
 
-        if (baseCylinderToAdd) {
-            if (hasLficPrefix) {
-                baseCylinderToAdd.partNumber = "#42";
-                baseCylinderToAdd.notes = `${baseCylinderToAdd.notes} (Modified for LFIC compatibility)`;
-            } else if (hasSficPrefix) {
-                baseCylinderToAdd.partNumber = "#43";
-                baseCylinderToAdd.notes = `${baseCylinderToAdd.notes} (Modified for SFIC compatibility)`;
-            }
-            cylinders.push(baseCylinderToAdd);
+        const rawCylinderList = [];
+        if (activeModelData.baseCylinder) {
+            rawCylinderList.push({ ...activeModelData.baseCylinder });
         }
-
-        allSelectedPrefixes.forEach(prefixId => {
+        selectedDevicePrefixes.forEach(prefixId => {
             const prefixData = activeModelData.prefixes.find(p => p.id === prefixId);
             if (prefixData && prefixData.addsCylinder) {
-                const isBaseCylinderModifiedByThisPrefix = (hasLficPrefix && lficPrefixes.includes(prefixId)) || (hasSficPrefix && sficPrefixes.includes(prefixId));
-                if (!isBaseCylinderModifiedByThisPrefix || !baseCylinderToAdd) {
-                    cylinders.push(prefixData.addsCylinder);
-                }
+                rawCylinderList.push({ ...prefixData.addsCylinder });
             }
         });
 
-        const uniqueCylinders = [];
-        const seenPartNumbers = new Set();
-        cylinders.forEach(cyl => {
-            if (!seenPartNumbers.has(cyl.partNumber)) {
-                uniqueCylinders.push(cyl);
-                seenPartNumbers.add(cyl.partNumber);
+        const transformedCylinderList = rawCylinderList.map(cyl => {
+            const newCyl = { ...cyl };
+            if (hasLficPrefix) {
+                if (newCyl.partNumber === '#41') newCyl.partNumber = '#42';
+            } else if (hasSficPrefix) {
+                if (newCyl.partNumber === '#41') newCyl.partNumber = '#43';
+                else if (newCyl.partNumber === '#44') newCyl.partNumber = '#46';
+            }
+            return newCyl;
+        });
+
+        const consolidatedMap = new Map();
+        transformedCylinderList.forEach(cyl => {
+            const key = cyl.partNumber;
+            if (consolidatedMap.has(key)) {
+                consolidatedMap.get(key).quantity++;
+            } else {
+                consolidatedMap.set(key, { ...cyl, quantity: 1 });
             }
         });
-        return uniqueCylinders;
+        
+        let finalCylindersArray = Array.from(consolidatedMap.values());
+        
+        if (selectedCylinderPrefix) {
+            finalCylindersArray = finalCylindersArray.map(cyl => {
+                const basePartNumber = cyl.partNumber.replace('#', '');
+                const lengthDesc = getCylinderLengthDescription(basePartNumber);
+                const prefixData = cylinderPrefixCategories.flatMap(c => c.prefixes).find(p => p.id === selectedCylinderPrefix);
+                const prefixDesc = prefixData ? prefixData.description.replace('Device', 'Housing') : '';
+                const finalPartNumber = `${selectedCylinderPrefix}${basePartNumber}`;
+                const finalDescription = `${lengthDesc} ${cyl.type} ${prefixDesc}`;
+                return {
+                    ...cyl,
+                    partNumber: finalPartNumber,
+                    description: finalDescription,
+                };
+            });
+        } else {
+            // Default description logic when no prefix is selected
+            finalCylindersArray = finalCylindersArray.map(cyl => {
+                const lengthDesc = getCylinderLengthDescription(cyl.partNumber);
+                const finalDescription = `${lengthDesc} ${cyl.type}`;
+                return {
+                    ...cyl,
+                    description: finalDescription.trim(),
+                };
+            });
+        }
+        
+        return finalCylindersArray;
+
     }, [activeModelData, selectedDevicePrefixes, selectedCylinderPrefix]);
+
 
     const handleCategoryChange = (value) => {
         setCategory(value);
@@ -141,6 +183,7 @@ function CylinderFinder() {
         setSelectedCylinderPrefix(null);
         setShowResults(false);
         setStep(1);
+        setSearchTerm('');
     };
 
     const handleNextStep = () => {
@@ -164,7 +207,7 @@ function CylinderFinder() {
                 <div className="cylinder-finder-selectors">
                     <HardwareSelector label="Hardware Category" options={categories} value={category} onChange={handleCategoryChange} />
                     <HardwareSelector label="Product Series" options={seriesOptions} value={series} onChange={handleSeriesChange} disabled={!category} />
-                    <HardwareSelector label="Model Number" options={modelOptions} value={model} onChange={handleModelChange} disabled={!series} />
+                    <HardwareSelector label="Model / Function" options={modelOptions} value={model} onChange={handleModelChange} disabled={!series} />
                 </div>
                 <div className="wizard-controls">
                     <button onClick={handleNextStep} disabled={!model} className="wizard-next-button">Next</button>
@@ -173,7 +216,7 @@ function CylinderFinder() {
 
             <div className={`wizard-step ${step === 2 ? 'active' : ''}`}>
                 <div className="selected-hardware-note">
-                    Selected: {category} > {series} > {model}
+                    Selected: {series} > {model}
                 </div>
                 <div className="cylinder-finder-options-area">
                     {deviceTiedPrefixes.length > 0 && (

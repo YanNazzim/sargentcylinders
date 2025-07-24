@@ -1,18 +1,18 @@
 /* src/components/ResultsDisplay.css */
 .results-display-container {
     width: 100%;
-    margin-top: 2rem; /* More space above results */
-    animation: fadeIn 0.7s ease-out; /* Fade in animation for the whole container */
+    margin-top: 2rem; 
+    animation: fadeIn 0.7s ease-out;
 }
 
 .results-display-heading {
-    font-size: clamp(1.1rem, 3vw, 1.4rem); /* Responsive font size */
+    font-size: clamp(1.1rem, 3vw, 1.4rem); 
     font-weight: 700;
     color: #fff;
-    margin-bottom: 1rem; /* More space below heading */
+    margin-bottom: 1rem; 
     border-bottom: 2px solid #3182ce;
-    padding-bottom: 0.75rem; /* More padding below border */
-    text-align: center; /* Center the heading */
+    padding-bottom: 0.75rem; 
+    text-align: center;
 }
 
 .results-display-empty-message {
@@ -22,47 +22,55 @@
     border: 1px dashed #4a5568;
     border-radius: 0.5rem;
     font-style: italic;
-    background-color: #1a202c; /* Background for empty message */
+    background-color: #1a202c; 
     animation: fadeIn 0.5s ease-out;
 }
 
 .results-display-list {
     display: flex;
     flex-direction: column;
-    gap: 1rem; /* Space between result items */
+    gap: 1rem;
 }
 
 .results-display-item {
     background-color: #2d3748;
-    padding: 1.25rem; /* More padding */
-    border-radius: 0.6rem; /* Slightly more rounded */
+    padding: 1.25rem;
+    border-radius: 0.6rem;
     border: 1px solid #4a5568;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Stronger shadow */
-    transition: transform 0.2s ease-out, box-shadow 0.2s ease-out; /* Subtle animation for items */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+    transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
 }
 
 .results-display-item:hover {
-    transform: translateY(-3px); /* Lift item on hover */
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); /* Stronger shadow on hover */
+    transform: translateY(-3px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
 }
 
 .results-display-item-part-number {
-    font-size: clamp(1rem, 2.5vw, 1.125rem); /* Responsive font size */
+    font-size: clamp(1rem, 2.5vw, 1.125rem);
     font-weight: 600;
     color: #63b3ed;
-    margin-bottom: 0.25rem; /* Space between part number and type/notes */
+    margin-bottom: 0.5rem;
 }
 
-.results-display-item-type {
-    font-size: clamp(0.8rem, 2vw, 0.875rem); /* Responsive font size */
+.results-display-item-quantity {
+    font-style: italic;
+    color: #38a169;
+    font-weight: bold;
+    margin-left: 0.5rem;
+}
+
+.results-display-item-description {
+    font-size: clamp(0.9rem, 2vw, 1rem);
     font-weight: 400;
-    color: #a0a0a0;
-    display: block; /* Ensure it takes full width below part number */
+    color: #cbd5e0;
+    margin-bottom: 0.5rem;
 }
 
 .results-display-item-notes {
-    color: #cbd5e0;
-    margin-top: 0.5rem; /* More space above notes */
-    font-size: clamp(0.8rem, 2vw, 0.875rem); /* Responsive font size */
-    line-height: 1.5; /* Improved readability */
+    color: #a0a0a0;
+    margin-top: 0.5rem;
+    font-size: clamp(0.8rem, 2vw, 0.875rem);
+    line-height: 1.5;
+    font-style: italic;
 }

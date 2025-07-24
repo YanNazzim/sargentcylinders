@@ -5,24 +5,117 @@ const sargentData = {
       "category": "Exit Devices",
       "series": [
         {
-          "name": "80 Series",
+          "name": "8300 Series Narrow Mortise",
           "models": [
-            {
-              "modelNumber": "8813",
-              "description": "Rim Exit Device",
-              "baseCylinder": { "partNumber": "#41", "type": "Mortise Cylinder", "notes": "Standard 1-1/8\" body length." },
-              "prefixes": [
-                { "id": "16", "description": "Cylinder Dogging", "addsCylinder": { "partNumber": "#41", "type": "Mortise Cylinder" }, "isDeviceSpecific": true },
-                { "id": "59", "description": "Delayed Egress", "addsCylinder": { "partNumber": "#41", "type": "Mortise Cylinder", "notes": "For alarm control." }, "isDeviceSpecific": true },
-                { "id": "AL", "description": "Alarmed Exit", "addsCylinder": { "partNumber": "#41", "type": "Mortise Cylinder", "notes": "For alarm kit control." }, "isDeviceSpecific": true }
-              ]
-            },
-            {
-              "modelNumber": "8888",
-              "description": "Mortise Exit Device",
-              "baseCylinder": { "partNumber": "#41", "type": "Mortise Cylinder", "notes": "Used with 8200 series mortise lock." },
-              "prefixes": [] // No original device-specific prefixes for 8888
-            }
+            { "modelNumber": "8304", "description": "Night Latch, Key Retracts Latch", "baseCylinder": { "partNumber": "#46", "type": "Mortise Cylinder" }, "prefixes": [] },
+            { "modelNumber": "8310", "description": "No Outside Operation (Dummy)", "baseCylinder": null, "prefixes": [] },
+            { "modelNumber": "8313", "description": "Key Outside Unlocks/Locks Trim", "baseCylinder": { "partNumber": "#41", "type": "Mortise Cylinder" }, "prefixes": [] },
+            { "modelNumber": "8315", "description": "Passage Only", "baseCylinder": null, "prefixes": [] },
+            { "modelNumber": "8340", "description": "Freewheeling - No Outside Operation", "baseCylinder": null, "prefixes": [] },
+            { "modelNumber": "8343", "description": "Freewheeling - Key Outside Unlocks/Locks", "baseCylinder": { "partNumber": "#41", "type": "Mortise Cylinder" }, "prefixes": [] },
+            { "modelNumber": "8344", "description": "Freewheeling - Key Retracts Latch", "baseCylinder": { "partNumber": "#46", "type": "Mortise Cylinder" }, "prefixes": [] },
+            { "modelNumber": "8375", "description": "Electrified Fail Safe", "baseCylinder": { "partNumber": "#46", "type": "Mortise Cylinder" }, "prefixes": [] },
+            { "modelNumber": "8376", "description": "Electrified Fail Secure", "baseCylinder": { "partNumber": "#46", "type": "Mortise Cylinder" }, "prefixes": [] },
+            { "modelNumber": "8363", "description": "Thumbpiece - Key Unlocks/Locks", "baseCylinder": { "partNumber": "#41", "type": "Mortise Cylinder" }, "prefixes": [] }
+          ]
+        },
+        {
+          "name": "8400 Series Narrow CVR",
+          "models": [
+            { "modelNumber": "MD8406", "description": "Key Unlocks/Locks Trim, Retracts Latch", "baseCylinder": { "partNumber": "#41", "type": "Mortise Cylinder" }, "prefixes": [] },
+            { "modelNumber": "MD8410", "description": "No Outside Operation (Dummy)", "baseCylinder": null, "prefixes": [] },
+            { "modelNumber": "MD8413", "description": "Key Outside Unlocks/Locks Trim", "baseCylinder": { "partNumber": "#41", "type": "Mortise Cylinder" }, "prefixes": [] },
+            { "modelNumber": "MD8415", "description": "Passage Only", "baseCylinder": null, "prefixes": [] },
+            { "modelNumber": "MD8440", "description": "Freewheeling - No Outside Operation", "baseCylinder": null, "prefixes": [] },
+            { "modelNumber": "MD8443", "description": "Freewheeling - Key Outside Unlocks/Locks", "baseCylinder": { "partNumber": "#41", "type": "Mortise Cylinder" }, "prefixes": [] },
+            { "modelNumber": "MD8446", "description": "Freewheeling - Key Unlocks/Locks, Retracts Latch", "baseCylinder": { "partNumber": "#41", "type": "Mortise Cylinder" }, "prefixes": [] },
+            { "modelNumber": "MD8473", "description": "Electrified Fail Safe", "baseCylinder": null, "prefixes": [] },
+            { "modelNumber": "MD8474", "description": "Electrified Fail Secure", "baseCylinder": null, "prefixes": [] }
+          ]
+        },
+        {
+          "name": "8500 Series Narrow Rim",
+          "models": [
+            { "modelNumber": "8504", "description": "Night Latch, Key Retracts Latch", "baseCylinder": { "partNumber": "#34", "type": "Rim Cylinder" }, "prefixes": [] },
+            { "modelNumber": "8506", "description": "Key Unlocks/Locks Trim, Retracts Latch", "baseCylinder": { "partNumber": "#41", "type": "Mortise Cylinder" }, "prefixes": [] },
+            { "modelNumber": "8510", "description": "No Outside Operation (Dummy)", "baseCylinder": null, "prefixes": [] },
+            { "modelNumber": "8513", "description": "Key Outside Unlocks/Locks Trim", "baseCylinder": { "partNumber": "#41", "type": "Mortise Cylinder" }, "prefixes": [] },
+            { "modelNumber": "8515", "description": "Passage Only", "baseCylinder": null, "prefixes": [] },
+            { "modelNumber": "8540", "description": "Freewheeling - No Outside Operation", "baseCylinder": null, "prefixes": [] },
+            { "modelNumber": "8543", "description": "Freewheeling - Key Outside Unlocks/Locks", "baseCylinder": { "partNumber": "#41", "type": "Mortise Cylinder" }, "prefixes": [] },
+            { "modelNumber": "8544", "description": "Freewheeling - Key Retracts Latch", "baseCylinder": { "partNumber": "#34", "type": "Rim Cylinder" }, "prefixes": [] },
+            { "modelNumber": "8546", "description": "Freewheeling - Key Unlocks/Locks, Retracts Latch", "baseCylinder": { "partNumber": "#41", "type": "Mortise Cylinder" }, "prefixes": [] },
+            { "modelNumber": "8573", "description": "Electrified Fail Safe", "baseCylinder": null, "prefixes": [] },
+            { "modelNumber": "8574", "description": "Electrified Fail Secure", "baseCylinder": null, "prefixes": [] }
+          ]
+        },
+        {
+          "name": "8600 Series CVR",
+          "models": [
+            { "modelNumber": "MD8606", "description": "Key Unlocks/Locks Trim, Retracts Latch", "baseCylinder": { "partNumber": "#41", "type": "Mortise Cylinder" }, "prefixes": [] },
+            { "modelNumber": "MD8610", "description": "No Outside Operation (Dummy)", "baseCylinder": null, "prefixes": [] },
+            { "modelNumber": "MD8613", "description": "Key Outside Unlocks/Locks Trim", "baseCylinder": { "partNumber": "#41", "type": "Mortise Cylinder" }, "prefixes": [] },
+            { "modelNumber": "MD8615", "description": "Passage Only", "baseCylinder": null, "prefixes": [] },
+            { "modelNumber": "MD8640", "description": "Freewheeling - No Outside Operation", "baseCylinder": null, "prefixes": [] },
+            { "modelNumber": "MD8643", "description": "Freewheeling - Key Outside Unlocks/Locks", "baseCylinder": { "partNumber": "#41", "type": "Mortise Cylinder" }, "prefixes": [] },
+            { "modelNumber": "MD8646", "description": "Freewheeling - Key Unlocks/Locks, Retracts Latch", "baseCylinder": { "partNumber": "#41", "type": "Mortise Cylinder" }, "prefixes": [] },
+            { "modelNumber": "MD8673", "description": "Electrified Fail Safe", "baseCylinder": null, "prefixes": [] },
+            { "modelNumber": "MD8674", "description": "Electrified Fail Secure", "baseCylinder": null, "prefixes": [] }
+          ]
+        },
+        {
+          "name": "8700 Series SVR",
+          "models": [
+            { "modelNumber": "8706", "description": "Key Unlocks/Locks Trim, Retracts Latch", "baseCylinder": { "partNumber": "#41", "type": "Mortise Cylinder" }, "prefixes": [] },
+            { "modelNumber": "8710", "description": "No Outside Operation (Dummy)", "baseCylinder": null, "prefixes": [] },
+            { "modelNumber": "8713", "description": "Key Outside Unlocks/Locks Trim", "baseCylinder": { "partNumber": "#41", "type": "Mortise Cylinder" }, "prefixes": [] },
+            { "modelNumber": "8715", "description": "Passage Only", "baseCylinder": null, "prefixes": [] },
+            { "modelNumber": "8740", "description": "Freewheeling - No Outside Operation", "baseCylinder": null, "prefixes": [] },
+            { "modelNumber": "8743", "description": "Freewheeling - Key Outside Unlocks/Locks", "baseCylinder": { "partNumber": "#41", "type": "Mortise Cylinder" }, "prefixes": [] },
+            { "modelNumber": "8746", "description": "Freewheeling - Key Unlocks/Locks, Retracts Latch", "baseCylinder": { "partNumber": "#41", "type": "Mortise Cylinder" }, "prefixes": [] },
+            { "modelNumber": "8773", "description": "Electrified Fail Safe", "baseCylinder": null, "prefixes": [] },
+            { "modelNumber": "8774", "description": "Electrified Fail Secure", "baseCylinder": null, "prefixes": [] },
+            { "modelNumber": "8762", "description": "Thumbpiece - Key Unlocks/Locks, Retracts Latch", "baseCylinder": { "partNumber": "#34", "type": "Rim Cylinder" }, "prefixes": [] },
+            { "modelNumber": "8763", "description": "Thumbpiece - Key Unlocks/Locks", "baseCylinder": { "partNumber": "#34", "type": "Rim Cylinder" }, "prefixes": [] }
+          ]
+        },
+        {
+          "name": "8800 Series Rim",
+          "models": [
+            { "modelNumber": "8804", "description": "Night Latch, Key Retracts Latch", "baseCylinder": { "partNumber": "#34", "type": "Rim Cylinder" }, "prefixes": [] },
+            { "modelNumber": "8806", "description": "Key Unlocks/Locks Trim, Retracts Latch", "baseCylinder": { "partNumber": "#41", "type": "Mortise Cylinder" }, "prefixes": [] },
+            { "modelNumber": "8810", "description": "No Outside Operation (Dummy)", "baseCylinder": null, "prefixes": [] },
+            { "modelNumber": "8813", "description": "Key Outside Unlocks/Locks Trim", "baseCylinder": { "partNumber": "#41", "type": "Mortise Cylinder" }, "prefixes": [] },
+            { "modelNumber": "8815", "description": "Passage Only", "baseCylinder": null, "prefixes": [] },
+            { "modelNumber": "8816", "description": "Key Outside Retracts Latch, Inside Unlocks/Locks", "baseCylinder": { "partNumber": "#34", "type": "Rim Cylinder" }, "prefixes": [{ "id": "Inside Cyl", "description": "Inside Cylinder for 8816 Function", "addsCylinder": { "partNumber": "#44", "type": "Mortise Cylinder" }, "isDeviceSpecific": true }] },
+            { "modelNumber": "8840", "description": "Freewheeling - No Outside Operation", "baseCylinder": null, "prefixes": [] },
+            { "modelNumber": "8843", "description": "Freewheeling - Key Outside Unlocks/Locks", "baseCylinder": { "partNumber": "#41", "type": "Mortise Cylinder" }, "prefixes": [] },
+            { "modelNumber": "8844", "description": "Freewheeling - Key Retracts Latch", "baseCylinder": { "partNumber": "#34", "type": "Rim Cylinder" }, "prefixes": [] },
+            { "modelNumber": "8846", "description": "Freewheeling - Key Unlocks/Locks, Retracts Latch", "baseCylinder": { "partNumber": "#41", "type": "Mortise Cylinder" }, "prefixes": [] },
+            { "modelNumber": "8873", "description": "Electrified Fail Safe", "baseCylinder": null, "prefixes": [] },
+            { "modelNumber": "8874", "description": "Electrified Fail Secure", "baseCylinder": null, "prefixes": [] },
+            { "modelNumber": "8875", "description": "Electrified Fail Safe with Key Override", "baseCylinder": { "partNumber": "#34", "type": "Rim Cylinder" }, "prefixes": [] },
+            { "modelNumber": "8876", "description": "Electrified Fail Secure with Key Override", "baseCylinder": { "partNumber": "#34", "type": "Rim Cylinder" }, "prefixes": [] },
+            { "modelNumber": "8863", "description": "Thumbpiece - Key Unlocks/Locks", "baseCylinder": { "partNumber": "#34", "type": "Rim Cylinder" }, "prefixes": [] },
+            { "modelNumber": "8866", "description": "Thumbpiece - Key Outside Retracts, Inside Unlocks/Locks", "baseCylinder": { "partNumber": "#34", "type": "Rim Cylinder" }, "prefixes": [{ "id": "Inside Cyl", "description": "Inside Cylinder for 8866 Function", "addsCylinder": { "partNumber": "#44", "type": "Mortise Cylinder" }, "isDeviceSpecific": true }] }
+          ]
+        },
+        {
+          "name": "8900 Series Mortise",
+          "models": [
+            { "modelNumber": "8904", "description": "Night Latch, Key Retracts Latch", "baseCylinder": { "partNumber": "#46", "type": "Mortise Cylinder" }, "prefixes": [] },
+            { "modelNumber": "8906", "description": "Key Unlocks/Locks Trim, Retracts Latch", "baseCylinder": { "partNumber": "#41", "type": "Mortise Cylinder" }, "prefixes": [] },
+            { "modelNumber": "8910", "description": "No Outside Operation (Dummy)", "baseCylinder": null, "prefixes": [] },
+            { "modelNumber": "8913", "description": "Key Outside Unlocks/Locks Trim", "baseCylinder": { "partNumber": "#41", "type": "Mortise Cylinder" }, "prefixes": [] },
+            { "modelNumber": "8915", "description": "Passage Only", "baseCylinder": null, "prefixes": [] },
+            { "modelNumber": "8916", "description": "Key Outside Retracts Latch, Inside Unlocks/Locks", "baseCylinder": { "partNumber": "#46", "type": "Mortise Cylinder" }, "prefixes": [{ "id": "Inside Cyl", "description": "Inside Cylinder for 8916 Function", "addsCylinder": { "partNumber": "#34", "type": "Rim Cylinder" }, "isDeviceSpecific": true }] },
+            { "modelNumber": "8940", "description": "Freewheeling - No Outside Operation", "baseCylinder": null, "prefixes": [] },
+            { "modelNumber": "8943", "description": "Freewheeling - Key Outside Unlocks/Locks", "baseCylinder": { "partNumber": "#41", "type": "Mortise Cylinder" }, "prefixes": [] },
+            { "modelNumber": "8944", "description": "Freewheeling - Key Retracts Latch", "baseCylinder": { "partNumber": "#46", "type": "Mortise Cylinder" }, "prefixes": [] },
+            { "modelNumber": "8975", "description": "Electrified Fail Safe", "baseCylinder": { "partNumber": "#46", "type": "Mortise Cylinder" }, "prefixes": [] },
+            { "modelNumber": "8976", "description": "Electrified Fail Secure", "baseCylinder": { "partNumber": "#46", "type": "Mortise Cylinder" }, "prefixes": [] },
+            { "modelNumber": "8963", "description": "Thumbpiece - Key Unlocks/Locks", "baseCylinder": { "partNumber": "#41", "type": "Mortise Cylinder" }, "prefixes": [] },
+            { "modelNumber": "8966", "description": "Thumbpiece - Key Outside Retracts, Inside Unlocks/Locks", "baseCylinder": { "partNumber": "#34", "type": "Rim Cylinder" }, "prefixes": [{ "id": "Inside Cyl", "description": "Inside Cylinder for 8966 Function", "addsCylinder": { "partNumber": "#41", "type": "Mortise Cylinder" }, "isDeviceSpecific": true }] }
           ]
         }
       ]
@@ -33,18 +126,8 @@ const sargentData = {
         {
           "name": "8200 Series",
           "models": [
-            {
-              "modelNumber": "8204",
-              "description": "Passage Function",
-              "baseCylinder": null, // No cylinder needed for this function
-              "prefixes": []
-            },
-            {
-              "modelNumber": "8237",
-              "description": "Storeroom Lock",
-              "baseCylinder": { "partNumber": "#41", "type": "Mortise Cylinder", "notes": "Standard cylinder." },
-              "prefixes": []
-            }
+            { "modelNumber": "8204", "description": "Passage Function", "baseCylinder": null, "prefixes": [] },
+            { "modelNumber": "8237", "description": "Storeroom Lock", "baseCylinder": { "partNumber": "#41", "type": "Mortise Cylinder" }, "prefixes": [] }
           ]
         }
       ]
@@ -115,10 +198,9 @@ const cylinderPrefixCategories = [
     ]
   },
   {
-    name: "Construction Key Systems (Lost Ball & Split Key)",
+    name: "Construction Key Systems (Lost Ball)",
     prefixes: [
       { id: "21-", description: "SARGENT Lost Ball Construction Keying for Conventional, XC and Signature Series (N/A with 63- or 73-)" },
-      { id: "22-", description: "SARGENT Construction Split Key System for Conventional Cylinders (Existing Systems Only) (N/A with 10-, 11-, 63-or 73-1" },
     ]
   },
   {
@@ -162,32 +244,40 @@ const cylinderPrefixCategories = [
     name: "Added Security & Keyway Options",
     prefixes: [
       { id: "BR-", description: "Bump Resistant Cylinder (Available with Conventional & Conventional XC Cylinders Only)" },
-      { id: "SC-", description: "Schlage C keyway cylinder, 0 bitted (not available with: 8904, 8916, 8944, 8975, 8976, 8866, 8304, 8344, 8375 & 8376)" },
-      { id: "SE-", description: "Schlage E keyway cylinder, 0 bitted (not available with: 8904, 8916, 8944, 8975, 8976, 8866, 8304, 8344, 8375 & 8376)" },
+      { id: "SC-", description: "Schlage C keyway cylinder, 0 bitted" },
+      { id: "SE-", description: "Schlage E keyway cylinder, 0 bitted" },
     ]
   }
 ];
 // --- END: Extracted and Categorized Cylinder Prefixes from Page 75 ---
 
 
-// Loop through all hardware, series, and models to add the cylinder prefixes
+// --- START: Universal Device-Specific Prefixes ---
+const universalDevicePrefixes = [
+    { "id": "16", "description": "Cylinder Dogging", "addsCylinder": { "partNumber": "#41", "type": "Mortise Cylinder" }, "isDeviceSpecific": true },
+    { "id": "59", "description": "Delayed Egress", "addsCylinder": { "partNumber": "#41", "type": "Mortise Cylinder", "notes": "For alarm control." }, "isDeviceSpecific": true },
+    { "id": "AL", "description": "Alarmed Exit", "addsCylinder": { "partNumber": "#41", "type": "Mortise Cylinder", "notes": "For alarm kit control." }, "isDeviceSpecific": true }
+];
+// --- END: Universal Device-Specific Prefixes ---
+
+
+// Loop through all hardware, series, and models to add the prefixes
 sargentData.hardware.forEach(category => {
   category.series.forEach(series => {
     series.models.forEach(model => {
+      // Add universal device-specific prefixes to each model
+      model.prefixes = [...model.prefixes, ...universalDevicePrefixes];
+
       const existingPrefixIds = new Set(model.prefixes.map(p => p.id));
       
       let allNewCylinderPrefixes = [];
-      cylinderPrefixCategories.forEach(cat => { // Iterate through categories
-        cat.prefixes.forEach(cylPrefix => { // Iterate through prefixes within each category
+      cylinderPrefixCategories.forEach(cat => {
+        cat.prefixes.forEach(cylPrefix => {
           if (!existingPrefixIds.has(cylPrefix.id)) {
             allNewCylinderPrefixes.push({
               ...cylPrefix,
-              isDeviceSpecific: false, // Mark these as NOT device-specific
-              addsCylinder: {
-                partNumber: "Varies",
-                type: "Various Cylinder Types",
-                notes: `General cylinder option. Specific part number/type may vary. (${cylPrefix.description})`
-              }
+              isDeviceSpecific: false,
+              addsCylinder: null // Cylinder prefixes modify, they don't add a separate cylinder
             });
           }
         });
