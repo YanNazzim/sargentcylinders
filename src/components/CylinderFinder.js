@@ -22,7 +22,42 @@ function CylinderFinder() {
     const seriesOptions = useMemo(() => {
         if (!category) return [];
         const hardwareCategory = sargentData.hardware.find(h => h.category === category);
-        return hardwareCategory ? hardwareCategory.series.map(s => s.name) : [];
+        if (!hardwareCategory) return [];
+
+        const groups = {
+            '80 Series': [],
+            'PE80 Series': [],
+            '90 Series': [],
+            '30 Series': [],
+            '20 Series': [],
+            'Other': [], // Fallback for any others
+        };
+
+        hardwareCategory.series.forEach(s => {
+            const name = s.name;
+            if (name.startsWith('PE8')) {
+                groups['PE80 Series'].push(name);
+            } else if (name.startsWith('8')) {
+                groups['80 Series'].push(name);
+            } else if (name.startsWith('9')) {
+                groups['90 Series'].push(name);
+            } else if (name.startsWith('3')) {
+                groups['30 Series'].push(name);
+            } else if (name.startsWith('2')) {
+                groups['20 Series'].push(name);
+            } else {
+                groups['Other'].push(name);
+            }
+        });
+        
+        // Format for the HardwareSelector with optgroups
+        return Object.keys(groups)
+            .filter(groupName => groups[groupName].length > 0)
+            .map(groupName => ({
+                label: groupName,
+                options: groups[groupName]
+            }));
+
     }, [category]);
 
     const modelOptions = useMemo(() => {
