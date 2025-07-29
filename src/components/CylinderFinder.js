@@ -282,7 +282,7 @@ function CylinderFinder() {
             {currentView === 'options' && (
                 <div className="wizard-step active"> {/* 'active' class ensures visibility */}
                     <div className="selected-hardware-note">
-                        Selected: {series} > {model}
+                        Selected: {series} &gt; {model}
                     </div>
                     <div className="cylinder-finder-options-area">
                         {deviceTiedPrefixes.length > 0 && (
@@ -324,7 +324,7 @@ function CylinderFinder() {
             {currentView === 'results' && (
                 <div className="wizard-step active"> {/* 'active' class ensures visibility */}
                     <div className="selected-hardware-note">
-                        Selected: {series} > {model}
+                        Selected: {series} &gt; {model}
                     </div>
                     {/* Display the ResultsDisplay component here */}
                     <ResultsDisplay cylinders={finalCylinders} />
