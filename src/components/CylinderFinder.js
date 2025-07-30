@@ -24,6 +24,12 @@ function CylinderFinder() {
         const hardwareCategory = sargentData.hardware.find(h => h.category === category);
         if (!hardwareCategory) return [];
 
+        // If the category is NOT 'Exit Devices', return a flat list of series names
+        if (category !== 'Exit Devices') {
+            return hardwareCategory.series.map(s => s.name);
+        }
+
+        // --- Existing logic for 'Exit Devices' ---
         const groups = {
             '80 Series': [],
             'PE80 Series': [],
@@ -77,15 +83,23 @@ function CylinderFinder() {
 
     const deviceTiedPrefixes = useMemo(() => {
         if (!activeModelData) return [];
-        let filteredPrefixes = activeModelData.prefixes.filter(p => p.isDeviceSpecific);
-
-        // Rule: None of the 90 series will have 16, 59, or AL prefixes available
-        if (series && series.startsWith('9')) { // Check if the selected series starts with '9'
-            filteredPrefixes = filteredPrefixes.filter(p => !['16', '59', 'AL'].includes(p.id));
+    
+        // All prefixes for the model that are tied to the device itself
+        const allDevicePrefixes = activeModelData.prefixes.filter(p => p.isDeviceSpecific);
+    
+        const universalPrefixes = ['16', '59', 'AL'];
+    
+        // Check if the selected series is an 80 or PE80 series
+        const is80Family = series && (series.includes('80 Series') || series.includes('PE80'));
+    
+        if (is80Family) {
+            // For 80 series family, ONLY show the universal prefixes
+            return allDevicePrefixes.filter(p => universalPrefixes.includes(p.id));
+        } else {
+            // For ALL OTHER series, show their specific prefixes but EXCLUDE the universal ones
+            return allDevicePrefixes.filter(p => !universalPrefixes.includes(p.id));
         }
-
-        return filteredPrefixes;
-    }, [activeModelData, series]); // Add 'series' to dependency array
+    }, [activeModelData, series]);
 
     const cylinderOptionsCategories = useMemo(() => {
         if (!activeModelData) return [];
@@ -126,8 +140,26 @@ function CylinderFinder() {
 
         const rawCylinderList = [];
         if (activeModelData.baseCylinder) {
-            rawCylinderList.push({ ...activeModelData.baseCylinder });
+            const modelNumberSuffix = activeModelData.modelNumber.slice(-2);
+            let cylinder = { ...activeModelData.baseCylinder };
+
+            // --- Logic for Special Function Cylinders ---
+            if (modelNumberSuffix === '50') { // Hotel Function
+                if (series.includes('10X')) cylinder.partNumber = 'C10X-2';
+                else if (series.includes('11')) cylinder.partNumber = 'C11-2';
+                else if (series.includes('6 Line')) cylinder.partNumber = 'C6-2B';
+                else if (['10 Line', '7 Line', '6500 Line'].some(s => series.includes(s))) {
+                    cylinder.partNumber = 'C10-2';
+                }
+            } else if (modelNumberSuffix === '65') { // Privacy Function
+                if (series.includes('10X')) cylinder.partNumber = 'C10X-3';
+                else if (['10 Line', '7 Line', '6500 Line'].some(s => series.includes(s))) {
+                    cylinder.partNumber = 'C10-3';
+                }
+            }
+            rawCylinderList.push(cylinder);
         }
+
         selectedDevicePrefixes.forEach(prefixId => {
             const prefixData = activeModelData.prefixes.find(p => p.id === prefixId);
             if (prefixData && prefixData.addsCylinder) {
@@ -164,7 +196,7 @@ function CylinderFinder() {
                 const lengthDesc = getCylinderLengthDescription(basePartNumber);
                 const prefixData = cylinderPrefixCategories.flatMap(c => c.prefixes).find(p => p.id === selectedCylinderPrefix);
                 const prefixDesc = prefixData ? prefixData.description.replace('Device', 'Housing') : '';
-                const finalPartNumber = `${selectedCylinderPrefix}${basePartNumber}`;
+                const finalPartNumber = `${selectedCylinderPrefix} ${basePartNumber} x Keying Details x Finish`;
                 const finalDescription = `${lengthDesc} ${cyl.type} ${prefixDesc}`;
                 return {
                     ...cyl,
@@ -179,6 +211,7 @@ function CylinderFinder() {
                 const finalDescription = `${lengthDesc} ${cyl.type}`;
                 return {
                     ...cyl,
+                    partNumber: `${cyl.partNumber} x Keying Details x Finish`,
                     description: finalDescription.trim(),
                 };
             });
@@ -186,7 +219,7 @@ function CylinderFinder() {
         
         return finalCylindersArray;
 
-    }, [activeModelData, selectedDevicePrefixes, selectedCylinderPrefix]);
+    }, [activeModelData, selectedDevicePrefixes, selectedCylinderPrefix, series]);
 
 
     const handleCategoryChange = (value) => {

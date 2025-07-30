@@ -11,13 +11,37 @@ function CategorizedPrefixSelector({ categories, selectedPrefixes, onChange, sea
 
   const filteredCategories = useMemo(() => {
     if (!searchTerm) return categories;
-    return categories.map(category => ({
-      ...category,
-      prefixes: category.prefixes.filter(prefix =>
-        prefix.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        prefix.description.toLowerCase().includes(searchTerm.toLowerCase())
-      )
-    })).filter(category => category.prefixes.length > 0);
+
+    const lowercasedSearchTerm = searchTerm.toLowerCase();
+
+    return categories
+      .map(category => {
+        // Check if the category name itself matches the search term
+        const categoryNameMatches = category.name.toLowerCase().includes(lowercasedSearchTerm);
+
+        // Filter prefixes based on the search term
+        const matchingPrefixes = category.prefixes.filter(prefix =>
+          prefix.id.toLowerCase().includes(lowercasedSearchTerm) ||
+          prefix.description.toLowerCase().includes(lowercasedSearchTerm)
+        );
+
+        // If the category name matches, show all its prefixes
+        if (categoryNameMatches) {
+          return category;
+        }
+
+        // If there are matching prefixes, return the category with just those prefixes
+        if (matchingPrefixes.length > 0) {
+          return {
+            ...category,
+            prefixes: matchingPrefixes
+          };
+        }
+
+        // If neither matched, return null to be filtered out
+        return null;
+      })
+      .filter(Boolean); // This will remove all null entries from the array
   }, [categories, searchTerm]);
 
   return (
