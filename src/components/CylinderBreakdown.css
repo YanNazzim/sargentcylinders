@@ -1,0 +1,36 @@
+/* src/components/CylinderBreakdown.css */
+.breakdown-container {
+    position: relative;
+    margin: 0 auto;
+    max-width: 100%;
+}
+
+.breakdown-image {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+.hotspot {
+    position: absolute;
+    background-color: rgba(255, 255, 0, 0.4);
+    border: 1px solid #ff0;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.hotspot:hover {
+    background-color: rgba(255, 255, 0, 0.6);
+}
+
+.tooltip {
+    position: fixed;
+    background-color: #1a202c;
+    color: #fff;
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+    border: 1px solid #63b3ed;
+    z-index: 1000;
+    pointer-events: none;
+    white-space: nowrap;
+}
