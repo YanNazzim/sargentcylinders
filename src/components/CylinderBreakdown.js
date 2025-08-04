@@ -1,51 +1,38 @@
 // src/components/CylinderBreakdown.js
-import React, { useState } from 'react';
+import React from 'react';
 import './CylinderBreakdown.css';
 
-function CylinderBreakdown({ imageUrl, parts }) {
-    const [activePart, setActivePart] = useState(null);
-    const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
-
-    const handleMouseOver = (part, event) => {
-        setActivePart(part);
-        setTooltipPosition({ x: event.clientX, y: event.clientY });
-    };
-
-    const handleMouseOut = () => {
-        setActivePart(null);
-    };
+const CylinderBreakdown = React.memo(({ imageUrl, parts }) => {
+    if (!parts) {
+        return null;
+    }
 
     return (
         <div className="breakdown-container">
-            <img src={imageUrl} alt="Cylinder Breakdown" className="breakdown-image" />
-            {parts.map(part => (
-                <div
-                    key={part.id}
-                    className="hotspot"
-                    style={{
-                        top: `${part.coordinates[0]}px`,
-                        left: `${part.coordinates[1]}px`,
-                        width: `${part.coordinates[2]}px`,
-                        height: `${part.coordinates[3]}px`,
-                    }}
-                    onMouseOver={(e) => handleMouseOver(part, e)}
-                    onMouseOut={handleMouseOut}
-                />
-            ))}
-            {activePart && (
-                <div
-                    className="tooltip"
-                    style={{
-                        top: `${tooltipPosition.y + 15}px`,
-                        left: `${tooltipPosition.x + 15}px`,
-                    }}
-                >
-                    <strong>{activePart.name}</strong><br />
-                    Part #: {activePart.partNumber}
-                </div>
-            )}
+            <div className="breakdown-image-wrapper">
+                 <img src={imageUrl} alt="Cylinder Breakdown" className="breakdown-image" />
+            </div>
+
+            <div className="parts-list">
+                {parts.map(part => (
+                    <div key={part.id} className="part-card">
+                        <div className="part-card-header">
+                            <span className="part-item-number">{part.id}</span>
+                            <h4 className="part-name">{part.name}</h4>
+                        </div>
+                        <ul className="components-list">
+                            {part.components.map((component, index) => (
+                                <li key={index} className="component-item">
+                                    <span className="component-part-number">{component.partNumber}</span>
+                                    <span className="component-description">{component.description}</span>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                ))}
+            </div>
         </div>
     );
-}
+});
 
 export default CylinderBreakdown;

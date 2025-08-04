@@ -133,6 +133,7 @@ function BittingSimulator() {
   return (
     <div className="bitting-simulator-container">
       <h2 className="simulator-title">Interactive Bitting Simulator</h2>
+      <h2 className="simulator-title">🛑 NOT READY FOR USE YET 🛑</h2>
       <p className="simulator-description">Watch how the key's cuts lift the pins to create the shear line.</p>
 
       <div className="simulator-controls">

@@ -6,61 +6,85 @@ export const glossaryData = {
     {
       id: 'mortise',
       name: 'Mortise Cylinder',
-      imageUrl: images.MortiseCyls, // Placeholder image
+      imageUrl: images.MortiseCyls,
       parts: [
-        { id: '1', name: 'Plug', partNumber: 'See Table', coordinates: [180, 270, 150, 40] },
-        { id: '2', name: 'Cylinder Shell, Cap & Slide Assy.', partNumber: 'See Table', coordinates: [140, 380, 150, 80] },
-        { id: '3', name: 'Bottom Pin', partNumber: 'See Table Page 16', coordinates: [130, 150, 100, 20] },
-        { id: '4', name: 'Master Pin', partNumber: '13-0062', coordinates: [100, 470, 80, 20] },
-        { id: '5', name: 'Top Pin', partNumber: 'See Table Page 25', coordinates: [60, 490, 80, 20] },
-        { id: '6', name: 'Compression Spring', partNumber: '13-0265', coordinates: [20, 580, 100, 20] },
-        { id: '7', name: 'Cam', partNumber: 'See Table Page 9', coordinates: [60, 680, 80, 60] },
-        { id: '8', name: 'Screw', partNumber: '01-1121', coordinates: [90, 780, 60, 40] },
-        { id: '13', name: '6 Pin Slide', partNumber: '13-1341', coordinates: [10, 650, 100, 20] }
+        { id: '1', name: 'Plug', components: [{ partNumber: 'See Table Page 17', description: 'Varies by cylinder length' }] },
+        { id: '2', name: 'Cylinder Shell, Cap & Slide Assy.', components: [{ partNumber: 'See Table Page 17', description: 'Varies by cylinder length' }] },
+        { id: '3', name: 'Bottom Pin', components: [{ partNumber: 'See Table Page 25', description: 'Varies by key bitting' }] },
+        { id: '4', name: 'Master Pin', components: [{ partNumber: '13-0062 (Size #13)', description: 'Additional sizes on page 25' }] },
+        { id: '5', name: 'Top Pin', components: [{ partNumber: 'See Table Page 25', description: 'Varies by keying' }] },
+        { id: '6', name: 'Compression Spring', components: [{ partNumber: '13-0265', description: '' }] },
+        { id: '7', name: 'Cam', components: [{ partNumber: 'See Table Page 18', description: 'Multiple options available' }] },
+        { id: '8', name: 'Screw', components: [{ partNumber: '01-1121', description: '#3-48 x 5/16" PH. FL' }] },
+        { id: '13', name: 'Slide', components: [
+            { partNumber: '13-1341', description: '6 Pin Slide (Mfg after 06-2008)' },
+            { partNumber: '13-1797', description: '7 Pin Slide (Mfg after 06-2008)' },
+            { partNumber: '13-0779', description: '6 Pin Slide (Mfg prior to 06-2008)' },
+            { partNumber: '13-0780', description: '7 Pin Slide (Mfg prior to 06-2008)' },
+        ]}
       ]
     },
     {
-      id: 'rim',
-      name: 'Rim Cylinder',
-      imageUrl: 'https://i.imgur.com/sT9f5gG.png', // Placeholder image
-      parts: [
-        { id: '1', name: 'Plug', partNumber: 'See Table', coordinates: [430, 270, 150, 40] },
-        { id: '2', name: 'Cylinder Shell, Cap & Slide Assy.', partNumber: 'See Table', coordinates: [330, 420, 150, 80] },
-        { id: '3', name: 'Bottom Pin', partNumber: 'See Table Page 25', coordinates: [340, 140, 100, 20] },
-        { id: '4', name: 'Master Pin', partNumber: '13-0062', coordinates: [290, 520, 80, 20] },
-        { id: '5', name: 'Top Pin', partNumber: 'See Table Page 25', coordinates: [250, 540, 80, 20] },
-        { id: '6', name: 'Compression Spring', partNumber: '13-0265', coordinates: [210, 620, 100, 20] },
-        { id: '9', name: 'Plug Retainer', partNumber: '13-0080', coordinates: [460, 640, 40, 40] },
-        { id: '10', name: 'Tail Piece', partNumber: '13-0085', coordinates: [480, 800, 250, 30] },
-        { id: '11', name: 'Cylinder Back Plate', partNumber: '13-0086', coordinates: [270, 820, 120, 120] },
-        { id: '12', name: 'Connecting Screws', partNumber: '13-0075', coordinates: [220, 850, 150, 30] },
-        { id: '13', name: '6 Pin Slide', partNumber: '13-1341', coordinates: [200, 680, 100, 20] }
-      ]
-    },
-    {
-        id: 'key-in-lever',
-        name: 'Key-in-Lever Cylinder',
-        imageUrl: images.KILCyls, // Placeholder image from catalog page 16
+        id: 'rim',
+        name: 'Rim Cylinder',
+        imageUrl: images.RimCyls,
         parts: [
-            { id: '1', name: '6 Pin Key Blank', partNumber: 'See Table Page 27', coordinates: [320, 20, 150, 80] },
-            { id: '2', name: 'Plug & Ring Assembly', partNumber: '13-3142', coordinates: [400, 180, 150, 60] },
-            { id: '3', name: 'Cylinder Shell & Slide Assembly', partNumber: '13-3257-Effective 9/03', coordinates: [200, 400, 150, 80] },
-            { id: '4', name: 'Bottom Pin', partNumber: 'See Table Page 25', coordinates: [280, 180, 100, 20] },
-            { id: '5', name: 'Top Pin', partNumber: '13-0059', coordinates: [140, 240, 80, 20] },
-            { id: '6', name: 'Master Pin', partNumber: 'See Table Page 25', coordinates: [110, 450, 80, 20] },
-            { id: '7', name: 'Compression Spring', partNumber: '13-0265', coordinates: [70, 520, 100, 20] },
-            { id: '8', name: 'Plug Retainer Ring', partNumber: '13-0205', coordinates: [110, 590, 40, 40] },
-            { id: '9', name: 'Tail Piece', partNumber: '13-1385', coordinates: [180, 750, 200, 40] },
-            { id: '10', name: 'Cylinder Cap Spring', partNumber: '13-1555-Effective 6/03', coordinates: [460, 680, 80, 20] },
-            { id: '11', name: 'Cylinder Cap Pin', partNumber: '13-1554-Effective 6/03', coordinates: [440, 740, 80, 20] },
-            { id: '12', name: 'Cylinder Tail Washer', partNumber: '13-0883', coordinates: [410, 840, 60, 60] },
-            { id: '13', name: 'Cylinder Endcap', partNumber: '13-0875', coordinates: [350, 880, 80, 60] },
-            { id: '14', name: 'Tail Piece', partNumber: '13-0878', coordinates: [380, 700, 150, 30] },
-            { id: '15', name: 'Blocking Piece', partNumber: '13-0884', coordinates: [450, 580, 40, 40] },
-            { id: '16', name: 'Slide', partNumber: '13-1341', coordinates: [80, 400, 80, 20] },
-            { id: '17', name: 'Tail Piece Retainer', partNumber: '13-0680', coordinates: [360, 520, 40, 40] },
-            { id: '18', name: 'Cam Connector', partNumber: '13-1813', coordinates: [330, 800, 60, 60] }
+          { id: '1', name: 'Plug', components: [{ partNumber: '13-0090 (6-Pin) or 13-0087 (7-Pin)', description: 'Varies by pin count' }] },
+          { id: '2', name: 'Cylinder Shell, Cap & Slide Assy.', components: [{ partNumber: '13-2005 (6-Pin) or 13-2712 (7-Pin)', description: 'Varies by pin count' }] },
+          { id: '3', name: 'Bottom Pin', components: [{ partNumber: 'See Table Page 25', description: 'Varies by key bitting' }] },
+          { id: '4', name: 'Master Pin', components: [{ partNumber: '13-0062', description: 'See page 25 for all sizes' }] },
+          { id: '5', name: 'Top Pin', components: [{ partNumber: 'See Table Page 25', description: 'Varies by keying' }] },
+          { id: '6', name: 'Compression Spring', components: [{ partNumber: '13-0265', description: '' }] },
+          { id: '9', name: 'Plug Retainer', components: [{ partNumber: '13-0080', description: '' }] },
+          { id: '10', name: 'Tail Piece', components: [{ partNumber: '13-0085', description: '' }] },
+          { id: '11', name: 'Cylinder Back Plate', components: [{ partNumber: '13-0086', description: '' }] },
+          { id: '12', name: 'Connecting Screws', components: [
+              { partNumber: '13-0075', description: 'Standard Connecting Screws #12-24 x 2-5/8"' },
+              { partNumber: '13-0074', description: 'Standard Connecting Screws #12-24 x 2-1/8"' },
+          ]},
+          { id: '13', name: 'Slide', components: [
+              { partNumber: '13-1341', description: '6 Pin Slide (Mfg after 06-2008)' },
+              { partNumber: '13-1797', description: '7 Pin Slide (Mfg after 06-2008)' },
+              { partNumber: '13-0779', description: '6 Pin Slide (Mfg prior to 06-2008)' },
+              { partNumber: '13-0780', description: '7 Pin Slide (Mfg prior to 06-2008)' },
+          ]}
         ]
+      },
+    {
+      id: 'key-in-lever',
+      name: 'Key-in-Lever Cylinder',
+      imageUrl: images.KILCyls,
+      parts: [
+        { id: '1', name: 'Key Blank', components: [{ partNumber: 'See Page 28', description: 'Varies by keyway' }] },
+        { id: '2', name: 'Plug', components: [
+            { partNumber: '13-3142', description: 'For 6, 7 Lever, 8L, 10, 10X, 11, 6500, etc.' },
+            { partNumber: '13-3425', description: 'For 7, 8, 9 Knobs' },
+            { partNumber: '13-0920', description: 'For 5500*, 8X' },
+        ]},
+        { id: '3', name: 'Cylinder Shell & Slide Assembly', components: [
+            { partNumber: '13-3257', description: 'For 7, 8, 9 Knobs and 6, 6500 lines' },
+            { partNumber: '13-3493', description: 'For 460, 470, 480, 1655 lines' },
+        ]},
+        { id: '4', name: 'Bottom Pin', components: [{ partNumber: 'See Page 25', description: 'Varies by bitting' }]},
+        { id: '5', name: 'Top Pin', components: [{ partNumber: '13-0059 (Size #10)', description: 'Additional sizes on page 25' }]},
+        { id: '6', name: 'Master Pin', components: [{ partNumber: 'See Page 25', description: 'Varies by keying' }]},
+        { id: '7', name: 'Compression Spring', components: [{ partNumber: '13-0265', description: '' }]},
+        { id: '8', name: 'Plug Retainer Ring', components: [
+            { partNumber: '13-0205', description: 'For most levers and 8 line knob mfg after 4/05' },
+            { partNumber: '06-0166', description: 'For 7, 8, 9 Knob plug mfg prior to 3/05' },
+            { partNumber: '01-0870', description: 'For 5500*, 8X' },
+        ]},
+        { id: '9', name: 'Tail Piece', components: [
+            { partNumber: '10-3629', description: 'For 10X (1-3/8"-2" door)' },
+            { partNumber: '13-1385', description: 'For 11 Line (except 50 func)' },
+            { partNumber: '13-0895', description: 'For 7, 8L, 10, 6500' },
+            { partNumber: '13-1849', description: 'For 8X Line' },
+        ]},
+        { id: '16', name: 'Slide', components: [
+            { partNumber: '13-1341', description: 'For most current models (Mfg after June 2008)' },
+            { partNumber: '13-0779', description: 'For older models (Mfg prior to June 2008)' },
+        ]},
+      ]
     }
   ]
 };
