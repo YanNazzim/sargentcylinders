@@ -1,38 +1,82 @@
 // src/components/CylinderGlossary.js
 import React, { useState } from 'react';
 import { glossaryData } from '../data/glossaryData';
+import { glossaryCategories } from '../data/glossaryCategories';
 import CylinderBreakdown from './CylinderBreakdown';
 import './CylinderGlossary.css';
 
 function CylinderGlossary() {
-  const [selectedCylinderId, setSelectedCylinderId] = useState(glossaryData.cylinderTypes[0].id);
+  const cylinderOptions = ['mortise', 'bored-locks', 'rim']
+    .map((id) => glossaryData.cylinderTypes.find((c) => c.id === id))
+    .filter(Boolean);
+  const [selectedTypeId, setSelectedTypeId] = useState(cylinderOptions[0].id);
+  const [selectedCategoryId, setSelectedCategoryId] = useState(
+    glossaryCategories[0].options[0].id
+  );
 
-  const selectedCylinder = glossaryData.cylinderTypes.find(c => c.id === selectedCylinderId);
+  const selectedCylinder = cylinderOptions.find(c => c.id === selectedTypeId);
+  const showParts =
+    selectedCategoryId === 'standard-conventional' &&
+    selectedCylinder &&
+    selectedCylinder.parts.length > 0;
 
   return (
     <div className="glossary-container">
       <h2 className="glossary-title">Cylinder Parts Glossary</h2>
+
       <div className="glossary-selector-container">
-        <label htmlFor="cylinder-select" className="glossary-selector-label">Choose a cylinder type:</label>
+        <label
+          htmlFor="type-select"
+          className="glossary-selector-label"
+        >
+          Select cylinder:
+        </label>
         <select
-          id="cylinder-select"
-          value={selectedCylinderId}
-          onChange={(e) => setSelectedCylinderId(e.target.value)}
+          id="type-select"
+          value={selectedTypeId}
+          onChange={(e) => setSelectedTypeId(e.target.value)}
           className="glossary-selector-select"
         >
-          {glossaryData.cylinderTypes.map(cylinder => (
-            <option key={cylinder.id} value={cylinder.id}>
-              {cylinder.name}
+          {cylinderOptions.map(option => (
+            <option key={option.id} value={option.id}>
+              {option.name}
             </option>
           ))}
         </select>
       </div>
 
-      {selectedCylinder && (
+      <div className="glossary-selector-container">
+        <label
+          htmlFor="category-select"
+          className="glossary-selector-label"
+        >
+          Select category:
+        </label>
+        <select
+          id="category-select"
+          value={selectedCategoryId}
+          onChange={(e) => setSelectedCategoryId(e.target.value)}
+          className="glossary-selector-select"
+        >
+          {glossaryCategories.map(group => (
+            <optgroup key={group.label} label={group.label}>
+              {group.options.map(option => (
+                <option key={option.id} value={option.id}>
+                  {option.name}
+                </option>
+              ))}
+            </optgroup>
+          ))}
+        </select>
+      </div>
+
+      {showParts ? (
         <CylinderBreakdown
           imageUrl={selectedCylinder.imageUrl}
           parts={selectedCylinder.parts}
         />
+      ) : (
+        <p className="no-parts-message">No parts available for this selection.</p>
       )}
     </div>
   );
