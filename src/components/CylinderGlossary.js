@@ -45,6 +45,7 @@ function CylinderGlossary() {
             <option key={option.id} value={option.id}>
               {option.name}
             </option>
+          ))}
           {glossaryCategories.map(group => (
             <optgroup key={group.label} label={group.label}>
               {group.options.map(option => (
@@ -83,14 +84,15 @@ function CylinderGlossary() {
       </div>
 
       {showParts ? (
-      {selectedCylinder && selectedCylinder.parts.length > 0 ? (
-        <CylinderBreakdown
-          imageUrl={selectedCylinder.imageUrl}
-          parts={selectedCylinder.parts}
-        />
-      ) : (
-        <p className="no-parts-message">No parts available for this selection.</p>
-      )}
+        selectedCylinder && selectedCylinder.parts.length > 0 ? (
+          <CylinderBreakdown
+            imageUrl={selectedCylinder.imageUrl}
+            parts={selectedCylinder.parts}
+          />
+        ) : (
+          <p className="no-parts-message">No parts available for this selection.</p>
+        )
+      ) : null}
     </div>
   );
 }
