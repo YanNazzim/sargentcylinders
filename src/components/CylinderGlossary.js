@@ -6,6 +6,7 @@ import CylinderBreakdown from './CylinderBreakdown';
 import './CylinderGlossary.css';
 
 function CylinderGlossary() {
+
   const cylinderOptions = ['mortise', 'bored-locks', 'rim']
     .map((id) => glossaryData.cylinderTypes.find((c) => c.id === id))
     .filter(Boolean);
@@ -13,6 +14,9 @@ function CylinderGlossary() {
   const [selectedCategoryId, setSelectedCategoryId] = useState(
     glossaryCategories[0].options[0].id
   );
+
+  const [selectedCylinderId, setSelectedCylinderId] = useState(glossaryCategories[0].options[0].id);
+
 
   const selectedCylinder = cylinderOptions.find(c => c.id === selectedTypeId);
   const showParts =
@@ -41,6 +45,14 @@ function CylinderGlossary() {
             <option key={option.id} value={option.id}>
               {option.name}
             </option>
+          {glossaryCategories.map(group => (
+            <optgroup key={group.label} label={group.label}>
+              {group.options.map(option => (
+                <option key={option.id} value={option.id}>
+                  {option.name}
+                </option>
+              ))}
+            </optgroup>
           ))}
         </select>
       </div>
@@ -71,6 +83,7 @@ function CylinderGlossary() {
       </div>
 
       {showParts ? (
+      {selectedCylinder && selectedCylinder.parts.length > 0 ? (
         <CylinderBreakdown
           imageUrl={selectedCylinder.imageUrl}
           parts={selectedCylinder.parts}
