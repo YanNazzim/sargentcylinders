@@ -3,8 +3,12 @@ import React from 'react';
 import './CylinderBreakdown.css';
 
 const CylinderBreakdown = React.memo(({ imageUrl, parts }) => {
-    if (!parts) {
-        return null;
+    if (!parts || parts.every(part => part.components.length === 0)) {
+        return (
+            <p className="no-parts-message">
+                No parts available for the selected keying system.
+            </p>
+        );
     }
 
     return (
@@ -17,7 +21,6 @@ const CylinderBreakdown = React.memo(({ imageUrl, parts }) => {
                 {parts.map(part => (
                     <div key={part.id} className="part-card">
                         <div className="part-card-header">
-                            <span className="part-item-number">{part.id}</span>
                             <h4 className="part-name">{part.name}</h4>
                         </div>
                         <ul className="components-list">
