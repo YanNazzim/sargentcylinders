@@ -1,11 +1,12 @@
 // src/components/CylinderGlossary.js
 import React, { useState } from 'react';
 import { glossaryData } from '../data/glossaryData';
+import { glossaryCategories } from '../data/glossaryCategories';
 import CylinderBreakdown from './CylinderBreakdown';
 import './CylinderGlossary.css';
 
 function CylinderGlossary() {
-  const [selectedCylinderId, setSelectedCylinderId] = useState(glossaryData.cylinderTypes[0].id);
+  const [selectedCylinderId, setSelectedCylinderId] = useState(glossaryCategories[0].options[0].id);
 
   const selectedCylinder = glossaryData.cylinderTypes.find(c => c.id === selectedCylinderId);
 
@@ -20,19 +21,25 @@ function CylinderGlossary() {
           onChange={(e) => setSelectedCylinderId(e.target.value)}
           className="glossary-selector-select"
         >
-          {glossaryData.cylinderTypes.map(cylinder => (
-            <option key={cylinder.id} value={cylinder.id}>
-              {cylinder.name}
-            </option>
+          {glossaryCategories.map(group => (
+            <optgroup key={group.label} label={group.label}>
+              {group.options.map(option => (
+                <option key={option.id} value={option.id}>
+                  {option.name}
+                </option>
+              ))}
+            </optgroup>
           ))}
         </select>
       </div>
 
-      {selectedCylinder && (
+      {selectedCylinder && selectedCylinder.parts.length > 0 ? (
         <CylinderBreakdown
           imageUrl={selectedCylinder.imageUrl}
           parts={selectedCylinder.parts}
         />
+      ) : (
+        <p className="no-parts-message">No parts available for this selection.</p>
       )}
     </div>
   );

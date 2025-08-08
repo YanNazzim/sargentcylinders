@@ -3,6 +3,18 @@ import { images } from '../images/images';
 
 export const glossaryData = {
   cylinderTypes: [
+    { id: 'standard-conventional', name: 'Standard Conventional', imageUrl: null, parts: [] },
+    { id: 'degree-conventional', name: 'Degree Conventional', imageUrl: null, parts: [] },
+    { id: 'xc-conventional', name: 'XC Conventional', imageUrl: null, parts: [] },
+    { id: 'keso-conventional', name: 'KESO Conventional', imageUrl: null, parts: [] },
+    { id: 'standard-lfic', name: 'Standard LFIC', imageUrl: null, parts: [] },
+    { id: 'degree-lfic', name: 'Degree LFIC', imageUrl: null, parts: [] },
+    { id: 'xc-lfic', name: 'XC LFIC', imageUrl: null, parts: [] },
+    { id: 'keso-lfic', name: 'KESO LFIC', imageUrl: null, parts: [] },
+    { id: 'standard-sfic', name: 'Standard SFIC', imageUrl: null, parts: [] },
+    { id: 'degree-sfic', name: 'Degree SFIC', imageUrl: null, parts: [] },
+    { id: 'xc-sfic', name: 'XC SFIC', imageUrl: null, parts: [] },
+    { id: 'keso-sfic', name: 'KESO SFIC', imageUrl: null, parts: [] },
     {
       id: 'mortise',
       name: 'Mortise Cylinder',
