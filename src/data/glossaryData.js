@@ -282,8 +282,8 @@ export const glossaryData = {
         ]
       },
     {
-      id: 'key-in-lever',
-      name: 'Key-in-Lever Cylinder',
+      id: 'bored-locks',
+      name: 'Bored Locks Cylinder',
       imageUrl: images.KILCyls,
       parts: [
         { id: '', name: 'Key Blank', components: [
