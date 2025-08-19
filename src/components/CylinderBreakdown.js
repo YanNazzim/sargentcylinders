@@ -2,11 +2,28 @@
 import React from 'react';
 import './CylinderBreakdown.css';
 
-const CylinderBreakdown = React.memo(({ imageUrl, parts }) => {
+// A simple component to highlight search matches
+const Highlight = ({ text = '', highlight = '' }) => {
+    if (!highlight.trim()) {
+        return <span>{text}</span>;
+    }
+    const regex = new RegExp(`(${highlight})`, 'gi');
+    const parts = text.split(regex);
+    return (
+        <span>
+            {parts.map((part, i) =>
+                regex.test(part) ? <strong key={i} className="highlighted-text">{part}</strong> : <span key={i}>{part}</span>
+            )}
+        </span>
+    );
+};
+
+
+const CylinderBreakdown = React.memo(({ imageUrl, parts, searchTerm }) => {
     if (!parts || parts.every(part => part.components.length === 0)) {
         return (
             <p className="no-parts-message">
-                No parts available for the selected keying system.
+                No parts available for this selection.
             </p>
         );
     }
@@ -21,7 +38,10 @@ const CylinderBreakdown = React.memo(({ imageUrl, parts }) => {
                 {parts.map(part => (
                     <div key={part.id} className="part-card">
                         <div className="part-card-header">
-                            <h4 className="part-name">{part.name}</h4>
+                            <h4 className="part-name">
+                                {part.partNumberLabel && <span className="part-number-indicator">{part.partNumberLabel}</span>}
+                                <Highlight text={part.name} highlight={searchTerm} />
+                            </h4>
                         </div>
                         <ul className="components-list">
                             {part.components.map((component, index) => {
@@ -43,7 +63,7 @@ const CylinderBreakdown = React.memo(({ imageUrl, parts }) => {
                                                             <tr key={rowIndex}>
                                                                 {component.headers.map(header => (
                                                                     <td key={header} data-label={header}>
-                                                                        {row[header]}
+                                                                        <Highlight text={row[header]} highlight={searchTerm} />
                                                                     </td>
                                                                 ))}
                                                             </tr>
@@ -56,8 +76,12 @@ const CylinderBreakdown = React.memo(({ imageUrl, parts }) => {
                                 } else {
                                     return (
                                         <li key={index} className="component-item">
-                                            <span className="component-part-number">{component.partNumber}</span>
-                                            <span className="component-description">{component.description}</span>
+                                            <span className="component-part-number">
+                                                <Highlight text={component.partNumber} highlight={searchTerm} />
+                                            </span>
+                                            <span className="component-description">
+                                                <Highlight text={component.description} highlight={searchTerm} />
+                                            </span>
                                         </li>
                                     );
                                 }

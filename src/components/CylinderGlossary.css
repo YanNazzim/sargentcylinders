@@ -4,10 +4,9 @@
     padding: 2rem;
     border-radius: 0.75rem;
     box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
-    max-width: 900px;
+    max-width: 1200px;
     margin: 2rem auto;
     color: #fff;
-    text-align: center;
 }
 
 .glossary-title {
@@ -15,25 +14,144 @@
     font-weight: bold;
     margin-bottom: 1.5rem;
     color: #fff;
+    text-align: center;
 }
 
-.glossary-selector-container {
+.glossary-controls {
     margin-bottom: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
 }
 
-.glossary-selector-label {
-    display: block;
-    font-size: 1.1rem;
-    margin-bottom: 0.5rem;
+.search-bar-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
 }
 
-.glossary-selector-select {
+.search-bar-wrapper svg {
+    position: absolute;
+    left: 1rem;
+    color: #a0aec0;
+    width: 1.25rem;
+    height: 1.25rem;
+}
+
+.glossary-search-bar {
     width: 100%;
-    max-width: 400px;
-    padding: 0.75rem;
-    border-radius: 0.375rem;
-    border: 1px solid #4a5568;
+    padding: 0.8rem 3rem; /* Make space for both icons */
+    font-size: 1.1rem;
+    border-radius: 0.5rem;
+    border: 2px solid #4a5568;
     background-color: #1a202c;
     color: #fff;
-    font-size: 1rem;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.glossary-search-bar:focus {
+    outline: none;
+    border-color: #63b3ed;
+    box-shadow: 0 0 0 4px rgba(99, 179, 237, 0.4);
+}
+
+.clear-search-button {
+    position: absolute;
+    right: 2rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #a0aec0;
+    transition: color 0.2s ease-in-out;
+}
+
+.clear-search-button:hover {
+    color: #fff;
+}
+
+.clear-search-button svg {
+    width: 1.25rem;
+    height: 1.25rem;
+}
+
+.glossary-filter-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    justify-content: center;
+}
+
+.glossary-filter-buttons button {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 0.375rem;
+    cursor: pointer;
+    background-color: #4a5568;
+    color: #cbd5e0;
+    transition: all 0.2s ease-in-out;
+}
+
+.glossary-filter-buttons button:hover {
+    background-color: #6a768e;
+    color: #fff;
+}
+
+.glossary-filter-buttons button.active {
+    background-color: #3182ce;
+    color: #fff;
+    box-shadow: 0 4px 10px rgba(49, 130, 206, 0.3);
+    transform: translateY(-2px);
+}
+
+.cylinder-section {
+    margin-bottom: 3rem;
+    padding: 1.5rem;
+    border: 1px solid #4a5568;
+    border-radius: 0.75rem;
+    background-color: #1a202c;
+}
+
+.cylinder-section-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #e2e8f0;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid #3182ce;
+}
+
+.no-results-message {
+    text-align: center;
+    font-size: 1.1rem;
+    color: #a0aec0;
+    padding: 2rem;
+    border: 2px dashed #4a5568;
+    border-radius: 0.5rem;
+}
+
+.glossary-initial-view {
+    text-align: center;
+    padding: 3rem 1rem;
+    border: 2px dashed #4a5568;
+    border-radius: 0.75rem;
+    color: #a0aec0;
+}
+
+.glossary-initial-view svg {
+    width: 3.5rem;
+    height: 3.5rem;
+    margin-bottom: 1rem;
+    color: #63b3ed;
+}
+
+.glossary-initial-view h3 {
+    font-size: 1.5rem;
+    color: #e2e8f0;
+    margin-bottom: 0.5rem;
 }

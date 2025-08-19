@@ -7,4 +7,3 @@ export const glossaryCategories = [
   { id: 'xc', name: 'XC' },
   { id: 'keso', name: 'KESO' },
 ];
-
