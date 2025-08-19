@@ -1,0 +1,120 @@
+/* src/components/FeedbackModal.css */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.75);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.modal-content {
+    background-color: #2d3748;
+    padding: 2.5rem;
+    border-radius: 0.75rem;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    width: 90%;
+    max-width: 500px;
+    position: relative;
+    border: 1px solid #4a5568;
+}
+
+.modal-close-button {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    font-size: 1.75rem;
+    color: #a0aec0;
+    cursor: pointer;
+    line-height: 1;
+}
+
+.modal-title {
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    color: #fff;
+}
+
+.feedback-form .form-group {
+    margin-bottom: 1.25rem;
+}
+
+.feedback-form label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #cbd5e0;
+    font-weight: 500;
+}
+
+.feedback-form input,
+.feedback-form textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border-radius: 0.375rem;
+    border: 1px solid #4a5568;
+    background-color: #1a202c;
+    color: #fff;
+    font-size: 1rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.feedback-form input:focus,
+.feedback-form textarea:focus {
+    outline: none;
+    border-color: #63b3ed;
+    box-shadow: 0 0 0 3px rgba(99, 179, 237, 0.4);
+}
+
+.feedback-form textarea {
+    resize: vertical;
+}
+
+.submit-button {
+    width: 100%;
+    padding: 0.8rem;
+    border: none;
+    border-radius: 0.375rem;
+    background-color: #3182ce;
+    color: #fff;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.submit-button:hover:not(:disabled) {
+    background-color: #2c6cb5;
+}
+
+.submit-button:disabled {
+    background-color: #555;
+    cursor: not-allowed;
+}
+
+.modal-message {
+    text-align: center;
+    padding: 1rem;
+    border-radius: 0.375rem;
+    margin-bottom: 1rem;
+}
+.modal-message.success {
+    background-color: #2f855a;
+    color: #fff;
+}
+.modal-message.error {
+    background-color: #c53030;
+    color: #fff;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}

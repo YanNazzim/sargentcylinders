@@ -3,22 +3,29 @@ import React, { useState, useMemo } from 'react';
 import Fuse from 'fuse.js';
 import { glossaryData } from '../data/glossaryData';
 import CylinderBreakdown from './CylinderBreakdown';
-import { SearchIcon, WrenchIcon, ClearIcon } from './Icons'; // Import ClearIcon
+import { SearchIcon, WrenchIcon, ClearIcon } from './Icons';
 import './CylinderGlossary.css';
 
+// Flatten the data for searching, ensuring each part knows its cylinder parent
 const allParts = glossaryData.cylinderTypes.flatMap(cylinder =>
     cylinder.parts.map(part => ({
         ...part,
         cylinderName: cylinder.name,
         cylinderId: cylinder.id,
-        imageUrl: cylinder.imageUrl
+        cylinderImageUrl: cylinder.imageUrl // Pass image URL for the header
     }))
 );
 
+// Fuse.js options for search relevance
 const fuseOptions = {
-    keys: ['name', 'components.partNumber', 'components.description'],
+    keys: [
+        { name: 'cylinderName', weight: 0.5 },
+        { name: 'name', weight: 0.3 },
+        { name: 'components.partNumber', weight: 0.15 },
+        { name: 'components.description', weight: 0.05 }
+    ],
     includeScore: true,
-    threshold: 0.4,
+    threshold: 0.3,
     minMatchCharLength: 2,
 };
 
@@ -27,10 +34,36 @@ const fuse = new Fuse(allParts, fuseOptions);
 function CylinderGlossary() {
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedCylinderType, setSelectedCylinderType] = useState('all');
+    const [openCylinderId, setOpenCylinderId] = useState(null);
+
+    const handleToggleCylinder = (cylinderId) => {
+        setOpenCylinderId(prevId => (prevId === cylinderId ? null : cylinderId));
+    };
 
     const searchResults = useMemo(() => {
         if (!searchTerm) return [];
-        return fuse.search(searchTerm).map(result => result.item);
+        const results = fuse.search(searchTerm);
+
+        // Custom sorting to prioritize specific cylinder types
+        results.sort((a, b) => {
+            const aName = a.item.cylinderName.toLowerCase();
+            const bName = b.item.cylinderName.toLowerCase();
+            const priorityKeywords = ['mortise cylinder', 'rim cylinder', 'bored locks cylinder'];
+
+            let aPriority = priorityKeywords.findIndex(keyword => aName.includes(keyword));
+            let bPriority = priorityKeywords.findIndex(keyword => bName.includes(keyword));
+
+            if (aPriority === -1) aPriority = priorityKeywords.length;
+            if (bPriority === -1) bPriority = priorityKeywords.length;
+
+            if (aPriority !== bPriority) {
+                return aPriority - bPriority;
+            }
+
+            return a.score - b.score;
+        });
+
+        return results.map(result => result.item);
     }, [searchTerm]);
 
     const displayedCylinders = useMemo(() => {
@@ -40,7 +73,7 @@ function CylinderGlossary() {
                     acc[part.cylinderId] = {
                         id: part.cylinderId,
                         name: part.cylinderName,
-                        imageUrl: part.imageUrl,
+                        imageUrl: part.cylinderImageUrl,
                         parts: []
                     };
                 }
@@ -49,11 +82,20 @@ function CylinderGlossary() {
             }, {});
             return Object.values(grouped);
         }
+
         if (selectedCylinderType === 'all') {
             return glossaryData.cylinderTypes;
         }
         return glossaryData.cylinderTypes.filter(c => c.id === selectedCylinderType);
     }, [searchTerm, searchResults, selectedCylinderType]);
+
+    React.useEffect(() => {
+        if (!searchTerm && selectedCylinderType !== 'all') {
+            setOpenCylinderId(selectedCylinderType);
+        } else if (!searchTerm) {
+            setOpenCylinderId(null);
+        }
+    }, [selectedCylinderType, searchTerm]);
 
     const isInitialState = !searchTerm && selectedCylinderType === 'all';
 
@@ -65,7 +107,7 @@ function CylinderGlossary() {
                     <SearchIcon />
                     <input
                         type="text"
-                        placeholder="Search for parts by name or number (e.g., 'cam', '13-0664')..."
+                        placeholder="Search for parts by name or number (e.g., 'cam', 'rim')..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                         className="glossary-search-bar"
@@ -105,13 +147,21 @@ function CylinderGlossary() {
                 </div>
             ) : displayedCylinders.length > 0 ? (
                 displayedCylinders.map(cylinder => (
-                    <div key={cylinder.id} className="cylinder-section">
-                        <h3 className="cylinder-section-title">{cylinder.name}</h3>
-                        <CylinderBreakdown
-                            imageUrl={cylinder.imageUrl}
-                            parts={cylinder.parts}
-                            searchTerm={searchTerm}
-                        />
+                    <div key={cylinder.id} className={`cylinder-section ${openCylinderId === cylinder.id ? 'open' : ''}`}>
+                        <button className="cylinder-section-header" onClick={() => handleToggleCylinder(cylinder.id)}>
+                            <img src={cylinder.imageUrl} alt={`${cylinder.name} diagram`} className="header-image" />
+                            <h3 className="cylinder-section-title">{cylinder.name}</h3>
+                             <span className="toggle-icon">{openCylinderId === cylinder.id ? '▲' : '▼'}</span>
+                        </button>
+                        {openCylinderId === cylinder.id && (
+                            <div className="cylinder-section-parts">
+                                <CylinderBreakdown
+                                    imageUrl={cylinder.imageUrl}
+                                    parts={cylinder.parts}
+                                    searchTerm={searchTerm}
+                                />
+                            </div>
+                        )}
                     </div>
                 ))
             ) : (

@@ -1,9 +1,10 @@
 // src/App.js
 import React, { useState } from 'react';
 import CylinderFinder from './components/CylinderFinder';
-import BittingSimulator from './components/BittingSimulator';
-import CylinderGlossary from './components/CylinderGlossary'; // Import the new component
-import { LockIcon, KeyIcon, WrenchIcon } from './components/Icons';
+import CylinderGlossary from './components/CylinderGlossary';
+import CylinderFAQ from './components/CylinderFAQ';
+import FeedbackModal from './components/FeedbackModal';
+import { LockIcon, WrenchIcon, QuestionMarkIcon, ChatIcon } from './components/Icons'; // Import ChatIcon
 import './App.css';
 import { images } from './images/images';
 
@@ -18,38 +19,57 @@ const NavButton = ({ toolId, label, icon, activeTool, setActiveTool }) => (
 );
 
 export default function App() {
-  const [activeTool, setActiveTool] = useState('finder'); // 'finder', 'bitting', 'parts'
+  const [activeTool, setActiveTool] = useState('finder');
+  const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
 
   const renderTool = () => {
     switch (activeTool) {
       case 'finder':
         return <CylinderFinder />;
-      case 'bitting':
-        return <BittingSimulator />;
       case 'parts':
-        return <CylinderGlossary />; // Render the new glossary component
+        return <CylinderGlossary />;
+      case 'faq':
+        return <CylinderFAQ />;
       default:
         return <CylinderFinder />;
     }
   };
 
   return (
-    <div className="app-container">
-      <header className="app-header">
-        <img className="logo" src={images.sargentlogo} alt='logo'/>
-        <h1 className="app-title">Sargent Cylinders</h1>
-        <p className="app-subtitle">Keys, Bits, and cores.. OH MY</p>
-      </header>
+    <>
+      <div className="app-container">
+        <header className="app-header">
+          <img className="logo" src={images.sargentlogo} alt='logo'/>
+          <h1 className="app-title">Sargent Cylinders</h1>
+          {/* The subtitle button has been removed from here */}
+        </header>
 
-      <nav className="app-navigation">
-        <NavButton toolId="finder" label="Cylinder Finder" icon={<LockIcon />} activeTool={activeTool} setActiveTool={setActiveTool} />
-        <NavButton toolId="bitting" label="Bitting Simulator" icon={<KeyIcon />} activeTool={activeTool} setActiveTool={setActiveTool} />
-        <NavButton toolId="parts" label="Parts Glossary" icon={<WrenchIcon />} activeTool={activeTool} setActiveTool={setActiveTool} />
-      </nav>
+        <nav className="app-navigation">
+          <NavButton toolId="finder" label="Cylinder Finder" icon={<LockIcon />} activeTool={activeTool} setActiveTool={setActiveTool} />
+          <NavButton toolId="parts" label="Parts Glossary" icon={<WrenchIcon />} activeTool={activeTool} setActiveTool={setActiveTool} />
+          <NavButton toolId="faq" label="Cylinders FAQ" icon={<QuestionMarkIcon />} activeTool={activeTool} setActiveTool={setActiveTool} />
+        </nav>
 
-      <main className="app-main">
-        {renderTool()}
-      </main>
-    </div>
+        <main className="app-main">
+          {renderTool()}
+        </main>
+      </div>
+
+      {/* The button is now a footer element, outside the main container for fixed positioning */}
+      <footer className="app-footer">
+        <button 
+          className="footer-feedback-button" 
+          onClick={() => setIsFeedbackModalOpen(true)}
+          title="Feedback/Suggestions"
+        >
+          <ChatIcon />
+        </button>
+      </footer>
+
+      <FeedbackModal 
+        isOpen={isFeedbackModalOpen} 
+        onClose={() => setIsFeedbackModalOpen(false)} 
+      />
+    </>
   );
 }

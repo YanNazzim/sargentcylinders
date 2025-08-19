@@ -1,0 +1,95 @@
+/* src/components/CylinderFAQ.css */
+.faq-container {
+    background-color: #2d3748;
+    padding: 2rem;
+    border-radius: 0.75rem;
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+    max-width: 900px;
+    margin: 2rem auto;
+    color: #fff;
+}
+
+.faq-title {
+    font-size: clamp(1.5rem, 4vw, 2.2rem);
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    text-align: center;
+}
+
+.faq-intro {
+    font-size: clamp(0.9rem, 2.5vw, 1.05rem);
+    color: #a0a0a0;
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.faq-item {
+    border-bottom: 1px solid #4a5568;
+    margin-bottom: 1rem;
+}
+
+.faq-item:last-child {
+    border-bottom: none;
+}
+
+.faq-question {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.25rem 0;
+    background: none;
+    border: none;
+    color: #e2e8f0;
+    font-size: 1.15rem;
+    font-weight: 500;
+    text-align: left;
+    cursor: pointer;
+}
+
+.faq-toggle {
+    font-size: 1.5rem;
+    color: #63b3ed;
+    transition: transform 0.2s ease-in-out;
+}
+
+.faq-answer {
+    padding-bottom: 1.5rem;
+    color: #cbd5e0;
+    line-height: 1.7;
+    animation: fadeIn 0.4s ease-out;
+}
+
+.faq-answer p {
+    margin-top: 0;
+}
+
+.video-container {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 aspect ratio */
+    height: 0;
+    overflow: hidden;
+    max-width: 100%;
+    background: #000;
+    border-radius: 0.5rem;
+    margin-top: 1rem;
+}
+
+.video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

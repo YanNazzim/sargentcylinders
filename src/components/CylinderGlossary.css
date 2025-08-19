@@ -57,7 +57,7 @@
 
 .clear-search-button {
     position: absolute;
-    right: 2rem;
+    right: 1rem;
     background: none;
     border: none;
     cursor: pointer;
@@ -110,20 +110,60 @@
 }
 
 .cylinder-section {
-    margin-bottom: 3rem;
-    padding: 1.5rem;
+    margin-bottom: 1.5rem;
     border: 1px solid #4a5568;
     border-radius: 0.75rem;
     background-color: #1a202c;
+    overflow: hidden; /* Important for animation */
+}
+
+.cylinder-section-header {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    width: 100%;
+    padding: 1rem 1.5rem;
+    background-color: #2d3748;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    color: #fff;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.cylinder-section-header:hover {
+    background-color: #4a5568;
+}
+
+.header-image {
+    width: 100px;
+    height: auto;
+    border-radius: 0.5rem;
+    background-color: #fff;
+    padding: 0.25rem;
 }
 
 .cylinder-section-title {
     font-size: 1.5rem;
     font-weight: 700;
     color: #e2e8f0;
-    margin-bottom: 1.5rem;
-    padding-bottom: 0.75rem;
-    border-bottom: 2px solid #3182ce;
+    margin: 0;
+    flex-grow: 1; /* Pushes the toggle icon to the right */
+}
+
+.toggle-icon {
+    font-size: 1.2rem;
+    transition: transform 0.3s ease-in-out;
+}
+
+.cylinder-section.open .toggle-icon {
+    transform: rotate(180deg);
+}
+
+.cylinder-section-parts {
+    padding: 1.5rem;
+    border-top: 1px solid #4a5568;
+    animation: fadeIn 0.5s ease-out;
 }
 
 .no-results-message {
@@ -154,4 +194,13 @@
     font-size: 1.5rem;
     color: #e2e8f0;
     margin-bottom: 0.5rem;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }

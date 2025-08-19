@@ -1,158 +1,164 @@
 /* src/App.css */
 :root {
-    /* Define a base font size for rem units, easier to scale */
-    font-size: 16px; 
+    font-size: 16px;
 }
-
 *, *::before, *::after {
-    box-sizing: border-box; /* Ensures padding and border are included in element's total width/height */
+    box-sizing: border-box;
 }
-
 body {
     margin: 0;
-    /* Use a font stack for better cross-platform rendering and readability */
-    font-family: 'Inter', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
-    background-color: #1a202c; /* Dark background */
-    color: #fff; /* White text for contrast */
-    line-height: 1.6; /* Improved readability */
-    -webkit-font-smoothing: antialiased; /* Smoother fonts on macOS/iOS */
-    -moz-osx-smoothing: grayscale; /* Smoother fonts on macOS/iOS */
-    overflow-x: hidden; /* Prevent horizontal scroll on small screens */
+    font-family: 'Inter', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    background-color: #1a202c;
+    color: #fff;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
 }
-
 .logo {
     border-radius: 25px;
     border: 3px solid black;
-    max-width: 300px; /* Adjust as needed */
+    max-width: 300px;
     height: auto;
-    margin-bottom: 1rem; /* Space below the logo */
+    margin-bottom: 1rem;
 }
-
 .logo:hover {
     background-color: #6a768e;
-    transform: translateY(-2px); /* Subtle lift on hover */
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Enhanced shadow on hover */
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
 }
-
-
 .app-container {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 1rem; /* Base padding for all screens */
+    padding: 1rem;
 }
-
-@media (min-width: 640px) { /* Small screens and up */
+@media (min-width: 640px) {
     .app-container {
         padding: 2rem;
     }
 }
-
 .app-header {
     width: 100%;
-    max-width: 960px; /* Max width for content, same as cylinder-finder-card */
+    max-width: 960px;
     margin-left: auto;
     margin-right: auto;
     margin-bottom: 2rem;
-    text-align: center; /* Center header text */
+    text-align: center;
 }
-
 .app-title {
-    /* Responsive font size: minimum 2rem, preferred 5vw, maximum 3.5rem */
-    font-size: clamp(2rem, 5vw, 3.5rem); 
+    font-size: clamp(2rem, 5vw, 3.5rem);
     font-weight: 800;
     color: #fff;
     margin-bottom: 0.5rem;
-    letter-spacing: -0.025em; /* Slightly tighter letter spacing for bold titles */
+    letter-spacing: -0.025em;
 }
 
-.app-subtitle {
-    /* Responsive font size */
-    font-size: clamp(0.9rem, 2vw, 1.1rem);
-    color: #a0a0a0;
-}
+/* Remove the old app-subtitle and app-subtitle-button styles */
 
 .app-navigation {
     display: flex;
-    flex-wrap: wrap; /* Allow buttons to wrap on smaller screens */
+    flex-wrap: wrap;
     justify-content: center;
-    gap: 0.5rem; /* Space between buttons */
+    gap: 0.5rem;
     margin-bottom: 2rem;
     padding: 0.5rem;
     background-color: #2d3748;
     border-radius: 0.5rem;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
     border: 1px solid #4a5568;
-    max-width: 960px; /* Match main content width */
+    max-width: 960px;
     width: 100%;
 }
-
 @media (min-width: 640px) {
     .app-navigation {
         gap: 1rem;
     }
 }
-
 .nav-button {
-    flex: 1 1 auto; /* Allow buttons to grow and shrink */
-    min-width: 120px; /* Ensure a minimum width for buttons */
+    flex: 1 1 auto;
+    min-width: 120px;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 0.75rem 1rem; /* Slightly more vertical padding */
-    font-size: 0.95rem; /* Slightly larger text */
+    padding: 0.75rem 1rem;
+    font-size: 0.95rem;
     font-weight: 500;
     border-radius: 0.375rem;
-    transition: all 0.3s ease-in-out; /* Smoother transition */
+    transition: all 0.3s ease-in-out;
     border: none;
     cursor: pointer;
     background-color: #4a5568;
     color: #cbd5e0;
-    position: relative; /* For active state pseudo-element */
-    overflow: hidden; /* Hide overflow for ripple effect or other animations */
+    position: relative;
+    overflow: hidden;
 }
-
 .nav-button:hover {
     background-color: #6a768e;
-    transform: translateY(-2px); /* Subtle lift on hover */
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Enhanced shadow on hover */
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
 }
-
 .nav-button.active {
     background-color: #3182ce;
     color: #fff;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25); /* More prominent shadow for active state */
-    transform: translateY(0); /* Reset lift if active */
-    animation: pulseBorder 1.5s infinite ease-in-out; /* Gentle pulse animation */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+    transform: translateY(0);
+    animation: pulseBorder 1.5s infinite ease-in-out;
 }
-
-/* Keyframes for the active button pulse effect */
 @keyframes pulseBorder {
-    0% {
-        box-shadow: 0 0 0 0 rgba(49, 130, 206, 0.7);
-    }
-    70% {
-        box-shadow: 0 0 0 10px rgba(49, 130, 206, 0);
-    }
-    100% {
-        box-shadow: 0 0 0 0 rgba(49, 130, 206, 0);
-    }
+    0% { box-shadow: 0 0 0 0 rgba(49, 130, 206, 0.7); }
+    70% { box-shadow: 0 0 0 10px rgba(49, 130, 206, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(49, 130, 206, 0); }
 }
-
 .nav-button svg {
     margin-right: 0.5rem;
     height: 1.25rem;
     width: 1.25rem;
-    transition: transform 0.2s ease-in-out; /* Icon transition */
+    transition: transform 0.2s ease-in-out;
 }
-
 .nav-button:hover svg {
-    transform: scale(1.1); /* Slightly enlarge icon on hover */
+    transform: scale(1.1);
 }
-
 .app-main {
     width: 100%;
-    max-width: 960px; /* Ensures content aligns with header and nav */
-    padding-bottom: 2rem; /* Ensure space at the bottom */
+    max-width: 960px;
+    padding-bottom: 5rem; /* Add padding to bottom so content doesn't hide behind the button */
+}
+
+/* --- NEW STYLES for Footer and Feedback Button --- */
+.app-footer {
+    /* This is a container for the fixed button, it doesn't need much styling */
+    position: relative;
+    width: 100%;
+}
+
+.footer-feedback-button {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    width: 60px;
+    height: 60px;
+    background-color: #3182ce;
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+    transition: transform 0.2s ease-in-out, background-color 0.2s ease-in-out;
+}
+
+.footer-feedback-button:hover {
+    background-color: #2c6cb5;
+    transform: scale(1.1) translateY(-2px);
+}
+
+.footer-feedback-button svg {
+    width: 28px;
+    height: 28px;
+    margin: 0; /* Remove margin from nav-button style */
 }
