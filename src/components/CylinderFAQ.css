@@ -23,6 +23,62 @@
     text-align: center;
 }
 
+/* --- NEW STYLES for search bar wrapper and button --- */
+.search-bar-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    margin-bottom: 1.5rem; /* Add margin below the search bar */
+}
+
+.search-bar-wrapper svg {
+    position: absolute;
+    left: 1rem;
+    color: #a0aec0;
+    width: 1.25rem;
+    height: 1.25rem;
+}
+
+.faq-search-input {
+    width: 100%;
+    padding: 0.8rem 3rem; /* Make space for both icons */
+    font-size: 1.1rem;
+    border-radius: 0.5rem;
+    border: 2px solid #4a5568;
+    background-color: #1a202c;
+    color: #fff;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.faq-search-input:focus {
+    outline: none;
+    border-color: #63b3ed;
+    box-shadow: 0 0 0 4px rgba(99, 179, 237, 0.4);
+}
+
+.clear-search-button {
+    position: absolute;
+    right: 1rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #a0aec0;
+    transition: color 0.2s ease-in-out;
+}
+
+.clear-search-button:hover {
+    color: #fff;
+}
+
+.clear-search-button svg {
+    width: 1.25rem;
+    height: 1.25rem;
+}
+
 .faq-item {
     border-bottom: 1px solid #4a5568;
     margin-bottom: 1rem;
@@ -64,6 +120,10 @@
     margin-top: 0;
 }
 
+.faq-answer ul {
+    padding-left: 20px;
+}
+
 .video-container {
     position: relative;
     padding-bottom: 56.25%; /* 16:9 aspect ratio */
@@ -83,6 +143,73 @@
     height: 100%;
 }
 
+/* --- NEW Keyway Table Styles --- */
+.keyway-table-container {
+    margin-top: 1.5rem;
+    overflow-x: auto;
+}
+
+.keyway-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    border: 1px solid #4a5568;
+    border-radius: 0.5rem;
+    overflow: hidden; /* Ensures border-radius is respected */
+}
+
+.keyway-table th,
+.keyway-table td {
+    padding: 0.8rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid #4a5568;
+}
+
+.keyway-table th {
+    background-color: #1a202c;
+    font-weight: 600;
+    color: #e2e8f0;
+}
+
+.keyway-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.keyway-table tbody tr:hover {
+    background-color: #354155;
+}
+
+.keyway-table td[data-label="System"] {
+    font-weight: bold;
+    color: #63b3ed;
+    vertical-align: middle;
+}
+
+@media screen and (max-width: 600px) {
+    .keyway-table thead {
+        display: none;
+    }
+    .keyway-table tr {
+        display: block;
+        margin-bottom: 1rem;
+    }
+    .keyway-table td {
+        display: block;
+        text-align: right;
+        border-bottom: 1px dotted #4a5568;
+    }
+    .keyway-table td[data-label]:before {
+        content: attr(data-label);
+        float: left;
+        font-weight: bold;
+        color: #a0aec0;
+    }
+    .keyway-table td[rowspan] {
+        display: block;
+    }
+}
+
+
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -92,4 +219,60 @@
         opacity: 1;
         transform: translateY(0);
     }
+}
+
+/* --- NEW STYLES for search bar wrapper and button --- */
+.search-bar-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    margin-bottom: 1.5rem; /* Add margin below the search bar */
+}
+
+.search-bar-wrapper svg {
+    position: absolute;
+    left: 1rem;
+    color: #a0aec0;
+    width: 1.25rem;
+    height: 1.25rem;
+}
+
+.faq-search-input {
+    width: 100%;
+    padding: 0.8rem 3rem; /* Make space for both icons */
+    font-size: 1.1rem;
+    border-radius: 0.5rem;
+    border: 2px solid #4a5568;
+    background-color: #1a202c;
+    color: #fff;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.faq-search-input:focus {
+    outline: none;
+    border-color: #63b3ed;
+    box-shadow: 0 0 0 4px rgba(99, 179, 237, 0.4);
+}
+
+.clear-search-button {
+    position: absolute;
+    right: 1.8rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #a0aec0;
+    transition: color 0.2s ease-in-out;
+}
+
+.clear-search-button:hover {
+    color: #fff;
+}
+
+.clear-search-button svg {
+    width: 1.25rem;
+    height: 1.25rem;
 }
