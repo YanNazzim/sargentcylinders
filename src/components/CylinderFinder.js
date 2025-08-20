@@ -1,115 +1,172 @@
-// src/components/CylinderFinder.js
 import React, { useState, useMemo } from 'react';
 import { sargentData, cylinderPrefixCategories } from '../data/sargentData';
-import HardwareSelector from './HardwareSelector';
+import { images } from '../images/images';
+import ButtonSelector from './ButtonSelector';
 import PrefixSelector from './PrefixSelector';
 import CategorizedPrefixSelector from './CategorizedPrefixSelector';
 import ResultsDisplay from './ResultsDisplay';
 import './CylinderFinder.css';
 
+// Map hardware categories to images for the first step
+const categoryImages = {
+    'Exit Devices': images.XCcyls,
+    'Mortise Locks': images.MortiseCyls,
+    'Bored Locks': images.KILCyls,
+};
+
+// Map series to images for the new series selection step
+const seriesImages = {
+    '80 Series': images.MortiseCyls,
+    'PE80 Series': images.MortiseCyls,
+    '90 Series': images.MortiseCyls,
+    '20/30 Series': images.MortiseCyls, // Placeholder for 20/30 Series
+    'Mortise Locks': images.MortiseCyls, // Default for other categories
+    'Bored Locks': images.KILCyls,
+};
+
 function CylinderFinder() {
-    // Replaced 'step' with 'currentView' for explicit state management
-    const [currentView, setCurrentView] = useState('form'); // 'form', 'options', 'results'
-    const [category, setCategory] = useState('');
-    const [series, setSeries] = useState('');
-    const [model, setModel] = useState('');
+    const [currentView, setCurrentView] = useState('category'); // 'category', 'series', 'model', 'options', 'results'
+    const [selectedCategory, setSelectedCategory] = useState(null);
+    const [selectedSeries, setSelectedSeries] = useState(null);
+    const [selectedModel, setSelectedModel] = useState(null);
     const [selectedDevicePrefixes, setSelectedDevicePrefixes] = useState([]);
     const [selectedCylinderPrefix, setSelectedCylinderPrefix] = useState(null);
     const [prefixSearchTerm, setPrefixSearchTerm] = useState('');
 
-    const categories = useMemo(() => sargentData.hardware.map(h => h.category), []);
+    const categories = useMemo(() => {
+        return sargentData.hardware.map(h => ({
+            id: h.category,
+            name: h.category,
+            imageUrl: categoryImages[h.category]
+        }));
+    }, []);
 
-    const seriesOptions = useMemo(() => {
-        if (!category) return [];
-        const hardwareCategory = sargentData.hardware.find(h => h.category === category);
-        if (!hardwareCategory) return [];
+    const seriesGroupOptions = useMemo(() => {
+        if (selectedCategory !== 'Exit Devices') return null;
 
-        // If the category is NOT 'Exit Devices', return a flat list of series names
-        if (category !== 'Exit Devices') {
-            return hardwareCategory.series.map(s => s.name);
-        }
+        const allSeries = sargentData.hardware
+            .find(h => h.category === 'Exit Devices')?.series || [];
 
-        // --- Existing logic for 'Exit Devices' ---
-        const groups = {
+        const seriesGroups = {
             '80 Series': [],
             'PE80 Series': [],
             '90 Series': [],
-            '30 Series': [],
-            '20 Series': [],
-            'Other': [], // Fallback for any others
+            '20/30 Series': [],
         };
 
-        hardwareCategory.series.forEach(s => {
-            const name = s.name;
-            if (name.startsWith('PE8')) {
-                groups['PE80 Series'].push(name);
-            } else if (name.startsWith('8')) {
-                groups['80 Series'].push(name);
-            } else if (name.startsWith('9')) {
-                groups['90 Series'].push(name);
-            } else if (name.startsWith('3')) {
-                groups['30 Series'].push(name);
-            } else if (name.startsWith('2')) {
-                groups['20 Series'].push(name);
-            } else {
-                groups['Other'].push(name);
+        allSeries.forEach(s => {
+            const seriesName = s.name;
+            if (seriesName.startsWith('PE8')) {
+                seriesGroups['PE80 Series'].push(s);
+            } else if (seriesName.startsWith('8')) {
+                seriesGroups['80 Series'].push(s);
+            } else if (seriesName.startsWith('9')) {
+                seriesGroups['90 Series'].push(s);
+            } else if (seriesName.startsWith('2') || seriesName.startsWith('3')) {
+                seriesGroups['20/30 Series'].push(s);
             }
         });
-        
-        // Format for the HardwareSelector with optgroups
-        return Object.keys(groups)
-            .filter(groupName => groups[groupName].length > 0)
-            .map(groupName => ({
-                label: groupName,
-                options: groups[groupName]
+
+        return Object.keys(seriesGroups)
+            .filter(key => seriesGroups[key].length > 0)
+            .map(key => ({
+                id: key,
+                name: key,
+                imageUrl: seriesImages[key]
             }));
 
-    }, [category]);
+    }, [selectedCategory]);
+    
+    // Updated to use a more specific data set for the next step
+    const specificSeriesOptions = useMemo(() => {
+        if (!selectedCategory || !selectedSeries) return [];
+        const seriesData = sargentData.hardware
+            .find(h => h.category === selectedCategory)
+            ?.series
+            .filter(s => {
+                // This logic correctly groups the series by their prefix
+                if (selectedSeries === '80 Series') return s.name.startsWith('8') && !s.name.startsWith('82') && !s.name.startsWith('8X');
+                if (selectedSeries === 'PE80 Series') return s.name.startsWith('PE8');
+                if (selectedSeries === '90 Series') return s.name.startsWith('9');
+                if (selectedSeries === '20/30 Series') return s.name.startsWith('2') || s.name.startsWith('3');
+                return false;
+            })
+            .map(s => ({
+                id: s.name,
+                name: s.name,
+                imageUrl: seriesImages[selectedSeries] || categoryImages[selectedCategory]
+            }));
+
+        return seriesData;
+    }, [selectedCategory, selectedSeries]);
+
 
     const modelOptions = useMemo(() => {
-        if (!category || !series) return [];
-        const catData = sargentData.hardware.find(h => h.category === category);
-        const seriesData = catData?.series.find(s => s.name === series);
-        return seriesData ? seriesData.models.map(m => `${m.modelNumber} - ${m.description}`) : [];
-    }, [category, series]);
+        if (!selectedCategory || !selectedSeries) return [];
+        
+        let modelsToDisplay = [];
+        
+        // Check if the selectedSeries is a group name (e.g., '80 Series')
+        const isSeriesGroup = ['80 Series', 'PE80 Series', '90 Series', '20/30 Series'].includes(selectedSeries);
+
+        if (isSeriesGroup) {
+            // Find all models for all series within the selected group
+            const allSeriesInGroup = sargentData.hardware
+                .find(h => h.category === selectedCategory)?.series
+                .filter(s => {
+                    if (selectedSeries === '80 Series') return s.name.startsWith('8') && !s.name.startsWith('82') && !s.name.startsWith('8X');
+                    if (selectedSeries === 'PE80 Series') return s.name.startsWith('PE8');
+                    if (selectedSeries === '90 Series') return s.name.startsWith('9');
+                    if (selectedSeries === '20/30 Series') return s.name.startsWith('2') || s.name.startsWith('3');
+                    return false;
+                });
+            
+            modelsToDisplay = allSeriesInGroup.flatMap(s => s.models);
+        } else {
+            // Otherwise, just find models for the single selected series
+            const seriesData = sargentData.hardware
+                .find(h => h.category === selectedCategory)?.series
+                .find(s => s.name === selectedSeries);
+            modelsToDisplay = seriesData?.models || [];
+        }
+
+        return modelsToDisplay.map(m => ({
+            id: m.modelNumber,
+            name: `${m.modelNumber} - ${m.description}`,
+            imageUrl: seriesImages[selectedSeries] || categoryImages[selectedCategory]
+        }));
+    }, [selectedCategory, selectedSeries]);
 
     const activeModelData = useMemo(() => {
-        if (!category || !series || !model) return null;
-        const modelNumber = model.split(' - ')[0];
-        const catData = sargentData.hardware.find(h => h.category === category);
-        const seriesData = catData?.series.find(s => s.name === series);
-        return seriesData?.models.find(m => m.modelNumber === modelNumber) || null;
-    }, [category, series, model]);
+        if (!selectedCategory || !selectedSeries || !selectedModel) return null;
+        const catData = sargentData.hardware.find(h => h.category === selectedCategory);
+        const seriesData = catData?.series.find(s => s.name === selectedSeries);
+        return seriesData?.models.find(m => m.modelNumber === selectedModel) || null;
+    }, [selectedCategory, selectedSeries, selectedModel]);
 
     const deviceTiedPrefixes = useMemo(() => {
         if (!activeModelData) return [];
     
-        // All prefixes for the model that are tied to the device itself
         const allDevicePrefixes = activeModelData.prefixes.filter(p => p.isDeviceSpecific);
     
         const universalPrefixes = ['16', '59', 'AL'];
     
-        // Check if the selected series is an 80 or PE80 series
-        const is80Family = series && (series.includes('80 Series') || series.includes('PE80'));
+        const is80Family = selectedSeries && (selectedSeries.includes('80 Series') || selectedSeries.includes('PE80'));
     
         if (is80Family) {
-            // For 80 series family, ONLY show the universal prefixes
             return allDevicePrefixes.filter(p => universalPrefixes.includes(p.id));
         } else {
-            // For ALL OTHER series, show their specific prefixes but EXCLUDE the universal ones
             return allDevicePrefixes.filter(p => !universalPrefixes.includes(p.id));
         }
-    }, [activeModelData, series]);
+    }, [activeModelData, selectedSeries]);
 
     const cylinderOptionsCategories = useMemo(() => {
         if (!activeModelData) return [];
 
         let allowedPrefixIds = [];
-        // Apply specific rule for 9404 model
         if (activeModelData.modelNumber === '9404') {
             allowedPrefixIds = ['10-', '11-', '11-21-', '82-', 'F1-82-', 'BR-', 'SC-', 'SE-'];
         } else {
-            // Original logic for all other models
             const allModelPrefixes = new Set(activeModelData.prefixes.map(p => p.id));
             allowedPrefixIds = Array.from(allModelPrefixes);
         }
@@ -145,17 +202,16 @@ function CylinderFinder() {
             const modelNumberSuffix = activeModelData.modelNumber.slice(-2);
             let cylinder = { ...activeModelData.baseCylinder };
 
-            // --- Logic for Special Function Cylinders ---
-            if (modelNumberSuffix === '50') { // Hotel Function
-                if (series.includes('10X')) cylinder.partNumber = 'C10X-2';
-                else if (series.includes('11')) cylinder.partNumber = 'C11-2';
-                else if (series.includes('6 Line')) cylinder.partNumber = 'C6-2B';
-                else if (['10 Line', '7 Line', '6500 Line'].some(s => series.includes(s))) {
+            if (modelNumberSuffix === '50') { 
+                if (selectedSeries.includes('10X')) cylinder.partNumber = 'C10X-2';
+                else if (selectedSeries.includes('11')) cylinder.partNumber = 'C11-2';
+                else if (selectedSeries.includes('6 Line')) cylinder.partNumber = 'C6-2B';
+                else if (['10 Line', '7 Line', '6500 Line'].some(s => selectedSeries.includes(s))) {
                     cylinder.partNumber = 'C10-2';
                 }
-            } else if (modelNumberSuffix === '65') { // Privacy Function
-                if (series.includes('10X')) cylinder.partNumber = 'C10X-3';
-                else if (['10 Line', '7 Line', '6500 Line'].some(s => series.includes(s))) {
+            } else if (modelNumberSuffix === '65') { 
+                if (selectedSeries.includes('10X')) cylinder.partNumber = 'C10X-3';
+                else if (['10 Line', '7 Line', '6500 Line'].some(s => selectedSeries.includes(s))) {
                     cylinder.partNumber = 'C10-3';
                 }
             }
@@ -173,16 +229,12 @@ function CylinderFinder() {
             const newCyl = { ...cyl };
             const partNumberBase = newCyl.partNumber.replace('#', '');
             
-            // Apply Keso F1 part number translation first
             if (hasKesoPrefix) {
                 if (partNumberBase === '41') newCyl.partNumber = 'F1-71';
                 else if (partNumberBase === '46') newCyl.partNumber = 'F1-76';
                 else if (partNumberBase === '34') newCyl.partNumber = 'F1-64';
             }
             
-            // Then apply LFIC/SFIC adjustments if they are selected
-            // This is a simplified example. In a real-world app, you might need a more complex hierarchy
-            // to handle which modification takes precedence.
             if (hasLficPrefix) {
                 if (partNumberBase === '41') newCyl.partNumber = '#42';
             } else if (hasSficPrefix) {
@@ -211,7 +263,6 @@ function CylinderFinder() {
                 let lengthDesc = '';
                 let finalPartNumber = '';
 
-                // Keso F1 has a different naming convention, do not prepend prefix
                 if (hasKesoPrefix) {
                      const kesoLengths = {
                         'F1-71': '1-1/8"', 'F1-72': '1-1/4"', 'F1-73': '1-3/8"', 'F1-74': '1-1/2"',
@@ -234,7 +285,6 @@ function CylinderFinder() {
                 };
             });
         } else {
-            // Default description logic when no prefix is selected
             finalCylindersArray = finalCylindersArray.map(cyl => {
                 const lengthDesc = getCylinderLengthDescription(cyl.partNumber);
                 const finalDescription = `${lengthDesc} ${cyl.type}`;
@@ -248,76 +298,95 @@ function CylinderFinder() {
         
         return finalCylindersArray;
 
-    }, [activeModelData, selectedDevicePrefixes, selectedCylinderPrefix, series]);
+    }, [activeModelData, selectedDevicePrefixes, selectedCylinderPrefix, selectedSeries]);
 
-
-    const handleCategoryChange = (value) => {
-        setCategory(value);
-        setSeries('');
-        setModel('');
-        setSelectedDevicePrefixes([]);
-        setSelectedCylinderPrefix(null);
-        setCurrentView('form'); // Reset view to form
+    const handleSelectCategory = (categoryId) => {
+        setSelectedCategory(categoryId);
+        setSelectedSeries(null);
+        setSelectedModel(null);
+        if (categoryId === 'Exit Devices') {
+            setCurrentView('seriesGroup');
+        } else {
+            setCurrentView('model');
+        }
+    };
+    
+    const handleSelectSeriesGroup = (seriesGroupId) => {
+        setSelectedSeries(seriesGroupId);
+        setSelectedModel(null);
+        setCurrentView('series');
     };
 
-    const handleSeriesChange = (value) => {
-        setSeries(value);
-        setModel('');
-        setSelectedDevicePrefixes([]);
-        setSelectedCylinderPrefix(null);
-        setCurrentView('form'); // Reset view to form
+    const handleSelectSpecificSeries = (seriesId) => {
+        setSelectedSeries(seriesId);
+        setSelectedModel(null);
+        setCurrentView('model');
     };
 
-    const handleModelChange = (value) => {
-        setModel(value);
-        setSelectedDevicePrefixes([]);
-        setSelectedCylinderPrefix(null);
-        setCurrentView('form'); // Reset view to form
-    };
+    const handleSelectModel = (modelId) => {
+        setSelectedModel(modelId);
+        
+        const currentActiveModelData = sargentData.hardware
+            .find(h => h.category === selectedCategory)?.series
+            .find(s => s.name === selectedSeries)?.models
+            .find(m => m.modelNumber === modelId);
 
+        const shouldSkipToResults = currentActiveModelData && !currentActiveModelData.baseCylinder && deviceTiedPrefixes.length === 0;
+
+        if (shouldSkipToResults) {
+            setCurrentView('results');
+        } else {
+            setCurrentView('options');
+        }
+    };
+    
     const handleDevicePrefixChange = (prefixId) => {
         setSelectedDevicePrefixes(prev =>
             prev.includes(prefixId)
                 ? prev.filter(id => id !== prefixId)
                 : [...prev, prefixId]
         );
-        // Do not change view here, let handleFindCylinders handle it.
     };
 
     const handleCylinderPrefixChange = (prefixId) => {
         setSelectedCylinderPrefix(prev => (prev === prefixId ? null : prefixId));
-        // Do not change view here, let handleFindCylinders handle it.
     };
 
     const handleReset = () => {
-        setCategory('');
-        setSeries('');
-        setModel('');
+        setSelectedCategory(null);
+        setSelectedSeries(null);
+        setSelectedModel(null);
         setSelectedDevicePrefixes([]);
         setSelectedCylinderPrefix(null);
-        setCurrentView('form'); // Reset view to initial form
+        setCurrentView('category');
         setPrefixSearchTerm('');
     };
 
-    const handleNextStep = () => {
-        if (model) {
-            // Check for the QOL condition:
-            const shouldSkipToResults = activeModelData && !activeModelData.baseCylinder && deviceTiedPrefixes.length === 0;
-
-            if (shouldSkipToResults) {
-                setCurrentView('results'); // Directly show results
+    const handleBack = () => {
+        if (currentView === 'seriesGroup') {
+            setCurrentView('category');
+        } else if (currentView === 'series') {
+             setCurrentView('seriesGroup');
+        } else if (currentView === 'model') {
+            if (selectedCategory === 'Exit Devices') {
+                setCurrentView('series');
             } else {
-                setCurrentView('options'); // Otherwise, proceed to options view
+                setCurrentView('category');
+            }
+        } else if (currentView === 'options') {
+            setCurrentView('model');
+        } else if (currentView === 'results') {
+            const currentActiveModelData = sargentData.hardware
+                .find(h => h.category === selectedCategory)?.series
+                .find(s => s.name === selectedSeries)?.models
+                .find(m => m.modelNumber === selectedModel);
+            const shouldSkipToResults = currentActiveModelData && !currentActiveModelData.baseCylinder && deviceTiedPrefixes.length === 0;
+            if (shouldSkipToResults) {
+                setCurrentView('model');
+            } else {
+                setCurrentView('options');
             }
         }
-    };
-
-    const handleBack = () => {
-        setCurrentView('form');
-    };
-
-    const handleFindCylinders = () => {
-        setCurrentView('results'); // Show results from the options view
     };
 
     return (
@@ -328,23 +397,63 @@ function CylinderFinder() {
             </div>
 
             {/* Render content based on currentView */}
-            {currentView === 'form' && (
-                <div className="wizard-step active"> {/* 'active' class ensures visibility without complex animation state */}
-                    <div className="cylinder-finder-selectors">
-                        <HardwareSelector label="Hardware Category" options={categories} value={category} onChange={handleCategoryChange} />
-                        <HardwareSelector label="Product Series" options={seriesOptions} value={series} onChange={handleSeriesChange} disabled={!category} />
-                        <HardwareSelector label="Model / Function" options={modelOptions} value={model} onChange={handleModelChange} disabled={!series} />
-                    </div>
+            {currentView === 'category' && (
+                <div className="wizard-step active">
+                    <ButtonSelector
+                        title="Select a Hardware Category"
+                        options={categories}
+                        selected={selectedCategory}
+                        onSelect={handleSelectCategory}
+                    />
+                </div>
+            )}
+            
+            {currentView === 'seriesGroup' && selectedCategory === 'Exit Devices' && (
+                <div className="wizard-step active">
+                    <ButtonSelector
+                        title="Select a Product Series Group"
+                        options={seriesGroupOptions}
+                        selected={selectedSeries}
+                        onSelect={handleSelectSeriesGroup}
+                    />
                     <div className="wizard-controls">
-                        <button onClick={handleNextStep} disabled={!model} className="wizard-next-button">Next</button>
+                        <button onClick={handleBack} className="wizard-back-button">Back</button>
+                    </div>
+                </div>
+            )}
+
+            {currentView === 'series' && selectedCategory === 'Exit Devices' && (
+                <div className="wizard-step active">
+                    <ButtonSelector
+                        title="Select a Product Series"
+                        options={specificSeriesOptions}
+                        selected={selectedSeries}
+                        onSelect={handleSelectSpecificSeries}
+                    />
+                    <div className="wizard-controls">
+                        <button onClick={handleBack} className="wizard-back-button">Back</button>
+                    </div>
+                </div>
+            )}
+
+            {currentView === 'model' && (
+                <div className="wizard-step active">
+                    <ButtonSelector
+                        title="Select a Model / Function"
+                        options={modelOptions}
+                        selected={selectedModel}
+                        onSelect={handleSelectModel}
+                    />
+                    <div className="wizard-controls">
+                        <button onClick={handleBack} className="wizard-back-button">Back</button>
                     </div>
                 </div>
             )}
 
             {currentView === 'options' && (
-                <div className="wizard-step active"> {/* 'active' class ensures visibility */}
+                <div className="wizard-step active">
                     <div className="selected-hardware-note">
-                        Selected: {series} &gt; {model}
+                        Selected: {selectedCategory} &gt; {selectedSeries} &gt; {selectedModel}
                     </div>
                     <div className="cylinder-finder-options-area">
                         {deviceTiedPrefixes.length > 0 && (
@@ -378,21 +487,19 @@ function CylinderFinder() {
                     </div>
                     <div className="wizard-controls">
                         <button onClick={handleBack} className="wizard-back-button">Back</button>
-                        <button onClick={handleFindCylinders} className="wizard-find-button">Find Cylinder</button>
+                        <button onClick={() => setCurrentView('results')} className="wizard-find-button">Find Cylinder</button>
                     </div>
                 </div>
             )}
 
             {currentView === 'results' && (
-                <div className="wizard-step active"> {/* 'active' class ensures visibility */}
+                <div className="wizard-step active">
                     <div className="selected-hardware-note">
-                        Selected: {series} &gt; {model}
+                        Selected: {selectedCategory} &gt; {selectedSeries} &gt; {selectedModel}
                     </div>
-                    {/* Display the ResultsDisplay component here */}
                     <ResultsDisplay cylinders={finalCylinders} />
                     <div className="wizard-controls">
                         <button onClick={handleBack} className="wizard-back-button">Back</button>
-                        {/* Optionally, add a "Reset" button here as well if desired */}
                     </div>
                 </div>
             )}

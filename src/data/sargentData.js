@@ -620,7 +620,7 @@ const cylinderPrefixCategories = [
     ]
   },
   {
-    name: "Keso & Kesa F1 Systems",
+    name: "KESO & KESO F1 Systems",
     prefixes: [
       { id: "81-", description: "Device provided with housings to accept Keso (83) & Keso F1 (F1-83-) removable cores. (Permanent Cores ordered separately)", keywords: ["Keso", "Keso F1", "removable core"] },
       { id: "82-", description: "Device provided with SARGENT Keso Security Cylinder", keywords: ["Keso", "Security"] },

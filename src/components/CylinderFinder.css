@@ -18,8 +18,8 @@
 }
 
 .cylinder-finder-header {
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr; /* Create three columns with the middle one for the title */
     align-items: center;
     margin-bottom: 1.5rem;
 }
@@ -29,7 +29,7 @@
     font-weight: 700;
     color: #fff;
     text-align: center;
-    flex-grow: 1;
+    grid-column: 2; /* Place the title in the middle column */
 }
 
 .cylinder-finder-reset-button {
@@ -43,12 +43,15 @@
     border: none;
     cursor: pointer;
     white-space: nowrap;
+    grid-column: 3; /* Place the reset button in the third column */
+    justify-self: end; /* Align the button to the end of its column */
 }
 
 .cylinder-finder-reset-button:hover {
     background-color: #6a768e;
     transform: translateY(-2px);
 }
+
 
 .wizard-step {
     display: none;
