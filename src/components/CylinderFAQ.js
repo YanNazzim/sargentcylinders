@@ -1,8 +1,9 @@
+// src/components/CylinderFAQ.js
 import React, { useState } from 'react';
 import './CylinderFAQ.css';
 import { SearchIcon, ClearIcon } from './Icons'; // Importing icons for search functionality
 
-const FAQItem = ({ question, children }) => {
+const FAQItem = ({ question, children, videoUrl, imageUrl }) => {
     const [isOpen, setIsOpen] = useState(false);
     return (
         <div className="faq-item">
@@ -10,7 +11,30 @@ const FAQItem = ({ question, children }) => {
                 <span>{question}</span>
                 <span className="faq-toggle">{isOpen ? '−' : '+'}</span>
             </button>
-            {isOpen && <div className="faq-answer">{children}</div>}
+            {isOpen && (
+                <div className="faq-answer">
+                    {children}
+                    {videoUrl && (
+                        <div className="video-container">
+                             <iframe
+                                width="560"
+                                height="315"
+                                src={videoUrl}
+                                title="YouTube video player"
+                                frameborder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                referrerpolicy="strict-origin-when-cross-origin"
+                                allowfullscreen
+                            ></iframe>
+                        </div>
+                    )}
+                    {imageUrl && (
+                        <div className="image-container">
+                            <img src={imageUrl} alt="" className="faq-image"/>
+                        </div>
+                    )}
+                </div>
+            )}
         </div>
     );
 };
@@ -18,7 +42,8 @@ const FAQItem = ({ question, children }) => {
 const allFaqs = [
     {
         question: "How does a pin tumbler lock work?",
-        answer: "A pin tumbler lock uses a series of pins of varying lengths to prevent the lock from opening without the correct key. The key lifts the pins to a specific height, creating a shear line that allows the plug to rotate. Watch this video for a detailed visual explanation."
+        answer: "A pin tumbler lock uses a series of pins of varying lengths to prevent the lock from opening without the correct key. The key lifts the pins to a specific height, creating a shear line that allows the plug to rotate. Watch this video for a detailed visual explanation.",
+        videoUrl: "https://www.youtube.com/embed/smIdInCQ-kU?si=0PAGhApuKeX8O2CB&start=8"
     },
     {
         question: "What are the different levels of security SARGENT offers?",
@@ -31,6 +56,105 @@ const allFaqs = [
     {
         question: "What is a construction core?",
         answer: "A construction core is a temporary cylinder core used during a building's construction phase. It allows workers to access doors with a single construction master key. Once construction is complete, these cores are removed and replaced with the permanent, final master keyed cores."
+    },
+    {
+        question: "What Mortise Cylinder sizes are available?",
+        answer: "",
+        children: (
+            <>
+                <p>SARGENT mortise cylinders come in a variety of standard lengths and sizes.</p>
+                <div className="keyway-table-container">
+                    <table className="keyway-table">
+                        <thead>
+                            <tr>
+                                <th>Size #</th>
+                                <th>Cylinder Length</th>
+                                <th>Order As:</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td data-label="Size #">41</td>
+                                <td data-label="Cylinder Length">1-1/8" (29mm)</td>
+                                <td data-label="Order As:">41 x Finish x Keying Details</td>
+                            </tr>
+                            <tr>
+                                <td data-label="Size #">42</td>
+                                <td data-label="Cylinder Length">1-1/4" (32mm)</td>
+                                <td data-label="Order As:">42 x Finish x Keying Details</td>
+                            </tr>
+                            <tr>
+                                <td data-label="Size #">43</td>
+                                <td data-label="Cylinder Length">1-3/8" (35mm)</td>
+                                <td data-label="Order As:">43 x Finish x Keying Details</td>
+                            </tr>
+                            <tr>
+                                <td data-label="Size #">44</td>
+                                <td data-label="Cylinder Length">1-1/2" (38mm)</td>
+                                <td data-label="Order As:">44 x Finish x Keying Details</td>
+                            </tr>
+                            <tr>
+                                <td data-label="Size #">46</td>
+                                <td data-label="Cylinder Length">1-3/4" (44mm)</td>
+                                <td data-label="Order As:">46 x Finish x Keying Details</td>
+                            </tr>
+                            <tr>
+                                <td data-label="Size #">48</td>
+                                <td data-label="Cylinder Length">2" (51mm)</td>
+                                <td data-label="Order As:">48 x Finish x Keying Details</td>
+                            </tr>
+                            <tr>
+                                <td data-label="Size #">50</td>
+                                <td data-label="Cylinder Length">2-1/4" (57mm)</td>
+                                <td data-label="Order As:">50 x Finish x Keying Details</td>
+                            </tr>
+                            <tr>
+                                <td data-label="Size #">52</td>
+                                <td data-label="Cylinder Length">2-1/2" (64mm)</td>
+                                <td data-label="Order As:">52 x Finish x Keying Details</td>
+                            </tr>
+                            <tr>
+                                <td data-label="Size #">54</td>
+                                <td data-label="Cylinder Length">2-3/4" (70mm)</td>
+                                <td data-label="Order As:">54 x Finish x Keying Details</td>
+                            </tr>
+                            <tr>
+                                <td data-label="Size #">56</td>
+                                <td data-label="Cylinder Length">3" (76mm)</td>
+                                <td data-label="Order As:">56 x Finish x Keying Details</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </>
+        )
+    },
+    {
+        question: "What Rim Cylinder sizes are available?",
+        answer: "",
+        children: (
+            <>
+                <p>SARGENT rim cylinders come in one standard size.</p>
+                <div className="keyway-table-container">
+                    <table className="keyway-table">
+                        <thead>
+                            <tr>
+                                <th>Size #</th>
+                                <th>Cylinder Length</th>
+                                <th>Order As:</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td data-label="Size #">34</td>
+                                <td data-label="Cylinder Length">1-1/8" (29mm)</td>
+                                <td data-label="Order As:">34 x Finish x Keying Details</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </>
+        )
     },
     {
         question: "How do I determine the length of a mortise cylinder?",
@@ -53,6 +177,10 @@ const allFaqs = [
         answer: "A multiplex keyway system allows a master key to operate cylinders with different keyways. For example, a key cut on an 'LD' master key blank can operate cylinders with LA, LB, or LC plug sections, which expands the keying capabilities of a system."
     },
     {
+        question: "What are Single Section Keyways?",
+        answer: "Single section keyways are independent, stand-alone keyways and cannot be tied to any other keyway to expand a keying system. Keys cut on a single section key blank, such as an R keyway, will only operate cylinders with the corresponding R plug section."
+    },
+    {
         question: "What is the MACS specification for SARGENT cylinders?",
         answer: "MACS stands for Maximum Adjacent Cut Specification. For standard SARGENT cylinders, the MACS is 7. This means the difference in cut depth between any two adjacent pins on a key should not exceed 7 steps."
     },
@@ -66,35 +194,55 @@ const allFaqs = [
     },
     {
         question: "What keyways are available?",
-        answer: "SARGENT offers a wide range of keyways for different systems, including Conventional & LFIC (275/6275/7275, 270/6270/7270, 273/6273/7273, 278/6278/7278 series) and SFIC (SARGENT 4A and 4B, and various competitor keyways)."
-    },
-    {
-        question: "What is the warranty period for SARGENT finishes?",
-        answer: "SARGENT finishes, including MicroShield®, are covered by a limited warranty of one year from the invoice date. The warranty becomes void if the product is modified in any way, such as with a third-party component."
+        answer: "",
+        children: (
+            <>
+                <p>SARGENT offers a wide range of keyways for different systems.</p>
+                <p><strong>L Family</strong> keyways are the standard stock keyways. <strong>C Family</strong> keyways are for hotel functions. <strong>H Family</strong> and <strong>R Family</strong> keyways are used for contract master key systems.</p>
+                <div className="keyway-table-container">
+                    <table className="keyway-table">
+                        <thead>
+                            <tr>
+                                <th>Family</th>
+                                <th>Keyways</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td data-label="Family">Conventional & LFIC</td>
+                                <td data-label="Keyways">
+                                    <p><strong>L Family:</strong> LA, LB, LC, LE, LF, LG, LJ, LK, LL, LD, LH, LM, LN, LDH, LDM, LHM</p>
+                                    <p><strong>R Family:</strong> RA, RB, RC, RE, RF, RG, RJ, RK, RL, RD, RH, RM, RN, RDH, RDM, RHM</p>
+                                    <p><strong>H Family:</strong> HA, HB, HC, HE, HF, HG, HJ, HK, HL, HD, HH, HM, HN, HHM, HDH, HDM</p>
+                                    <p><strong>C Family:</strong> CA, CB, CC, CE, CF, CG, CJ, CK, CL, CR, CD, CH, CM, CN, CDH, CHM, CDM</p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td data-label="Family">Single Section Keyways</td>
+                                <td data-label="Keyways">
+                                    <p>S, U, R, CR</p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td data-label="Family">SFIC</td>
+                                <td data-label="Keyways">
+                                    <p><strong>SARGENT:</strong> 4A, 4B</p>
+                                    <p><strong>Other:</strong> Various competitor keyways are also available.</p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </>
+        )
     },
     {
         question: "Can I use SARGENT cylinders or cores with non-SARGENT locking devices?",
         answer: "You can, but the warranty for the SARGENT cylinder or core will be voided if used in a non-SARGENT locking device. Additionally, a Cylinder Service Fee of $100.00 (net) per cylinder will be assessed for SARGENT® cylinders or cores used in non-SARGENT manufactured locking devices for which SARGENT® has an equivalent."
     },
     {
-        question: "What is the policy for returns on incorrectly ordered items?",
-        answer: "SARGENT generally does not accept returns for material correctly furnished per the purchase order. For approved returns (called 'Goodwill' returns), the product must be in its original, undamaged packaging, valued over $250.00 net, and invoiced within the previous 120 days. These returns are subject to a minimum 45% reprocessing fee."
-    },
-    {
         question: "Are there special charges for shipping keys separately?",
         answer: "Keys such as Grand Master and Control Keys are shipped separately for security reasons. If the total order value is over $12,000, they are shipped prepaid by SARGENT. For orders under $12,000, shipping charges will be added to the customer's invoice."
-    },
-    {
-        question: "What fees are associated with custom keying software files like Simple K or Keywizard?",
-        answer: "While bitting lists requested for key sets ordered with factory keyed products are provided at no charge, an additional fee is applied if the list is requested in a specific software format like Simple K or Keywizard. The cost varies depending on the number of bittings, from $307.00 for 1-50 bittings to $1,459.00 for 6001-9000 bittings."
-    },
-    {
-        question: "How is freight calculated for orders under $12,000?",
-        answer: "For orders with a net product value greater than $400 and less than $12,000, freight charges are calculated as a percentage of the net invoice value and added to the customer's invoice. This percentage is based on the National U.S. Average On Highway Diesel Fuel Prices."
-    },
-    {
-        question: "What is the policy on modifying a fire-rated door opening?",
-        answer: "SARGENT advises that any field modification to a fire-rated opening can impact its fire rating. You should consult a code specialist or local code official to ensure compliance with all applicable codes and ratings when specifying or installing a new or retrofitted fire-rated opening."
     },
     {
         question: "Is SARGENT still establishing new Signature Key systems?",
@@ -104,10 +252,6 @@ const allFaqs = [
         question: "What is the lead time for a new special stamp for key marking?",
         answer: "A new special stamp, such as \"State of Alaska - Do Not Duplicate,\" requires extra lead time and costs an additional $840.00 per die, plus $4.00 per key for the first order."
     },
-    {
-        question: "What finishes are available for a 6500 Series lockset?",
-        answer: "According to the price book, the 6500 Series lockset is available in a variety of finishes, including: 10BE/26D/BSP/WSP for $421.00, and 03/04/26 for $423.00."
-    }
 ];
 
 function CylinderFAQ() {
@@ -119,7 +263,8 @@ function CylinderFAQ() {
 
     const filteredFaqs = allFaqs.filter(faq =>
         faq.question.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        faq.answer.toLowerCase().includes(searchQuery.toLowerCase())
+        (faq.answer && faq.answer.toLowerCase().includes(searchQuery.toLowerCase())) ||
+        (faq.children && JSON.stringify(faq.children).toLowerCase().includes(searchQuery.toLowerCase()))
     );
 
     return (
@@ -148,8 +293,14 @@ function CylinderFAQ() {
             <div className="faq-list">
                 {filteredFaqs.length > 0 ? (
                     filteredFaqs.map((faq, index) => (
-                        <FAQItem key={index} question={faq.question}>
-                            <p>{faq.answer}</p>
+                        <FAQItem
+                            key={index}
+                            question={faq.question}
+                            videoUrl={faq.videoUrl}
+                            imageUrl={faq.imageUrl}
+                        >
+                            {faq.answer ? <p>{faq.answer}</p> : null}
+                            {faq.children}
                         </FAQItem>
                     ))
                 ) : (

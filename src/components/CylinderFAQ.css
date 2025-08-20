@@ -143,7 +143,23 @@
     height: 100%;
 }
 
-/* --- NEW Keyway Table Styles --- */
+/* --- NEW STYLES for image container --- */
+.image-container {
+    margin-top: 1.5rem;
+    text-align: center;
+    background-color: #fff;
+    padding: 1rem;
+    border-radius: 0.5rem;
+}
+
+.faq-image {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+}
+
+/* --- NEW Keyway Table Styles (unchanged from original) --- */
 .keyway-table-container {
     margin-top: 1.5rem;
     overflow-x: auto;

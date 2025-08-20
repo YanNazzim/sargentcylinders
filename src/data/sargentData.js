@@ -3,9 +3,9 @@
 // --- START: Series Definitions ---
 
 const devicePrefixes80Series = [
-  { "id": "16", "description": "Cylinder Dogging", "addsCylinder": { "partNumber": "#41", "type": "Mortise Cylinder" }, "isDeviceSpecific": true },
-  { "id": "59", "description": "Delayed Egress", "addsCylinder": { "partNumber": "#41", "type": "Mortise Cylinder", "notes": "For alarm control." }, "isDeviceSpecific": true },
-  { "id": "AL", "description": "Alarmed Exit", "addsCylinder": { "partNumber": "#41", "type": "Mortise Cylinder", "notes": "For alarm kit control." }, "isDeviceSpecific": true }
+  { "id": "16", "description": "Cylinder Dogging", "addsCylinder": { "partNumber": "#41", "type": "Mortise Cylinder" }, "isDeviceSpecific": true, "keywords": [] },
+  { "id": "59", "description": "Delayed Egress", "addsCylinder": { "partNumber": "#41", "type": "Mortise Cylinder", "notes": "For alarm control." }, "isDeviceSpecific": true, "keywords": [] },
+  { "id": "AL", "description": "Alarmed Exit", "addsCylinder": { "partNumber": "#41", "type": "Mortise Cylinder", "notes": "For alarm kit control." }, "isDeviceSpecific": true, "keywords": [] }
 ];
 
 
@@ -118,14 +118,14 @@ const series8800 = {
     { "modelNumber": "8810", "description": "No outside operation ET Control is used as Pull Only", "baseCylinder": null, "prefixes": [...devicePrefixes80Series] },
     { "modelNumber": "8813", "description": "Key Outside Unlocks/Locks Trim", "baseCylinder": { "partNumber": "#41", "type": "Mortise Cylinder" }, "prefixes": [...devicePrefixes80Series] },
     { "modelNumber": "8815", "description": "Passage Only", "baseCylinder": null, "prefixes": [...devicePrefixes80Series] },
-    { "modelNumber": "8816", "description": "Key Outside Retracts Latch; Key Inside Unlocks/Locks O/S Trim", "baseCylinder": { "partNumber": "#34", "type": "Rim Cylinder" }, "prefixes": [{ "id": "Inside Cyl", "description": "Inside Cylinder for 8816 Function", "addsCylinder": { "partNumber": "#44", "type": "Mortise Cylinder" }, "isDeviceSpecific": true }, ...devicePrefixes80Series] },
+    { "modelNumber": "8816", "description": "Key Outside Retracts Latch; Key Inside Unlocks/Locks O/S Trim", "baseCylinder": { "partNumber": "#34", "type": "Rim Cylinder" }, "prefixes": [{ "id": "Inside Cyl", "description": "Inside Cylinder for 8816 Function", "addsCylinder": { "partNumber": "#44", "type": "Mortise Cylinder" }, "isDeviceSpecific": true, "keywords": [] }, ...devicePrefixes80Series] },
     { "modelNumber": "8828", "description": "Thumbpiece - Passage Only", "baseCylinder": null, "prefixes": [...devicePrefixes80Series] },
     { "modelNumber": "8840", "description": "Freewheeling Trim- No outside operation Dummy Trim", "baseCylinder": null, "prefixes": [...devicePrefixes80Series] },
     { "modelNumber": "8843", "description": "Freewheeling Trim- Key Outside Unlocks/locks Trim", "baseCylinder": { "partNumber": "#41", "type": "Mortise Cylinder" }, "prefixes": [...devicePrefixes80Series] },
     { "modelNumber": "8844", "description": "Freewheeling Trim - Key Retracts Latch", "baseCylinder": { "partNumber": "#34", "type": "Rim Cylinder" }, "prefixes": [...devicePrefixes80Series] },
     { "modelNumber": "8846", "description": "Freewheeling Trim - Key unlocks Trim, Trim retracts latch/Trim relocks when key is removed", "baseCylinder": { "partNumber": "#41", "type": "Mortise Cylinder" }, "prefixes": [...devicePrefixes80Series] },
     { "modelNumber": "8863", "description": "Thumbpiece - Key Unlocks/Locks", "baseCylinder": { "partNumber": "#34", "type": "Rim Cylinder" }, "prefixes": [...devicePrefixes80Series] },
-    { "modelNumber": "8866", "description": "Thumbpiece - Key Outside Retracts, Inside Unlocks/Locks O/S Trim", "baseCylinder": { "partNumber": "#34", "type": "Rim Cylinder" }, "prefixes": [{ "id": "Inside Cyl", "description": "Inside Cylinder for 8866 Function", "addsCylinder": { "partNumber": "#44", "type": "Mortise Cylinder" }, "isDeviceSpecific": true }, ...devicePrefixes80Series] },
+    { "modelNumber": "8866", "description": "Thumbpiece - Key Outside Retracts, Inside Unlocks/Locks Trim", "baseCylinder": { "partNumber": "#34", "type": "Rim Cylinder" }, "prefixes": [{ "id": "Inside Cyl", "description": "Inside Cylinder for 8866 Function", "addsCylinder": { "partNumber": "#44", "type": "Mortise Cylinder" }, "isDeviceSpecific": true, "keywords": [] }, ...devicePrefixes80Series] },
     { "modelNumber": "8873", "description": "Electrified ET Trim - Fail Safe Power Off, Unlocks Lever", "baseCylinder": null, "prefixes": [...devicePrefixes80Series] },
     { "modelNumber": "8874", "description": "Electrified ET Trim-Fail Secure Power Off, Locks Lever", "baseCylinder": null, "prefixes": [...devicePrefixes80Series] },
     { "modelNumber": "8875", "description": "Electrified ET Trim - Fail Safe Power Off, Unlocks Lever, Key Retracts Latch", "baseCylinder": { "partNumber": "#34", "type": "Rim Cylinder" }, "prefixes": [...devicePrefixes80Series] },
@@ -141,13 +141,13 @@ const series8900 = {
     { "modelNumber": "8910", "description": "No outside operation ET Control is used as Pull Only", "baseCylinder": null, "prefixes": [...devicePrefixes80Series] },
     { "modelNumber": "8913", "description": "Key Outside Unlocks/Locks Trim", "baseCylinder": { "partNumber": "#41", "type": "Mortise Cylinder" }, "prefixes": [...devicePrefixes80Series] },
     { "modelNumber": "8915", "description": "Passage Only", "baseCylinder": null, "prefixes": [...devicePrefixes80Series] },
-    { "modelNumber": "8916", "description": "Key Outside Retracts Latch, Key Inside Unlocks/Locks O/S Trim", "baseCylinder": { "partNumber": "#46", "type": "Mortise Cylinder" }, "prefixes": [{ "id": "Inside Cyl", "description": "Inside Cylinder for 8916 Function", "addsCylinder": { "partNumber": "#34", "type": "Rim Cylinder" }, "isDeviceSpecific": true }, ...devicePrefixes80Series] },
+    { "modelNumber": "8916", "description": "Key Outside Retracts Latch, Key Inside Unlocks/Locks O/S Trim", "baseCylinder": { "partNumber": "#46", "type": "Mortise Cylinder" }, "prefixes": [{ "id": "Inside Cyl", "description": "Inside Cylinder for 8916 Function", "addsCylinder": { "partNumber": "#34", "type": "Rim Cylinder" }, "isDeviceSpecific": true, "keywords": [] }, ...devicePrefixes80Series] },
     { "modelNumber": "8928", "description": "Thumbpiece - Passage Only", "baseCylinder": null, "prefixes": [...devicePrefixes80Series] },
     { "modelNumber": "8940", "description": "Freewheeling Trim- No outside Operation Dummy Trim", "baseCylinder": null, "prefixes": [...devicePrefixes80Series] },
     { "modelNumber": "8943", "description": "Freewheeling Trim- Key Outside Unlocks/locks Trim", "baseCylinder": { "partNumber": "#41", "type": "Mortise Cylinder" }, "prefixes": [...devicePrefixes80Series] },
     { "modelNumber": "8944", "description": "Freewheeling Trim- Key Retracts Latch", "baseCylinder": { "partNumber": "#46", "type": "Mortise Cylinder" }, "prefixes": [...devicePrefixes80Series] },
     { "modelNumber": "8963", "description": "Thumbpiece - Key Unlocks/Locks", "baseCylinder": { "partNumber": "#41", "type": "Mortise Cylinder" }, "prefixes": [...devicePrefixes80Series] },
-    { "modelNumber": "8966", "description": "Thumbpiece - Key Outside Retracts, Inside Unlocks/Locks Trim", "baseCylinder": { "partNumber": "#34", "type": "Rim Cylinder" }, "prefixes": [{ "id": "Inside Cyl", "description": "Inside Cylinder for 8966 Function", "addsCylinder": { "partNumber": "#41", "type": "Mortise Cylinder" }, "isDeviceSpecific": true }, ...devicePrefixes80Series] },
+    { "modelNumber": "8966", "description": "Thumbpiece - Key Outside Retracts, Inside Unlocks/Locks Trim", "baseCylinder": { "partNumber": "#34", "type": "Rim Cylinder" }, "prefixes": [{ "id": "Inside Cyl", "description": "Inside Cylinder for 8966 Function", "addsCylinder": { "partNumber": "#41", "type": "Mortise Cylinder" }, "isDeviceSpecific": true, "keywords": [] }, ...devicePrefixes80Series] },
     { "modelNumber": "8975", "description": "Electrified ET Trim-Fail Safe Power Off, Unlocks Lever, Key Retracts Latch", "baseCylinder": { "partNumber": "#46", "type": "Mortise Cylinder" }, "prefixes": [...devicePrefixes80Series] },
     { "modelNumber": "8976", "description": "Electrified ET Trim Fail Secure Power Off, Locks Lever, Key Retracts Latch", "baseCylinder": { "partNumber": "#46", "type": "Mortise Cylinder" }, "prefixes": [...devicePrefixes80Series] },
   ].sort((a, b) => a.modelNumber.localeCompare(b.modelNumber))
@@ -161,7 +161,7 @@ const seriesPE8300 = {
     { "modelNumber": "PE8310", "description": "No outside operation Trim is used as Pull Only", "baseCylinder": null, "prefixes": [...devicePrefixes80Series] },
     { "modelNumber": "PE8313", "description": "Key outside unlocks/locks trim", "baseCylinder": { "partNumber": "#41", "type": "Mortise Cylinder" }, "prefixes": [...devicePrefixes80Series] },
     { "modelNumber": "PE8315", "description": "Passage only", "baseCylinder": null, "prefixes": [...devicePrefixes80Series] },
-    { "modelNumber": "PE8316", "description": "Key Outside Retracts Latch, Key Inside Unlocks/Locks O/S Trim", "baseCylinder": { "partNumber": "#34", "type": "Rim Cylinder" }, "prefixes": [{ "id": "Inside Cyl", "description": "Inside Cylinder for PE8316 Function", "addsCylinder": { "partNumber": "#44", "type": "Mortise Cylinder" }, "isDeviceSpecific": true }, ...devicePrefixes80Series] },
+    { "modelNumber": "PE8316", "description": "Key Outside Retracts Latch, Key Inside Unlocks/Locks O/S Trim", "baseCylinder": { "partNumber": "#34", "type": "Rim Cylinder" }, "prefixes": [{ "id": "Inside Cyl", "description": "Inside Cylinder for PE8316 Function", "addsCylinder": { "partNumber": "#44", "type": "Mortise Cylinder" }, "isDeviceSpecific": true, "keywords": [] }, ...devicePrefixes80Series] },
     { "modelNumber": "PE8328", "description": "Thumbpiece - Passage Only", "baseCylinder": null, "prefixes": [...devicePrefixes80Series] },
     { "modelNumber": "PE8340", "description": "No outside operation", "baseCylinder": null, "prefixes": [...devicePrefixes80Series] },
     { "modelNumber": "PE8343", "description": "Key outside unlocks/locks trim", "baseCylinder": { "partNumber": "#41", "type": "Mortise Cylinder" }, "prefixes": [...devicePrefixes80Series] },
@@ -170,7 +170,7 @@ const seriesPE8300 = {
     { "modelNumber": "PE8363", "description": "Thumbpiece - Key Unlocks/Locks", "baseCylinder": { "partNumber": "#41", "type": "Mortise Cylinder" }, "prefixes": [...devicePrefixes80Series] },
     { "modelNumber": "PE8373", "description": "Electrified trim - fail safe power off, unlocks lever", "baseCylinder": null, "prefixes": [...devicePrefixes80Series] },
     { "modelNumber": "PE8374", "description": "Electrified trim - fail secure power off, locks lever", "baseCylinder": null, "prefixes": [...devicePrefixes80Series] },
-    { "modelNumber": "PE8375", "description": "Electrified trim - fail safe power off, unlocks lever, key retracts latch", "baseCylinder": { "partNumber": "#46", "type": "Mortise Cylinder" }, "prefixes": [...devicePrefixes80Series] },
+    { "modelNumber": "PE8375", "description": "Electrified trim-fail safe power off, unlocks lever, key retracts latch", "baseCylinder": { "partNumber": "#46", "type": "Mortise Cylinder" }, "prefixes": [...devicePrefixes80Series] },
     { "modelNumber": "PE8376", "description": "Electrified trim - fail secure power off, locks lever, key retracts latch", "baseCylinder": { "partNumber": "#46", "type": "Mortise Cylinder" }, "prefixes": [...devicePrefixes80Series] },
   ].sort((a, b) => a.modelNumber.localeCompare(b.modelNumber))
 };
@@ -251,14 +251,14 @@ const seriesPE8800 = {
     { "modelNumber": "PE8810", "description": "No outside operation Trim is used as Pull Only", "baseCylinder": null, "prefixes": [...devicePrefixes80Series] },
     { "modelNumber": "PE8813", "description": "Key outside unlocks/locks trim", "baseCylinder": { "partNumber": "#41", "type": "Mortise Cylinder" }, "prefixes": [...devicePrefixes80Series] },
     { "modelNumber": "PE8815", "description": "Passage only", "baseCylinder": null, "prefixes": [...devicePrefixes80Series] },
-    { "modelNumber": "PE8816", "description": "Key Outside Retracts Latch; Key Inside Unlocks/Locks O/S Trim", "baseCylinder": { "partNumber": "#34", "type": "Rim Cylinder" }, "prefixes": [{ "id": "Inside Cyl", "description": "Inside Cylinder for 8816 Function", "addsCylinder": { "partNumber": "#44", "type": "Mortise Cylinder" }, "isDeviceSpecific": true }, ...devicePrefixes80Series] },
+    { "modelNumber": "PE8816", "description": "Key Outside Retracts Latch; Key Inside Unlocks/Locks O/S Trim", "baseCylinder": { "partNumber": "#34", "type": "Rim Cylinder" }, "prefixes": [{ "id": "Inside Cyl", "description": "Inside Cylinder for 8816 Function", "addsCylinder": { "partNumber": "#44", "type": "Mortise Cylinder" }, "isDeviceSpecific": true, "keywords": [] }, ...devicePrefixes80Series] },
     { "modelNumber": "PE8828", "description": "Thumbpiece - Passage Only", "baseCylinder": null, "prefixes": [...devicePrefixes80Series] },
     { "modelNumber": "PE8840", "description": "No outside operation; Freewheeling trim.", "baseCylinder": null, "prefixes": [...devicePrefixes80Series] },
     { "modelNumber": "PE8843", "description": "Key outside unlocks/locks trim. Freewheeling trim.", "baseCylinder": { "partNumber": "#41", "type": "Mortise Cylinder" }, "prefixes": [...devicePrefixes80Series] },
     { "modelNumber": "PE8844", "description": "Key retracts latch. Freewheeling trim.", "baseCylinder": { "partNumber": "#34", "type": "Rim Cylinder" }, "prefixes": [...devicePrefixes80Series] },
     { "modelNumber": "PE8846", "description": "Key unlocks trim, trim retracts latch/trim relocks when key is removed. Freewheeling trim.", "baseCylinder": { "partNumber": "#41", "type": "Mortise Cylinder" }, "prefixes": [...devicePrefixes80Series] },
     { "modelNumber": "PE8863", "description": "Thumbpiece - Key Unlocks/Locks", "baseCylinder": { "partNumber": "#34", "type": "Rim Cylinder" }, "prefixes": [...devicePrefixes80Series] },
-    { "modelNumber": "PE8866", "description": "Thumbpiece - Key Outside Retracts, Inside Unlocks/Locks Trim", "baseCylinder": { "partNumber": "#34", "type": "Rim Cylinder" }, "prefixes": [{ "id": "Inside Cyl", "description": "Inside Cylinder for 8866 Function", "addsCylinder": { "partNumber": "#44", "type": "Mortise Cylinder" }, "isDeviceSpecific": true }, ...devicePrefixes80Series] },
+    { "modelNumber": "PE8866", "description": "Thumbpiece - Key Outside Retracts, Inside Unlocks/Locks Trim", "baseCylinder": { "partNumber": "#34", "type": "Rim Cylinder" }, "prefixes": [{ "id": "Inside Cyl", "description": "Inside Cylinder for 8866 Function", "addsCylinder": { "partNumber": "#44", "type": "Mortise Cylinder" }, "isDeviceSpecific": true, "keywords": [] }, ...devicePrefixes80Series] },
     { "modelNumber": "PE8867", "description": "Push Button locks latchbolt/key releases button and latchbolt", "baseCylinder": null, "prefixes": [...devicePrefixes80Series] },
     { "modelNumber": "PE8873", "description": "Electrified trim - fail safe power off, unlocks lever", "baseCylinder": null, "prefixes": [...devicePrefixes80Series] },
     { "modelNumber": "PE8874", "description": "Electrified lever trim - fail secure power off, locks lever", "baseCylinder": null, "prefixes": [...devicePrefixes80Series] },
@@ -275,14 +275,14 @@ const seriesPE8900 = {
     { "modelNumber": "PE8910", "description": "No outside operation Trim is used as Pull Only", "baseCylinder": null, "prefixes": [...devicePrefixes80Series] },
     { "modelNumber": "PE8913", "description": "Key outside unlocks/locks trim", "baseCylinder": { "partNumber": "#41", "type": "Mortise Cylinder" }, "prefixes": [...devicePrefixes80Series] },
     { "modelNumber": "PE8915", "description": "Passage only", "baseCylinder": null, "prefixes": [...devicePrefixes80Series] },
-    { "modelNumber": "PE8916", "description": "Key outside retracts latch; key inside unlocks/locks o/s trim", "baseCylinder": { "partNumber": "#46", "type": "Mortise Cylinder" }, "prefixes": [{ "id": "Inside Cyl", "description": "Inside Cylinder for 8916 Function", "addsCylinder": { "partNumber": "#34", "type": "Rim Cylinder" }, "isDeviceSpecific": true }, ...devicePrefixes80Series] },
+    { "modelNumber": "PE8916", "description": "Key outside retracts latch; key inside unlocks/locks o/s trim", "baseCylinder": { "partNumber": "#46", "type": "Mortise Cylinder" }, "prefixes": [{ "id": "Inside Cyl", "description": "Inside Cylinder for PE8916 Function", "addsCylinder": { "partNumber": "#34", "type": "Rim Cylinder" }, "isDeviceSpecific": true, "keywords": [] }, ...devicePrefixes80Series] },
     { "modelNumber": "PE8928", "description": "Thumbpiece - Passage Only", "baseCylinder": null, "prefixes": [...devicePrefixes80Series] },
     { "modelNumber": "PE8940", "description": "No outside operation", "baseCylinder": null, "prefixes": [...devicePrefixes80Series] },
     { "modelNumber": "PE8943", "description": "Key outside unlocks/locks trim. Freewheeling trim.", "baseCylinder": { "partNumber": "#41", "type": "Mortise Cylinder" }, "prefixes": [...devicePrefixes80Series] },
     { "modelNumber": "PE8944", "description": "Key retracts latch", "baseCylinder": { "partNumber": "#46", "type": "Mortise Cylinder" }, "prefixes": [...devicePrefixes80Series] },
     { "modelNumber": "PE8946", "description": "Key unlocks trim, trim retracts latch/trim relocks when key is removed", "baseCylinder": { "partNumber": "#41", "type": "Mortise Cylinder" }, "prefixes": [...devicePrefixes80Series] },
     { "modelNumber": "PE8963", "description": "Thumbpiece - Key Unlocks/Locks", "baseCylinder": { "partNumber": "#34", "type": "Rim Cylinder" }, "prefixes": [...devicePrefixes80Series] },
-    { "modelNumber": "PE8966", "description": "Thumbpiece - Key Outside Retracts, Inside Unlocks/Locks Trim", "baseCylinder": { "partNumber": "#34", "type": "Rim Cylinder" }, "prefixes": [{ "id": "Inside Cyl", "description": "Inside Cylinder for 8966 Function", "addsCylinder": { "partNumber": "#41", "type": "Mortise Cylinder" }, "isDeviceSpecific": true }, ...devicePrefixes80Series] },
+    { "modelNumber": "PE8966", "description": "Thumbpiece - Key Outside Retracts, Inside Unlocks/Locks Trim", "baseCylinder": { "partNumber": "#34", "type": "Rim Cylinder" }, "prefixes": [{ "id": "Inside Cyl", "description": "Inside Cylinder for 8966 Function", "addsCylinder": { "partNumber": "#41", "type": "Mortise Cylinder" }, "isDeviceSpecific": true, "keywords": [] }, ...devicePrefixes80Series] },
     { "modelNumber": "PE8973", "description": "Electrified trim fail safe power off, unlocks lever.", "baseCylinder": null, "prefixes": [...devicePrefixes80Series] },
     { "modelNumber": "PE8974", "description": "Electrified trim fail secure power off, locks lever", "baseCylinder": null, "prefixes": [...devicePrefixes80Series] },
     { "modelNumber": "PE8975", "description": "Electrified trim-fail safe power off, unlocks lever, key retracts latch", "baseCylinder": { "partNumber": "#46", "type": "Mortise Cylinder" }, "prefixes": [...devicePrefixes80Series] },
@@ -310,6 +310,8 @@ const series9700 = {
     { "modelNumber": "9763", "description": "Thumbpiece - Key Unlocks/Locks", "baseCylinder": { "partNumber": "#34", "type": "Rim Cylinder" }, "prefixes": [] },
     { "modelNumber": "9773", "description": "Electrified ET Trim - Fail Safe Power Off, Unlocks Lever", "baseCylinder": null, "prefixes": [] },
     { "modelNumber": "9774", "description": "Electrified ET Trim Fail Secure Power Off, Locks Lever", "baseCylinder": null, "prefixes": [] },
+    { "modelNumber": "9775", "description": "Electrified ET Trim - Fail Safe Power Off, Unlocks Lever, Key Retracts Latch", "baseCylinder": { "partNumber": "#34", "type": "Rim Cylinder" }, "prefixes": [] },
+    { "modelNumber": "9776", "description": "Electrified ET Trim-Fail Secure Power Off, Locks Lever, Key Retracts Latch", "baseCylinder": { "partNumber": "#34", "type": "Rim Cylinder" }, "prefixes": [] }
   ].sort((a, b) => a.modelNumber.localeCompare(b.modelNumber))
 };
 const series9800 = {
@@ -528,112 +530,112 @@ const cylinderPrefixCategories = [
   {
     name: "Degree Key System Level 1",
     prefixes: [
-      { id: "DG1-", description: "SARGENT Degree Key System Level 1 (bump resistant with patented keys)" },
-      { id: "DG1-21-", description: "Degree Level 1 Construction Master Keying" },
-      { id: "DG1-60-", description: "Degree Level 1 Removable Disposable Construction Core" },
-      { id: "DG1-63-", description: "Degree Level 1 Removable Core" },
-      { id: "DG1-64-", description: "Degree Level 1 Removable Construction Keyed LFIC" },
-      { id: "DG1-65-", description: "Degree Level 1 Unassembled/uncombinated Core" },
+      { id: "DG1-", description: "SARGENT Degree Key System Level 1 (bump resistant with patented keys)", keywords: ["Conventional", "Standard","Not Removable"] },
+      { id: "DG1-21-", description: "Degree Level 1 Construction Master Keying", keywords: ["Lost Ball", "Construction", "Master", "Keying", "Key"] },
+      { id: "DG1-60-", description: "Degree Level 1 Removable Disposable Construction Core", keywords: ["LFIC", "Large Format Interchangeable Core", "removable core"] },
+      { id: "DG1-63-", description: "Degree Level 1 Removable Core", keywords: ["LFIC", "Large Format Interchangeable Core", "removable core"] },
+      { id: "DG1-64-", description: "Degree Level 1 Removable Construction Keyed LFIC", keywords: ["LFIC", "Large Format Interchangeable Core", "removable core"] },
+      { id: "DG1-65-", description: "Degree Level 1 Unassembled/uncombinated Core", keywords: ["LFIC", "Large Format Interchangeable Core", "removable core"] },
     ]
   },
   {
     name: "Degree Key System Level 2",
     prefixes: [
-      { id: "DG2-", description: "SARGENT Degree Key System Level 2 (geographically exclusive; bump and pick resistant)" },
-      { id: "DG2-21-", description: "Degree Level 2 Construction Master Keying" },
-      { id: "DG2-60-", description: "Degree Level 2 Removable Disposable Construction Core" },
-      { id: "DG2-63-", description: "Degree Level 2 Removable Core" },
-      { id: "DG2-64-", description: "Degree Level 2 Removable Construction Keyed LFIC" },
-      { id: "DG2-65-", description: "Degree Level 2 Unassembled/uncombinated Core" },
+      { id: "DG2-", description: "SARGENT Degree Key System Level 2 (geographically exclusive; bump and pick resistant)", keywords: ["Conventional", "Standard", "Not Removable"] },
+      { id: "DG2-21-", description: "Degree Level 2 Construction Master Keying", keywords: ["Lost Ball", "Construction", "Master", "Keying", "Key"] },
+      { id: "DG2-60-", description: "Degree Level 2 Removable Disposable Construction Core", keywords: ["LFIC", "Large Format Interchangeable Core", "removable core"] },
+      { id: "DG2-63-", description: "Degree Level 2 Removable Core", keywords: ["LFIC", "Large Format Interchangeable Core", "removable core"] },
+      { id: "DG2-64-", description: "Degree Level 2 Removable Construction Keyed LFIC", keywords: ["LFIC", "Large Format Interchangeable Core", "removable core"] },
+      { id: "DG2-65-", description: "Degree Level 2 Unassembled/uncombinated Core", keywords: ["LFIC", "Large Format Interchangeable Core", "removable core"] },
     ]
   },
   {
     name: "Degree Key System Level 3",
     prefixes: [
-      { id: "DG3-", description: "SARGENT Degree Key System Level 3 (geographically exclusive; UL437 certified; bump and pick resistant)" },
-      { id: "DG3-21-", description: "Degree Level 3 Construction Master Keying" },
-      { id: "DG3-60-", description: "Degree Level 3 Removable Disposable Construction Core" },
-      { id: "DG3-63-", description: "Degree Level 3 Removable Core" },
-      { id: "DG3-64-", description: "Degree Level 3 Removable Construction Keyed LFIC" },
-      { id: "DG3-65", description: "Degree Level 3 Unassembled/uncombinated Core" },
+      { id: "DG3-", description: "SARGENT Degree Key System Level 3 (geographically exclusive; UL437 certified; bump and pick resistant)", keywords: ["Conventional", "Standard", "Not Removable"] },
+      { id: "DG3-21-", description: "Degree Level 3 Construction Master Keying", keywords: ["Lost Ball", "Construction", "Master", "Keying", "Key"] },
+      { id: "DG3-60-", description: "Degree Level 3 Removable Disposable Construction Core", keywords: ["LFIC", "Large Format Interchangeable Core", "removable core"] },
+      { id: "DG3-63-", description: "Degree Level 3 Removable Core", keywords: ["LFIC", "Large Format Interchangeable Core", "removable core"] },
+      { id: "DG3-64-", description: "Degree Level 3 Removable Construction Keyed LFIC", keywords: ["LFIC", "Large Format Interchangeable Core", "removable core"] },
+      { id: "DG3-65", description: "Degree Level 3 Unassembled/uncombinated Core", keywords: ["LFIC", "Large Format Interchangeable Core", "removable core"] },
     ]
   },
   {
     name: "Signature Key System",
     prefixes: [
-      { id: "10-", description: "SARGENT Signature Key System (Not Available with other Key Systems)" },
-      { id: "10-21-", description: "SARGENT Signature Construction Key System (Lost Ball)" },
-      { id: "10-63-", description: "SARGENT Signature Large Format Interchangeable Core Cylinder (Removable)" },
+      { id: "10-", description: "SARGENT Signature Key System (Not Available with other Key Systems)", keywords: [] },
+      { id: "10-21-", description: "SARGENT Signature Construction Key System (Lost Ball)", keywords: [] },
+      { id: "10-63-", description: "SARGENT Signature Large Format Interchangeable Core Cylinder (Removable)", keywords: ["LFIC", "Large Format Interchangeable Core", "removable core"] },
     ]
   },
   {
     name: "XC-Key System",
     prefixes: [
-      { id: "11-", description: "XC Key System (Not available with other Key systems unless specified)" },
-      { id: "11-21-", description: "XC-Construction Key System (Lost Ball)" },
-      { id: "11-60-", description: "Device to accept XC- Permanent Large Format Interchangeable Core, Disposable plastic Core- provided" },
-      { id: "11-63-", description: "Device provided with XC-Large Format Interchangeable Core Cylinder - (Includes masterkeying, grand masterkeying)" },
-      { id: "11-64-", description: "Device provided with Keyed construction core to accept XC- Permanent Large Format Interchangeable Core (ordered separately)" },
+      { id: "11-", description: "XC Key System (Not available with other Key systems unless specified)", keywords: [] },
+      { id: "11-21-", description: "XC-Construction Key System (Lost Ball)", keywords: [] },
+      { id: "11-60-", description: "Device to accept XC- Permanent Large Format Interchangeable Core, Disposable plastic Core- provided", keywords: ["LFIC", "Large Format Interchangeable Core", "removable core"] },
+      { id: "11-63-", description: "Device provided with XC-Large Format Interchangeable Core Cylinder - (Includes masterkeying, grand masterkeying)", keywords: ["LFIC", "Large Format Interchangeable Core", "removable core"] },
+      { id: "11-64-", description: "Device provided with Keyed construction core to accept XC- Permanent Large Format Interchangeable Core (ordered separately)", keywords: ["LFIC", "Large Format Interchangeable Core", "removable core"] },
     ]
   },
   {
     name: "XC-Small Format Interchangeable Core (SFIC)",
     prefixes: [
-      { id: "11-70-7P-", description: "Device to accept XC-SFIC (7-Pin) XC-Permanent Cores, plastic disposable core provided" },
-      { id: "11-72-7P-", description: "Device to accept XC-SFIC (7-Pin Keyed Construction Core provided) cylinder Permanent core ordered separately" },
-      { id: "11-73-7P-", description: "Device provided with XC- Small Format 7-Pin interchangeable core (Includes masterkeying, grand masterkeying)" },
-      { id: "11-65-73-7P-", description: "Device provided to accept XC-Uncombinated 7-Pin SFIC (Permanent) Core - (Packed Loose)" },
+      { id: "11-70-7P-", description: "Device to accept XC-SFIC (7-Pin) XC-Permanent Cores, plastic disposable core provided", keywords: ["SFIC", "Small Format Interchangeable Core", "removable core"] },
+      { id: "11-72-7P-", description: "Device to accept XC-SFIC (7-Pin Keyed Construction Core provided) cylinder Permanent core ordered separately", keywords: ["SFIC", "Small Format Interchangeable Core", "removable core"] },
+      { id: "11-73-7P-", description: "Device provided with XC- Small Format 7-Pin interchangeable core (Includes masterkeying, grand masterkeying)", keywords: ["SFIC", "Small Format Interchangeable Core", "removable core"] },
+      { id: "11-65-73-7P-", description: "Device provided to accept XC-Uncombinated 7-Pin SFIC (Permanent) Core - (Packed Loose)", keywords: ["SFIC", "Small Format Interchangeable Core", "removable core"] },
     ]
   },
   {
     name: "Construction Key Systems (Lost Ball)",
     prefixes: [
-      { id: "21-", description: "SARGENT Lost Ball Construction Keying for Conventional, XC and Signature Series (N/A with 63- or 73-)" },
+      { id: "21-", description: "SARGENT Lost Ball Construction Keying for Conventional, XC and Signature Series (N/A with 63- or 73-)", keywords: ["Lost Ball"] },
     ]
   },
   {
     name: "Old Style Removable Core",
     prefixes: [
-      { id: "51-", description: "Removable Core Cylinder (Old Style) provided (existing systems only)" },
-      { id: "52-", description: "Removable Construction Core (Old Style) Permanent core ordered separately (existing systems only)" },
+      { id: "51-", description: "Removable Core Cylinder (Old Style) provided (existing systems only)", keywords: ["removable core", "Old Style"] },
+      { id: "52-", description: "Removable Construction Core (Old Style) Permanent core ordered separately (existing systems only)", keywords: ["removable core", "Old Style"] },
     ]
   },
   {
     name: "Large Format Interchangeable Core (LFIC)",
     prefixes: [
-      { id: "60-", description: "Device to accept SARGENT Permanent Large Format Interchangeable Core, Disposable plastic Core provided (Permanent Cores ordered separately)" },
-      { id: "63-", description: "Device provided with Large Format Interchangeable Core Cylinder- (Includes masterkeying, grand masterkeying)" },
-      { id: "64-", description: "Device provided with Keyed construction core to accept Permanent Large Format Interchangeable Core (ordered separately)" },
+      { id: "60-", description: "Device to accept SARGENT Permanent Large Format Interchangeable Core, Disposable plastic Core provided (Permanent Cores ordered separately)", keywords: ["LFIC", "Large Format Interchangeable Core", "removable core"] },
+      { id: "63-", description: "Device provided with Large Format Interchangeable Core Cylinder- (Includes masterkeying, grand masterkeying)", keywords: ["LFIC", "Large Format Interchangeable Core", "removable core"] },
+      { id: "64-", description: "Device provided with Keyed construction core to accept Permanent Large Format Interchangeable Core (ordered separately)", keywords: ["LFIC", "Large Format Interchangeable Core", "removable core"] },
     ]
   },
   {
     name: "Small Format Interchangeable Core (SFIC)",
     prefixes: [
-      { id: "70-", description: "Device to accept 6 or 7-Pin SFIC Permanent Cores, plastic disposable core provided" },
-      { id: "72-", description: "Device to accept 6- or 7-Pin SFIC (6-Pin Keyed Construction Core provided) Cylinder (Permanent Core ordered separately)" },
-      { id: "73-", description: "Device provided with 6-Pin SFIC (Includes masterkeying, grand masterkeying)" },
-      { id: "65-73-", description: "Device provided to accept Uncombinated 6-Pin SFIC (Permanent) Core - (Packed Loose for field keying)" },
-      { id: "65-73-7P-", description: "Device provided to accept Uncombinated 7-Pin SFIC (Permanent) Core - (Packed Loose for field keying)" },
-      { id: "73-7P-", description: "Device provided with Small Format 7-Pin Interchangeable Core (Includes masterkeying, grand masterkeying)" },
+      { id: "70-", description: "Device to accept 6 or 7-Pin SFIC Permanent Cores, plastic disposable core provided", keywords: ["SFIC", "Small Format Interchangeable Core", "removable core"] },
+      { id: "72-", description: "Device to accept 6- or 7-Pin SFIC (6-Pin Keyed Construction Core provided) Cylinder (Permanent Core ordered separately)", keywords: ["SFIC", "Small Format Interchangeable Core", "removable core"] },
+      { id: "73-", description: "Device provided with 6-Pin SFIC (Includes masterkeying, grand masterkeying)", keywords: ["SFIC", "Small Format Interchangeable Core", "removable core"] },
+      { id: "65-73-", description: "Device provided to accept Uncombinated 6-Pin SFIC (Permanent) Core - (Packed Loose for field keying)", keywords: ["SFIC", "Small Format Interchangeable Core", "removable core"] },
+      { id: "65-73-7P-", description: "Device provided to accept Uncombinated 7-Pin SFIC (Permanent) Core - (Packed Loose for field keying)", keywords: ["SFIC", "Small Format Interchangeable Core", "removable core"] },
+      { id: "73-7P-", description: "Device provided with Small Format 7-Pin Interchangeable Core (Includes masterkeying, grand masterkeying)", keywords: ["SFIC", "Small Format Interchangeable Core", "removable core"] },
     ]
   },
   {
     name: "Keso & Kesa F1 Systems",
     prefixes: [
-      { id: "81-", description: "Device provided with housings to accept Keso (83) & Keso F1 (F1-83-) removable cores. (Permanent Cores ordered separately)" },
-      { id: "82-", description: "Device provided with SARGENT Keso Security Cylinder" },
-      { id: "F1-82-", description: "Device provided with SARGENT Keso F1 Security Cylinder (Patented)" },
-      { id: "83-", description: "Device provided with SARGENT Keso Security Removable Core cylinder" },
-      { id: "F1-83-", description: "Device provided with SARGENT Keso F1 Security Removable Core cylinder (Patented)" },
-      { id: "84-", description: "Device provided with SARGENT Keso Construction Cores (Permanent Cores ordered separately)" },
+      { id: "81-", description: "Device provided with housings to accept Keso (83) & Keso F1 (F1-83-) removable cores. (Permanent Cores ordered separately)", keywords: ["Keso", "Keso F1", "removable core"] },
+      { id: "82-", description: "Device provided with SARGENT Keso Security Cylinder", keywords: ["Keso", "Security"] },
+      { id: "F1-82-", description: "Device provided with SARGENT Keso F1 Security Cylinder (Patented)", keywords: ["Keso F1", "Security", "Patented"] },
+      { id: "83-", description: "Device provided with SARGENT Keso Security Removable Core cylinder", keywords: ["Keso", "Security", "removable core"] },
+      { id: "F1-83-", description: "Device provided with SARGENT Keso F1 Security Removable Core cylinder (Patented)", keywords: ["Keso F1", "Security", "Patented", "removable core"] },
+      { id: "84-", description: "Device provided with SARGENT Keso Construction Cores (Permanent Cores ordered separately)", keywords: ["Keso", "Construction"] },
     ]
   },
   {
     name: "Added Security & Keyway Options",
     prefixes: [
-      { id: "BR-", description: "Bump Resistant Cylinder (Available with Conventional & Conventional XC Cylinders Only)" },
-      { id: "SC-", description: "Schlage C keyway cylinder, 0 bitted" },
-      { id: "SE-", description: "Schlage E keyway cylinder, 0 bitted" },
+      { id: "BR-", description: "Bump Resistant Cylinder (Available with Conventional & Conventional XC Cylinders Only)", keywords: ["Bump Resistant"] },
+      { id: "SC-", description: "Schlage C keyway cylinder, 0 bitted", keywords: ["Schlage", "keyway"] },
+      { id: "SE-", description: "Schlage E keyway cylinder, 0 bitted", keywords: ["Schlage", "keyway"] },
     ]
   }
 ];

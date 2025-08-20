@@ -22,7 +22,8 @@ function CategorizedPrefixSelector({ categories, selectedPrefixes, onChange, sea
         // Filter prefixes based on the search term
         const matchingPrefixes = category.prefixes.filter(prefix =>
           prefix.id.toLowerCase().includes(lowercasedSearchTerm) ||
-          prefix.description.toLowerCase().includes(lowercasedSearchTerm)
+          prefix.description.toLowerCase().includes(lowercasedSearchTerm) ||
+          (prefix.keywords && prefix.keywords.some(keyword => keyword.toLowerCase().includes(lowercasedSearchTerm)))
         );
 
         // If the category name matches, show all its prefixes

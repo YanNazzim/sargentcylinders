@@ -15,7 +15,7 @@ function CylinderFinder() {
     const [model, setModel] = useState('');
     const [selectedDevicePrefixes, setSelectedDevicePrefixes] = useState([]);
     const [selectedCylinderPrefix, setSelectedCylinderPrefix] = useState(null);
-    const [searchTerm, setSearchTerm] = useState('');
+    const [prefixSearchTerm, setPrefixSearchTerm] = useState('');
 
     const categories = useMemo(() => sargentData.hardware.map(h => h.category), []);
 
@@ -134,9 +134,11 @@ function CylinderFinder() {
 
         const lficPrefixes = ["60-", "63-", "64-", "DG1-60-", "DG1-63-", "DG1-64-", "DG2-60-", "DG2-63-", "DG2-64-", "DG3-60-", "DG3-63-", "DG3-64-", "10-63-", "11-60-", "11-63-", "11-64-"];
         const sficPrefixes = ["70-", "72-", "73-", "65-73-", "65-73-7P-", "73-7P-", "11-70-7P-", "11-72-7P-", "11-73-7P-", "11-65-73-7P-"];
+        const kesoPrefixes = ["F1-82-", "F1-83-", "82-", "83-"];
         
         const hasLficPrefix = selectedCylinderPrefix && lficPrefixes.includes(selectedCylinderPrefix);
         const hasSficPrefix = selectedCylinderPrefix && sficPrefixes.includes(selectedCylinderPrefix);
+        const hasKesoPrefix = selectedCylinderPrefix && kesoPrefixes.includes(selectedCylinderPrefix);
 
         const rawCylinderList = [];
         if (activeModelData.baseCylinder) {
@@ -169,12 +171,25 @@ function CylinderFinder() {
 
         const transformedCylinderList = rawCylinderList.map(cyl => {
             const newCyl = { ...cyl };
-            if (hasLficPrefix) {
-                if (newCyl.partNumber === '#41') newCyl.partNumber = '#42';
-            } else if (hasSficPrefix) {
-                if (newCyl.partNumber === '#41') newCyl.partNumber = '#43';
-                else if (newCyl.partNumber === '#44') newCyl.partNumber = '#46';
+            const partNumberBase = newCyl.partNumber.replace('#', '');
+            
+            // Apply Keso F1 part number translation first
+            if (hasKesoPrefix) {
+                if (partNumberBase === '41') newCyl.partNumber = 'F1-71';
+                else if (partNumberBase === '46') newCyl.partNumber = 'F1-76';
+                else if (partNumberBase === '34') newCyl.partNumber = 'F1-64';
             }
+            
+            // Then apply LFIC/SFIC adjustments if they are selected
+            // This is a simplified example. In a real-world app, you might need a more complex hierarchy
+            // to handle which modification takes precedence.
+            if (hasLficPrefix) {
+                if (partNumberBase === '41') newCyl.partNumber = '#42';
+            } else if (hasSficPrefix) {
+                if (partNumberBase === '41') newCyl.partNumber = '#43';
+                else if (partNumberBase === '44') newCyl.partNumber = '#46';
+            }
+            
             return newCyl;
         });
 
@@ -193,10 +208,24 @@ function CylinderFinder() {
         if (selectedCylinderPrefix) {
             finalCylindersArray = finalCylindersArray.map(cyl => {
                 const basePartNumber = cyl.partNumber.replace('#', '');
-                const lengthDesc = getCylinderLengthDescription(basePartNumber);
+                let lengthDesc = '';
+                let finalPartNumber = '';
+
+                // Keso F1 has a different naming convention, do not prepend prefix
+                if (hasKesoPrefix) {
+                     const kesoLengths = {
+                        'F1-71': '1-1/8"', 'F1-72': '1-1/4"', 'F1-73': '1-3/8"', 'F1-74': '1-1/2"',
+                        'F1-76': '1-3/4"', 'F1-64': '1-3/4" to 3-1/8"',
+                    };
+                    lengthDesc = kesoLengths[basePartNumber] || '';
+                    finalPartNumber = `${basePartNumber} x Keying Details x Finish`;
+                } else {
+                    lengthDesc = getCylinderLengthDescription(basePartNumber);
+                    finalPartNumber = `${selectedCylinderPrefix}${basePartNumber} x Keying Details x Finish`;
+                }
+
                 const prefixData = cylinderPrefixCategories.flatMap(c => c.prefixes).find(p => p.id === selectedCylinderPrefix);
                 const prefixDesc = prefixData ? prefixData.description.replace('Device', 'Housing') : '';
-                const finalPartNumber = `${selectedCylinderPrefix} ${basePartNumber} x Keying Details x Finish`;
                 const finalDescription = `${lengthDesc} ${cyl.type} ${prefixDesc}`;
                 return {
                     ...cyl,
@@ -267,7 +296,7 @@ function CylinderFinder() {
         setSelectedDevicePrefixes([]);
         setSelectedCylinderPrefix(null);
         setCurrentView('form'); // Reset view to initial form
-        setSearchTerm('');
+        setPrefixSearchTerm('');
     };
 
     const handleNextStep = () => {
@@ -334,15 +363,15 @@ function CylinderFinder() {
                                 <input
                                     type="text"
                                     placeholder="Search prefixes..."
-                                    value={searchTerm}
-                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                    value={prefixSearchTerm}
+                                    onChange={(e) => setPrefixSearchTerm(e.target.value)}
                                     className="prefix-search-bar"
                                 />
                                 <CategorizedPrefixSelector
                                     categories={cylinderOptionsCategories}
                                     selectedPrefixes={[selectedCylinderPrefix]}
                                     onChange={handleCylinderPrefixChange}
-                                    searchTerm={searchTerm}
+                                    searchTerm={prefixSearchTerm}
                                 />
                             </div>
                         )}

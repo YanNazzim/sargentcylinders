@@ -447,7 +447,7 @@ export const glossaryData = {
                 ]},
                 { id: 'sfic-construction-cores', name: 'Construction Cores', components: [
                     { partNumber: '13-5176', description: 'Disposable Plastic Core' },
-                    { partNumber: '7200', description: '6-Pin Brass Construction Core' },
+                    { partNumber: '7200', description: '6-Pin Brass Construction Core' }
                 ]},
                 { id: 'sfic-keys', name: 'Keys & Key Blanks', components: [
                     {
@@ -540,11 +540,43 @@ export const glossaryData = {
             imageUrl: images.KESOcyls,
             parts: [
                 {
-                    id: 'keso-f1-mortise-cores',
-                    name: 'Mortise Cores',
+                    id: 'keso-f1-mortise-cylinders',
+                    name: 'Mortise Cylinders',
                     components: [
                         {
-                            description: 'Keso F1 Removable Cores for Mortise Cylinders.',
+                            description: 'F1-70 Series Mortise Type Cylinders',
+                            isTable: true,
+                            headers: ['Cylinder Length', 'Part Number'],
+                            rows: [
+                                { 'Cylinder Length': '1-1/8"', 'Part Number': 'F1-71' },
+                                { 'Cylinder Length': '1-1/4"', 'Part Number': 'F1-72' },
+                                { 'Cylinder Length': '1-3/8"', 'Part Number': 'F1-73' },
+                                { 'Cylinder Length': '1-1/2"', 'Part Number': 'F1-74' },
+                                { 'Cylinder Length': '1-3/4"', 'Part Number': 'F1-76' },
+                            ]
+                        }
+                    ]
+                },
+                {
+                    id: 'keso-f1-rim-cylinders',
+                    name: 'Rim Cylinders',
+                    components: [
+                        {
+                            description: 'F1-64 Series Rim Type Cylinders',
+                            isTable: true,
+                            headers: ['Cylinder Length', 'Part Number'],
+                            rows: [
+                                { 'Cylinder Length': '1-3/4" to 3-1/8"', 'Part Number': 'F1-64' }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    id: 'keso-f1-mortise-cores',
+                    name: 'Mortise Removable Cores',
+                    components: [
+                        {
+                            description: 'F1-170 Series Removable Core Mortise Type Cylinders',
                             isTable: true,
                             headers: ["Cylinder Length", "Standard Cam Core", "105 Cam Core"],
                             rows: [
@@ -558,7 +590,7 @@ export const glossaryData = {
                 },
                 {
                     id: 'keso-f1-rim-cores',
-                    name: 'Rim Cores',
+                    name: 'Rim Removable Cores',
                     components: [
                         { partNumber: 'F1-5164', description: 'Keso F1 Rim Type Removable Core' }
                     ]
