@@ -1,3 +1,4 @@
+// src/components/CylinderFinder.js
 import React, { useState, useMemo } from 'react';
 import { sargentData, cylinderPrefixCategories } from '../data/sargentData';
 import { images } from '../images/images';
@@ -20,8 +21,13 @@ const seriesImages = {
     'PE80 Series': images.MortiseCyls,
     '90 Series': images.MortiseCyls,
     '20/30 Series': images.MortiseCyls, // Placeholder for 20/30 Series
-    'Mortise Locks': images.MortiseCyls, // Default for other categories
-    'Bored Locks': images.KILCyls,
+    '8200 Series': images.MortiseCyls,
+    '10X Line': images.KILCyls,
+    '11 Line': images.KILCyls,
+    '6 Line': images.KILCyls,
+    '7 Line': images.KILCyls,
+    '8X Line': images.KILCyls,
+    '6500 Line': images.KILCyls,
 };
 
 function CylinderFinder() {
@@ -100,19 +106,29 @@ function CylinderFinder() {
         return seriesData;
     }, [selectedCategory, selectedSeries]);
 
+    // NEW Memo for Mortise and Bored Series
+    const seriesOptions = useMemo(() => {
+        if (selectedCategory === 'Exit Devices' || !selectedCategory) return [];
+        const hardwareCategoryData = sargentData.hardware.find(h => h.category === selectedCategory);
+        return hardwareCategoryData?.series.map(s => ({
+            id: s.name,
+            name: s.name,
+            imageUrl: seriesImages[s.name] || categoryImages[selectedCategory]
+        }));
+    }, [selectedCategory]);
 
     const modelOptions = useMemo(() => {
         if (!selectedCategory || !selectedSeries) return [];
         
         let modelsToDisplay = [];
-        
+        const hardwareCategoryData = sargentData.hardware.find(h => h.category === selectedCategory);
+
         // Check if the selectedSeries is a group name (e.g., '80 Series')
         const isSeriesGroup = ['80 Series', 'PE80 Series', '90 Series', '20/30 Series'].includes(selectedSeries);
 
         if (isSeriesGroup) {
             // Find all models for all series within the selected group
-            const allSeriesInGroup = sargentData.hardware
-                .find(h => h.category === selectedCategory)?.series
+            const allSeriesInGroup = hardwareCategoryData?.series
                 .filter(s => {
                     if (selectedSeries === '80 Series') return s.name.startsWith('8') && !s.name.startsWith('82') && !s.name.startsWith('8X');
                     if (selectedSeries === 'PE80 Series') return s.name.startsWith('PE8');
@@ -124,8 +140,7 @@ function CylinderFinder() {
             modelsToDisplay = allSeriesInGroup.flatMap(s => s.models);
         } else {
             // Otherwise, just find models for the single selected series
-            const seriesData = sargentData.hardware
-                .find(h => h.category === selectedCategory)?.series
+            const seriesData = hardwareCategoryData?.series
                 .find(s => s.name === selectedSeries);
             modelsToDisplay = seriesData?.models || [];
         }
@@ -307,7 +322,7 @@ function CylinderFinder() {
         if (categoryId === 'Exit Devices') {
             setCurrentView('seriesGroup');
         } else {
-            setCurrentView('model');
+            setCurrentView('series');
         }
     };
     
@@ -318,6 +333,13 @@ function CylinderFinder() {
     };
 
     const handleSelectSpecificSeries = (seriesId) => {
+        setSelectedSeries(seriesId);
+        setSelectedModel(null);
+        setCurrentView('model');
+    };
+
+    // NEW handleSelectSeries for Mortise/Bored locks
+    const handleSelectSeries = (seriesId) => {
         setSelectedSeries(seriesId);
         setSelectedModel(null);
         setCurrentView('model');
@@ -366,13 +388,13 @@ function CylinderFinder() {
         if (currentView === 'seriesGroup') {
             setCurrentView('category');
         } else if (currentView === 'series') {
-             setCurrentView('seriesGroup');
+             if (selectedCategory === 'Exit Devices') {
+                 setCurrentView('seriesGroup');
+             } else {
+                 setCurrentView('category');
+             }
         } else if (currentView === 'model') {
-            if (selectedCategory === 'Exit Devices') {
-                setCurrentView('series');
-            } else {
-                setCurrentView('category');
-            }
+            setCurrentView('series');
         } else if (currentView === 'options') {
             setCurrentView('model');
         } else if (currentView === 'results') {
@@ -422,13 +444,13 @@ function CylinderFinder() {
                 </div>
             )}
 
-            {currentView === 'series' && selectedCategory === 'Exit Devices' && (
+            {currentView === 'series' && (
                 <div className="wizard-step active">
-                    <ButtonSelector
+                     <ButtonSelector
                         title="Select a Product Series"
-                        options={specificSeriesOptions}
+                        options={selectedCategory === 'Exit Devices' ? specificSeriesOptions : seriesOptions}
                         selected={selectedSeries}
-                        onSelect={handleSelectSpecificSeries}
+                        onSelect={selectedCategory === 'Exit Devices' ? handleSelectSpecificSeries : handleSelectSeries}
                     />
                     <div className="wizard-controls">
                         <button onClick={handleBack} className="wizard-back-button">Back</button>

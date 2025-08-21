@@ -47,7 +47,7 @@ const allFaqs = [
     },
     {
         question: "What are the different levels of security SARGENT offers?",
-        answer: "SARGENT categorizes its key systems into a security hierarchy: Open Conventional (legacy systems with expired patents), Patented Keyway (keys protected against unauthorized duplication, like Degree DG1 and Keso F1), Security (protection against picking attacks, like Degree DG2, Signature, Keso and Keso F1), and High Security (UL 437 certified protection against drilling and picking, including Degree DG3 and UL-Keso)."
+        answer: "SARGENT categorizes its key systems into a security hierarchy: Open Conventional (legacy systems with expired patents), Patented Keyway (keys protected against unauthorized duplication, like Degree DG1 and XC), Security (protection against picking attacks, like Degree DG2, Signature, and Keso), and High Security (UL 437 certified protection against drilling and picking, including Degree DG3 and UL-Keso)."
     },
     {
         question: "What is the difference between LFIC and SFIC?",
@@ -55,7 +55,7 @@ const allFaqs = [
     },
     {
         question: "What is a construction core?",
-        answer: "A construction core is a temporary cylinder core used during a building's construction phase. It allows workers to access doors with a single construction master key. Once construction is complete, these cores are removed and replaced with the permanent, final master keyed cores."
+        answer: "A construction core is a temporary cylinder core used during a building's construction phase. It allows workers to access doors with a single construction master key. Once construction is complete, these cores are removed and replaced with the permanent, final master keyed cores. For LFIC applications, a 64-DG construction keyed core should be specified."
     },
     {
         question: "What Mortise Cylinder sizes are available?",
