@@ -1,4 +1,3 @@
-// src/components/PrefixSelector.js
 import React from 'react';
 import './PrefixSelector.css';
 
@@ -15,7 +14,11 @@ function PrefixSelector({ prefixes, selectedPrefixes, onChange }) {
     <div className="prefix-selector-container">
         <div className="prefix-selector-options">
             {prefixes.map((prefix) => (
-                <label key={prefix.id} className="prefix-selector-option-label" data-tooltip={prefix.description}>
+                <label 
+                    key={prefix.id} 
+                    className={`prefix-selector-option-label ${selectedPrefixes.includes(prefix.id) ? 'selected' : ''}`}
+                    data-tooltip={prefix.description}
+                >
                     <input
                         type="checkbox"
                         checked={selectedPrefixes.includes(prefix.id)}

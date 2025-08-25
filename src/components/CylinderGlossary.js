@@ -21,7 +21,13 @@ const fuseOptions = {
     keys: [
         { name: 'cylinderName', weight: 0.5 },
         { name: 'name', weight: 0.3 },
-        { name: 'components.partNumber', weight: 0.15 },
+        { name: 'components.partNumber', weight: 0.2 }, // Boosted weight for direct part numbers
+        { name: 'components.rows.Part Number', weight: 0.2 }, // Add support for tables with a single "Part Number" column
+        { name: 'components.rows.Catalog Part #', weight: 0.2 }, // Add support for other table part number columns
+        { name: 'components.rows.6 Pin Plug Part Number', weight: 0.2 }, // Add support for other table part number columns
+        { name: 'components.rows.7 Pin Plug Part Number', weight: 0.2 }, // Add support for other table part number columns
+        { name: 'components.rows.Part Number', weight: 0.2 }, // Add support for other table part number columns
+        { name: 'components.rows.Cam Part # When Ordered Separately', weight: 0.2 }, // Add support for other table part number columns
         { name: 'components.description', weight: 0.05 }
     ],
     includeScore: true,

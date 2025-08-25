@@ -146,6 +146,7 @@ export const series8400 = {
 
 export const series8500 = {
   name: "8500 Series Narrow Rim",
+  imageUrl: images.Series8500,
 
   models: [
     {
@@ -232,7 +233,8 @@ export const series8500 = {
 };
 
 export const series8600 = {
-  name: "8600 Series CVR",
+  name: "8600 Series Wide CVR",
+  imageUrl: images.Series8600,
   models: [
     {
       modelNumber: "8606",
@@ -302,7 +304,8 @@ export const series8600 = {
 };
 
 export const series8700 = {
-  name: "8700 Series SVR",
+  name: "8700 Series Wide SVR",
+  imageUrl: images.Series8700,
   models: [
     {
       modelNumber: "8706",
@@ -382,8 +385,8 @@ export const series8700 = {
 };
 
 export const series8800 = {
-  name: "8800 Series Rim",
-  imageUrl: images.Series8300,
+  name: "8800 Series Wide Rim",
+  imageUrl: images.RimExit80,
   models: [
     {
       modelNumber: "8804",
@@ -515,7 +518,8 @@ export const series8800 = {
 };
 
 export const series8900 = {
-  name: "8900 Series Mortise",
+  name: "8900 Series Wide Mortise",
+  imageUrl: images.Series8900,
   models: [
     {
       modelNumber: "8904",

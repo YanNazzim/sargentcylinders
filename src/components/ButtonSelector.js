@@ -1,4 +1,3 @@
-// src/components/ButtonSelector.js
 import React from 'react';
 import './ButtonSelector.css';
 

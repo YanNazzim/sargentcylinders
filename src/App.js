@@ -1,4 +1,3 @@
-// src/App.js
 import React, { useState } from 'react';
 import CylinderFinder from './components/CylinderFinder';
 import CylinderGlossary from './components/CylinderGlossary';
