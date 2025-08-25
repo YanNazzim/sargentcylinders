@@ -92,8 +92,17 @@
 }
 
 .wizard-back-button {
-    background-color: #718096;
-    color: white;
+    background-color: #f6ad55; /* A more visible yellow/orange */
+    color: #1a202c; /* Darker text for contrast */
+    font-size: 1rem;
+    font-weight: bold;
+    border: 2px solid #dd6b20; /* A bold border to match */
+    padding: 0.85rem 1.7rem; /* Make it a bit bigger */
+}
+
+.wizard-back-button:hover {
+    background-color: #ed8936;
+    transform: translateY(-2px);
 }
 
 .wizard-find-button {
