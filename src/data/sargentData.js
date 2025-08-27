@@ -62,26 +62,4 @@ export const sargentData = {
   ]
 };
 
-
-sargentData.hardware.forEach(category => {
-  category.series.forEach(series => {
-    series.models.forEach(model => {
-      const existingPrefixIds = new Set(model.prefixes.map(p => p.id));
-      let allNewCylinderPrefixes = [];
-      cylinderPrefixCategories.forEach(cat => {
-        cat.prefixes.forEach(cylPrefix => {
-          if (!existingPrefixIds.has(cylPrefix.id)) {
-            allNewCylinderPrefixes.push({
-              ...cylPrefix,
-              isDeviceSpecific: false,
-              addsCylinder: null
-            });
-          }
-        });
-      });
-      model.prefixes = [...model.prefixes, ...allNewCylinderPrefixes];
-    });
-  });
-});
-
 export { cylinderPrefixCategories };

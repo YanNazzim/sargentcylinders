@@ -5,6 +5,7 @@
     box-sizing: border-box;
 }
 body {
+    padding-top: 70px;
     margin: 0;
     font-family: 'Inter', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
     background-color: #1a202c;

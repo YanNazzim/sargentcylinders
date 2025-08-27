@@ -51,10 +51,10 @@ function CylinderFinder() {
       category.series.forEach(series => {
         let seriesGroup = null;
         if (category.category === 'Exit Devices') {
-            if (series.name.startsWith("PE8")) seriesGroup = "PE80 Series";
-            else if (series.name.startsWith("8") && !series.name.startsWith("82")) seriesGroup = "80 Series";
-            else if (series.name.startsWith("9")) seriesGroup = "90 Series";
-            else if (series.name.startsWith("2") || series.name.startsWith("3")) seriesGroup = "20/30 Series";
+          if (series.name.startsWith("PE8")) seriesGroup = "PE80 Series";
+          else if (series.name.startsWith("8") && !series.name.startsWith("82")) seriesGroup = "80 Series";
+          else if (series.name.startsWith("9")) seriesGroup = "90 Series";
+          else if (series.name.startsWith("2") || series.name.startsWith("3")) seriesGroup = "20/30 Series";
         }
         series.models.forEach(model => {
           models.push({
@@ -97,18 +97,18 @@ function CylinderFinder() {
     setSearchResults([]);
 
     const fullModelData = sargentData.hardware
-        .find(h => h.category === result.category)?.series
-        .find(s => s.name === result.seriesName)?.models
-        .find(m => m.modelNumber === result.modelNumber);
+      .find(h => h.category === result.category)?.series
+      .find(s => s.name === result.seriesName)?.models
+      .find(m => m.modelNumber === result.modelNumber);
 
     if (!fullModelData) return;
 
     const devicePrefixes = fullModelData.prefixes.filter(p => p.isDeviceSpecific);
 
     if (!fullModelData.baseCylinder && devicePrefixes.length === 0) {
-        setCurrentView("results");
+      setCurrentView("results");
     } else {
-        setCurrentView("options");
+      setCurrentView("options");
     }
   };
 
@@ -159,11 +159,11 @@ function CylinderFinder() {
     return sargentData.hardware
       .find((h) => h.category === selectedCategory)
       ?.series.filter((s) => {
-          if (selectedSeriesGroup === "80 Series") return s.name.startsWith("8") && !s.name.startsWith("PE8") && !s.name.startsWith("82");
-          if (selectedSeriesGroup === "PE80 Series") return s.name.startsWith("PE8");
-          if (selectedSeriesGroup === "90 Series") return s.name.startsWith("9");
-          if (selectedSeriesGroup === "20/30 Series") return s.name.startsWith("2") || s.name.startsWith("3");
-          return false;
+        if (selectedSeriesGroup === "80 Series") return s.name.startsWith("8") && !s.name.startsWith("PE8") && !s.name.startsWith("82");
+        if (selectedSeriesGroup === "PE80 Series") return s.name.startsWith("PE8");
+        if (selectedSeriesGroup === "90 Series") return s.name.startsWith("9");
+        if (selectedSeriesGroup === "20/30 Series") return s.name.startsWith("2") || s.name.startsWith("3");
+        return false;
       })
       .map((s) => ({
         id: s.name, name: s.name, imageUrl: s.imageUrl || seriesImages[selectedSeriesGroup] || categoryImages[selectedCategory],
@@ -200,7 +200,7 @@ function CylinderFinder() {
   const cylinderOptionsCategories = useMemo(() => {
     if (!activeModelData) return [];
     let allowedPrefixIds = new Set(activeModelData.prefixes.map((p) => p.id));
-    return cylinderPrefixCategories.map((cat) => ({ ...cat, prefixes: cat.prefixes.filter((p) => allowedPrefixIds.has(p.id))})).filter((cat) => cat.prefixes.length > 0);
+    return cylinderPrefixCategories.map((cat) => ({ ...cat, prefixes: cat.prefixes.filter((p) => allowedPrefixIds.has(p.id)) })).filter((cat) => cat.prefixes.length > 0);
   }, [activeModelData]);
 
   const getCylinderLengthDescription = (partNumber) => {
@@ -208,6 +208,7 @@ function CylinderFinder() {
     return lengths[partNumber.replace("#", "")] || "";
   };
 
+  // src/components/CylinderFinder.js
   const finalCylinders = useMemo(() => {
     if (!activeModelData) return [];
     const lficPrefixes = ["60-", "63-", "64-", "DG1-60-", "DG1-63-", "DG1-64-", "DG2-60-", "DG2-63-", "DG2-64-", "DG3-60-", "DG3-63-", "DG3-64-", "10-63-", "11-60-", "11-63-", "11-64-"];
@@ -216,20 +217,27 @@ function CylinderFinder() {
     const hasLficPrefix = selectedCylinderPrefix && lficPrefixes.includes(selectedCylinderPrefix);
     const hasSficPrefix = selectedCylinderPrefix && sficPrefixes.includes(selectedCylinderPrefix);
     const hasKesoPrefix = selectedCylinderPrefix && kesoPrefixes.includes(selectedCylinderPrefix);
+
     const rawCylinderList = [];
-    if (activeModelData.baseCylinder) rawCylinderList.push({ ...activeModelData.baseCylinder });
-    
-    // Automatically add the "Inside Cyl" if the model has it
-    const insideCylData = activeModelData.prefixes.find(p => p.id === "Inside Cyl" && p.addsCylinder);
-    if (insideCylData) {
-        rawCylinderList.push({ ...insideCylData.addsCylinder });
+    if (activeModelData.baseCylinder) {
+      rawCylinderList.push({ ...activeModelData.baseCylinder });
     }
 
+    // Check if the model has a second cylinder via the 'Inside Cyl' prefix
+    const insideCylData = activeModelData.prefixes.find(p => p.id === "Inside Cyl" && p.addsCylinder);
+    if (insideCylData) {
+      rawCylinderList.push({ ...insideCylData.addsCylinder });
+    }
+
+    // Add any other cylinders from selected device-specific prefixes
     selectedDevicePrefixes.forEach((prefixId) => {
       const prefixData = activeModelData.prefixes.find((p) => p.id === prefixId);
-      if (prefixData?.addsCylinder) rawCylinderList.push({ ...prefixData.addsCylinder });
+      // Ensure we don't add the "Inside Cyl" again if it was already added
+      if (prefixData?.addsCylinder && prefixData.id !== "Inside Cyl") {
+        rawCylinderList.push({ ...prefixData.addsCylinder });
+      }
     });
-    
+
     const transformedCylinderList = rawCylinderList.map((cyl) => {
       const newCyl = { ...cyl };
       const partNumberBase = newCyl.partNumber.replace("#", "");
@@ -265,7 +273,6 @@ function CylinderFinder() {
     }
     return finalCylindersArray;
   }, [activeModelData, selectedDevicePrefixes, selectedCylinderPrefix]);
-
   const handleSelectCategory = (categoryId) => {
     setSelectedCategory(categoryId);
     setSelectedSeriesGroup(null);
@@ -287,12 +294,12 @@ function CylinderFinder() {
   const handleSelectModel = (modelId) => {
     setSelectedModel(modelId);
     const currentActiveModelData = sargentData.hardware.find((h) => h.category === selectedCategory)?.series.find((s) => s.name === selectedSeriesName)?.models.find((m) => m.modelNumber === modelId);
-    
+
     // Automatically select device-specific prefixes that add a cylinder
     const prefixesToAdd = currentActiveModelData?.prefixes
       .filter(p => p.isDeviceSpecific && p.addsCylinder)
       .map(p => p.id) || [];
-    
+
     setSelectedDevicePrefixes(prefixesToAdd);
 
     const devicePrefixes = currentActiveModelData?.prefixes.filter(p => p.isDeviceSpecific);
@@ -300,7 +307,7 @@ function CylinderFinder() {
   };
   const handleDevicePrefixChange = (prefixId) => setSelectedDevicePrefixes((prev) => prev.includes(prefixId) ? prev.filter((id) => id !== prefixId) : [...prev, prefixId]);
   const handleCylinderPrefixChange = (prefixId) => setSelectedCylinderPrefix((prev) => (prev === prefixId ? null : prefixId));
-  
+
   const handleReset = () => {
     setCurrentView("category");
     setSelectedCategory(null);
@@ -317,15 +324,15 @@ function CylinderFinder() {
   const handleBack = useCallback(() => {
     setSearchResults([]); // Clear search results on back
     if (currentView === "results") {
-        const fullModelData = sargentData.hardware.find(h => h.category === selectedCategory)?.series.find(s => s.name === selectedSeriesName)?.models.find(m => m.modelNumber === selectedModel);
-        const devicePrefixes = fullModelData?.prefixes.filter(p => p.isDeviceSpecific);
-        setCurrentView((!fullModelData?.baseCylinder && devicePrefixes?.length === 0) ? "model" : "options");
+      const fullModelData = sargentData.hardware.find(h => h.category === selectedCategory)?.series.find(s => s.name === selectedSeriesName)?.models.find(m => m.modelNumber === selectedModel);
+      const devicePrefixes = fullModelData?.prefixes.filter(p => p.isDeviceSpecific);
+      setCurrentView((!fullModelData?.baseCylinder && devicePrefixes?.length === 0) ? "model" : "options");
     } else if (currentView === "options") setCurrentView("model");
     else if (currentView === "model") setCurrentView("series");
     else if (currentView === "series") setCurrentView(selectedCategory === "Exit Devices" ? "seriesGroup" : "category");
     else if (currentView === "seriesGroup") setCurrentView("category");
   }, [currentView, selectedCategory, selectedSeriesName, selectedModel]);
-  
+
   useEffect(() => {
     const handleMouseUp = (event) => { if (event.button === 3 || event.button === 4) { event.preventDefault(); handleBack(); } };
     document.addEventListener("mouseup", handleMouseUp);
@@ -340,7 +347,6 @@ function CylinderFinder() {
     <div className="cylinder-finder-card">
       <div className="cylinder-finder-header">
         <h2 className="cylinder-finder-title">Cylinder Finder</h2>
-        <button onClick={handleReset} className="cylinder-finder-reset-button">Reset</button>
       </div>
 
       <div className="global-search-container">
@@ -353,20 +359,32 @@ function CylinderFinder() {
           className="global-search-input"
         />
         {showMultipleMatchesWarning && (
-            <div className="multiple-matches-warning">
-                Multiple matches found. Please select a device from the list below.
-            </div>
+          <div className="multiple-matches-warning">
+            Multiple matches found. Please select a device from the list below.
+          </div>
+        )}
+      </div>
+
+      <div className="wizard-controls">
+        {currentView !== 'category' && (
+          <button onClick={handleBack} className="wizard-back-button">Back</button>
+        )}
+        {(currentView === 'options' || currentView === 'results') && (
+          <button onClick={handleReset} className="wizard-find-button reset-button">Reset</button>
+        )}
+        {currentView === 'options' && (
+          <button onClick={() => setCurrentView("results")} className="wizard-find-button">Find Cylinder</button>
         )}
       </div>
 
       {showWizard && (
         <>
           {currentView === "category" && <div className="wizard-step active"><ButtonSelector title="Select a Hardware Category" options={categories} selected={selectedCategory} onSelect={handleSelectCategory} /></div>}
-          {currentView === "seriesGroup" && <div className="wizard-step active"><ButtonSelector title="Select a Product Series Group" options={seriesGroupOptions} selected={selectedSeriesGroup} onSelect={handleSelectSeriesGroup} /><div className="wizard-controls"><button onClick={handleBack} className="wizard-back-button">Back</button></div></div>}
-          {currentView === "series" && <div className="wizard-step active"><ButtonSelector title="Select a Product Series" options={selectedCategory === "Exit Devices" ? specificSeriesOptions : seriesOptions} selected={selectedSeriesName} onSelect={handleSelectSeries} /><div className="wizard-controls"><button onClick={handleBack} className="wizard-back-button">Back</button></div></div>}
-          {currentView === "model" && <div className="wizard-step active"><ButtonSelector title="Select a Model / Function" options={modelOptions} selected={selectedModel} onSelect={handleSelectModel} /><div className="wizard-controls"><button onClick={handleBack} className="wizard-back-button">Back</button></div></div>}
-          {currentView === "options" && <div className="wizard-step active"><div className="selected-hardware-note">Selected: {selectedCategory} {">"} {selectedSeriesName} {">"} {selectedModel}</div><div className="cylinder-finder-options-area">{deviceTiedPrefixes.length > 0 && (<div className="prefix-section device-options-section"><h3 className="prefix-section-title">Device Options</h3><PrefixSelector prefixes={deviceTiedPrefixes} selectedPrefixes={selectedDevicePrefixes} onChange={handleDevicePrefixChange} /></div>)}{cylinderOptionsCategories.length > 0 && (<div className="prefix-section cylinder-options-section"><h3 className="prefix-section-title">Cylinder Options</h3><input type="text" placeholder="Search prefixes..." value={prefixSearchTerm} onChange={(e) => setPrefixSearchTerm(e.target.value)} className="prefix-search-bar" /><CategorizedPrefixSelector categories={cylinderOptionsCategories} selectedPrefixes={[selectedCylinderPrefix]} onChange={handleCylinderPrefixChange} searchTerm={prefixSearchTerm} /></div>)}</div><div className="wizard-controls"><button onClick={handleBack} className="wizard-back-button">Back</button><button onClick={() => setCurrentView("results")} className="wizard-find-button">Find Cylinder</button></div></div>}
-          {currentView === "results" && <div className="wizard-step active"><div className="selected-hardware-note">Selected: {selectedCategory} {">"} {selectedSeriesName} {">"} {selectedModel}</div><ResultsDisplay cylinders={finalCylinders} /><div className="wizard-controls"><button onClick={handleBack} className="wizard-back-button">Back</button></div></div>}
+          {currentView === "seriesGroup" && <div className="wizard-step active"><ButtonSelector title="Select a Product Series Group" options={seriesGroupOptions} selected={selectedSeriesGroup} onSelect={handleSelectSeriesGroup} /></div>}
+          {currentView === "series" && <div className="wizard-step active"><ButtonSelector title="Select a Product Series" options={selectedCategory === "Exit Devices" ? specificSeriesOptions : seriesOptions} selected={selectedSeriesName} onSelect={handleSelectSeries} /></div>}
+          {currentView === "model" && <div className="wizard-step active"><ButtonSelector title="Select a Model / Function" options={modelOptions} selected={selectedModel} onSelect={handleSelectModel} hasImages={false} /></div>}
+          {currentView === "options" && <div className="wizard-step active"><div className="selected-hardware-note">Selected: {selectedCategory} {">"} {selectedSeriesName} {">"} {selectedModel}</div><div className="cylinder-finder-options-area">{deviceTiedPrefixes.length > 0 && (<div className="prefix-section device-options-section"><h3 className="prefix-section-title">Device Options</h3><PrefixSelector prefixes={deviceTiedPrefixes} selectedPrefixes={selectedDevicePrefixes} onChange={handleDevicePrefixChange} /></div>)}{cylinderOptionsCategories.length > 0 && (<div className="prefix-section cylinder-options-section"><h3 className="prefix-section-title">Cylinder Options</h3><input type="text" placeholder="Search prefixes..." value={prefixSearchTerm} onChange={(e) => setPrefixSearchTerm(e.target.value)} className="prefix-search-bar" /><CategorizedPrefixSelector categories={cylinderOptionsCategories} selectedPrefixes={[selectedCylinderPrefix]} onChange={handleCylinderPrefixChange} searchTerm={prefixSearchTerm} /></div>)}</div></div>}
+          {currentView === "results" && <div className="wizard-step active"><div className="selected-hardware-note">Selected: {selectedCategory} {">"} {selectedSeriesName} {">"} {selectedModel}</div><ResultsDisplay cylinders={finalCylinders} /></div>}
         </>
       )}
 
@@ -387,7 +405,7 @@ function CylinderFinder() {
 
       {showNoResults && (
         <div className="no-search-results">
-            No models found for "{globalSearchTerm}".
+          No models found for "{globalSearchTerm}".
         </div>
       )}
 

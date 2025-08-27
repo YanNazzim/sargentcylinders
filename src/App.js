@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
-import CylinderFinder from './components/CylinderFinder';
-import CylinderGlossary from './components/CylinderGlossary';
-import CylinderFAQ from './components/CylinderFAQ';
+// src/App.js
+import React, { useState, Suspense, lazy } from 'react';
 import FeedbackModal from './components/FeedbackModal';
-import { LockIcon, WrenchIcon, QuestionMarkIcon, ChatIcon } from './components/Icons'; // Import ChatIcon
+import { LockIcon, WrenchIcon, QuestionMarkIcon, ChatIcon } from './components/Icons';
 import './App.css';
 import { images } from './images/images';
+const CylinderFinder = lazy(() => import('./components/CylinderFinder'));
+const CylinderGlossary = lazy(() => import('./components/CylinderGlossary'));
+const CylinderFAQ = lazy(() => import('./components/CylinderFAQ'));
 
 const NavButton = ({ toolId, label, icon, activeTool, setActiveTool }) => (
     <button
@@ -40,7 +41,6 @@ export default function App() {
         <header className="app-header">
           <img className="logo" src={images.sargentlogo} alt='logo'/>
           <h1 className="app-title">Sargent Cylinders</h1>
-          {/* The subtitle button has been removed from here */}
         </header>
 
         <nav className="app-navigation">
@@ -50,11 +50,12 @@ export default function App() {
         </nav>
 
         <main className="app-main">
-          {renderTool()}
+          <Suspense fallback={<div>Loading...</div>}>
+            {renderTool()}
+          </Suspense>
         </main>
       </div>
 
-      {/* The button is now a footer element, outside the main container for fixed positioning */}
       <footer className="app-footer">
         <button 
           className="footer-feedback-button" 
