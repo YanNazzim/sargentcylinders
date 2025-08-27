@@ -3,7 +3,7 @@ import { series8300, series8400, series8500, series8600, series8700, series8800,
 import { seriesPE8300, seriesPE8400, seriesPE8500, seriesPE8600, seriesPE8700, seriesPE8800, seriesPE8900 } from './sargent/series/seriesPE80';
 import { series9400, series9700, series9800, series9900 } from './sargent/series/series90';
 import { series20, series30 } from './sargent/series/series20_30';
-import { series8200Locks, series7800Locks, series9200Locks, seriesM9200Locks } from './sargent/series/mortiseLocks';
+import { series8200Locks, series7800Locks, series9200Locks } from './sargent/series/mortiseLocks';
 import { series10XLine, series11Line, series6Line, series7Line, series8XLine, series6500Line } from './sargent/series/boredLocks';
 import { cylinderPrefixCategories } from './sargent/cylinderPrefixes';
 
@@ -39,7 +39,6 @@ const mortiseLocks = {
     series8200Locks,
     series7800Locks,
     series9200Locks,
-    seriesM9200Locks
   ]
 };
 

@@ -1,8 +1,11 @@
 // src/data/sargent/series/seriesPE80.js
 import { devicePrefixesPE80Series } from '../devicePrefixes';
+import {images} from '../../../images/images';
+
 
 export const seriesPE8300 = {
   "name": "PE8300 Series Narrow Mortise",
+  imageUrl: images.SeriesPE8300,
   "models": [
     { "modelNumber": "PE8304", "description": "Key retracts latch", "baseCylinder": { "partNumber": "#46", "type": "Mortise Cylinder" }, "prefixes": [...devicePrefixesPE80Series] },
     { "modelNumber": "PE8310", "description": "No outside operation Trim is used as Pull Only", "baseCylinder": null, "prefixes": [...devicePrefixesPE80Series] },
@@ -24,6 +27,7 @@ export const seriesPE8300 = {
 
 export const seriesPE8400 = {
   "name": "PE8400 Series Narrow CVR",
+  imageUrl: images.SeriesPE8400,
   "models": [
     { "modelNumber": "PE8406", "description": "Key unlocks Trim, Trim retracts latch/Trim relocks when key is removed", "baseCylinder": { "partNumber": "#41", "type": "Mortise Cylinder" }, "prefixes": [...devicePrefixesPE80Series] },
     { "modelNumber": "PE8410", "description": "No outside operation Trim is used as Pull Only", "baseCylinder": null, "prefixes": [...devicePrefixesPE80Series] },
@@ -39,6 +43,7 @@ export const seriesPE8400 = {
 
 export const seriesPE8500 = {
   "name": "PE8500 Series Narrow Rim",
+  imageUrl: images.SeriesPE8500,
   "models": [
     { "modelNumber": "PE8504", "description": "Key retracts latch", "baseCylinder": { "partNumber": "#34", "type": "Rim Cylinder" }, "prefixes": [...devicePrefixesPE80Series] },
     { "modelNumber": "PE8506", "description": "Key unlocks trim, trim retracts latch/trim relocks when key is removed", "baseCylinder": { "partNumber": "#41", "type": "Mortise Cylinder" }, "prefixes": [...devicePrefixesPE80Series] },
@@ -57,7 +62,8 @@ export const seriesPE8500 = {
 };
 
 export const seriesPE8600 = {
-  "name": "PE8600 Series CVR",
+  "name": "PE8600 Series Wide CVR",
+  imageUrl: images.SeriesPE8600,
   "models": [
     { "modelNumber": "PE8606", "description": "Key unlocks Trim, Trim retracts latch/Trim relocks when key is removed", "baseCylinder": { "partNumber": "#41", "type": "Mortise Cylinder" }, "prefixes": [...devicePrefixesPE80Series] },
     { "modelNumber": "PE8610", "description": "No outside operation Trim is used as Pull Only", "baseCylinder": null, "prefixes": [...devicePrefixesPE80Series] },
@@ -73,7 +79,8 @@ export const seriesPE8600 = {
 };
 
 export const seriesPE8700 = {
-  "name": "PE8700 Series SVR",
+  "name": "PE8700 Series Wide SVR",
+  imageUrl: images.SeriesPE8700,
   "models": [
     { "modelNumber": "PE8706", "description": "Key unlocks trim, trim retracts latch/trim relocks when key is removed", "baseCylinder": { "partNumber": "#41", "type": "Mortise Cylinder" }, "prefixes": [...devicePrefixesPE80Series] },
     { "modelNumber": "PE8710", "description": "No outside operation; Trim is used as pull only", "baseCylinder": null, "prefixes": [...devicePrefixesPE80Series] },
@@ -91,7 +98,8 @@ export const seriesPE8700 = {
 };
 
 export const seriesPE8800 = {
-  "name": "PE8800 Series Rim",
+  "name": "PE8800 Series Wide Rim",
+  imageUrl: images.SeriesPE8800,
   "models": [
     { "modelNumber": "PE8804", "description": "Key retracts latch", "baseCylinder": { "partNumber": "#34", "type": "Rim Cylinder" }, "prefixes": [...devicePrefixesPE80Series] },
     { "modelNumber": "PE8806", "description": "Key unlocks trim, trim retracts latch/trim relocks when key is removed", "baseCylinder": { "partNumber": "#41", "type": "Mortise Cylinder" }, "prefixes": [...devicePrefixesPE80Series] },
@@ -115,7 +123,8 @@ export const seriesPE8800 = {
 };
 
 export const seriesPE8900 = {
-  "name": "PE8900 Series Mortise",
+  "name": "PE8900 Series Wide Mortise",
+  imageUrl: images.SeriesPE8900,
   "models": [
     { "modelNumber": "PE8904", "description": "Key retracts latch", "baseCylinder": { "partNumber": "#46", "type": "Mortise Cylinder" }, "prefixes": [...devicePrefixesPE80Series] },
     { "modelNumber": "PE8906", "description": "Key unlocks trim, trim retracts latch/trim relocks when key is removed", "baseCylinder": { "partNumber": "#41", "type": "Mortise Cylinder" }, "prefixes": [...devicePrefixesPE80Series] },

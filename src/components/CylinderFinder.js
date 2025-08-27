@@ -11,7 +11,7 @@ import "./CylinderFinder.css";
 const categoryImages = {
   "Exit Devices": images.RimExit80,
   "Mortise Locks": images.Mortise8200,
-  "Bored Locks": images.KILCyls,
+  "Bored Locks": images.Bored10XLine,
 };
 
 // Map series to images for the new series selection step
@@ -21,12 +21,12 @@ const seriesImages = {
   "90 Series": images.Series9800,
   "20/30 Series": images.MortiseCyls, // Placeholder for 20/30 Series
   "8200 Series": images.Mortise8200,
-  "10X Line": images.KILCyls,
-  "11 Line": images.KILCyls,
-  "6 Line": images.KILCyls,
-  "7 Line": images.KILCyls,
-  "8X Line": images.KILCyls,
-  "6500 Line": images.KILCyls,
+  "10X Line": images.Bored10XLine,
+  "11 Line": images.Bored11Line,
+  "6 Line": images.Bored6Line,
+  "7 Line": images.Bored7Line,
+  "8X Line": images.Bored8XLine,
+  "6500 Line": images.Bored6500Line,
 };
 
 function CylinderFinder() {
@@ -335,8 +335,8 @@ function CylinderFinder() {
           {currentView === "seriesGroup" && <div className="wizard-step active"><ButtonSelector title="Select a Product Series Group" options={seriesGroupOptions} selected={selectedSeriesGroup} onSelect={handleSelectSeriesGroup} /><div className="wizard-controls"><button onClick={handleBack} className="wizard-back-button">Back</button></div></div>}
           {currentView === "series" && <div className="wizard-step active"><ButtonSelector title="Select a Product Series" options={selectedCategory === "Exit Devices" ? specificSeriesOptions : seriesOptions} selected={selectedSeriesName} onSelect={handleSelectSeries} /><div className="wizard-controls"><button onClick={handleBack} className="wizard-back-button">Back</button></div></div>}
           {currentView === "model" && <div className="wizard-step active"><ButtonSelector title="Select a Model / Function" options={modelOptions} selected={selectedModel} onSelect={handleSelectModel} /><div className="wizard-controls"><button onClick={handleBack} className="wizard-back-button">Back</button></div></div>}
-          {currentView === "options" && <div className="wizard-step active"><div className="selected-hardware-note">Selected: {selectedCategory} > {selectedSeriesName} > {selectedModel}</div><div className="cylinder-finder-options-area">{deviceTiedPrefixes.length > 0 && (<div className="prefix-section device-options-section"><h3 className="prefix-section-title">Device Options</h3><PrefixSelector prefixes={deviceTiedPrefixes} selectedPrefixes={selectedDevicePrefixes} onChange={handleDevicePrefixChange} /></div>)}{cylinderOptionsCategories.length > 0 && (<div className="prefix-section cylinder-options-section"><h3 className="prefix-section-title">Cylinder Options</h3><input type="text" placeholder="Search prefixes..." value={prefixSearchTerm} onChange={(e) => setPrefixSearchTerm(e.target.value)} className="prefix-search-bar" /><CategorizedPrefixSelector categories={cylinderOptionsCategories} selectedPrefixes={[selectedCylinderPrefix]} onChange={handleCylinderPrefixChange} searchTerm={prefixSearchTerm} /></div>)}</div><div className="wizard-controls"><button onClick={handleBack} className="wizard-back-button">Back</button><button onClick={() => setCurrentView("results")} className="wizard-find-button">Find Cylinder</button></div></div>}
-          {currentView === "results" && <div className="wizard-step active"><div className="selected-hardware-note">Selected: {selectedCategory} > {selectedSeriesName} > {selectedModel}</div><ResultsDisplay cylinders={finalCylinders} /><div className="wizard-controls"><button onClick={handleBack} className="wizard-back-button">Back</button></div></div>}
+          {currentView === "options" && <div className="wizard-step active"><div className="selected-hardware-note">Selected: {selectedCategory} {">"} {selectedSeriesName} {">"} {selectedModel}</div><div className="cylinder-finder-options-area">{deviceTiedPrefixes.length > 0 && (<div className="prefix-section device-options-section"><h3 className="prefix-section-title">Device Options</h3><PrefixSelector prefixes={deviceTiedPrefixes} selectedPrefixes={selectedDevicePrefixes} onChange={handleDevicePrefixChange} /></div>)}{cylinderOptionsCategories.length > 0 && (<div className="prefix-section cylinder-options-section"><h3 className="prefix-section-title">Cylinder Options</h3><input type="text" placeholder="Search prefixes..." value={prefixSearchTerm} onChange={(e) => setPrefixSearchTerm(e.target.value)} className="prefix-search-bar" /><CategorizedPrefixSelector categories={cylinderOptionsCategories} selectedPrefixes={[selectedCylinderPrefix]} onChange={handleCylinderPrefixChange} searchTerm={prefixSearchTerm} /></div>)}</div><div className="wizard-controls"><button onClick={handleBack} className="wizard-back-button">Back</button><button onClick={() => setCurrentView("results")} className="wizard-find-button">Find Cylinder</button></div></div>}
+          {currentView === "results" && <div className="wizard-step active"><div className="selected-hardware-note">Selected: {selectedCategory} {">"} {selectedSeriesName} {">"} {selectedModel}</div><ResultsDisplay cylinders={finalCylinders} /><div className="wizard-controls"><button onClick={handleBack} className="wizard-back-button">Back</button></div></div>}
         </>
       )}
 

@@ -1,7 +1,12 @@
 // src/data/sargent/series/boredLocks.js
 
+import {images} from '../../../images/images';
+
+
 export const series10XLine = {
-    "name": "10X Line",
+    "name": "10X Line", 
+    imageUrl: images.Bored10XLine,
+
     "models": [
         { "modelNumber": "10XG04", "description": "Storeroom or Closet", "baseCylinder": { "partNumber": "C10X-1", "type": "Key-in-Lever Cylinder" }, "prefixes": [] },
         { "modelNumber": "10XG05", "description": "Entrance or Office", "baseCylinder": { "partNumber": "C10X-1", "type": "Key-in-Lever Cylinder" }, "prefixes": [] },

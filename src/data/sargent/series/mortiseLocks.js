@@ -1,5 +1,5 @@
 // src/data/sargent/series/mortiseLocks.js
-import { series8200MortiseFunctions, series7800MortiseFunctions, series9200MortiseFunctions, seriesM9200MortiseFunctions } from './mortiseFunctions';
+import { series8200MortiseFunctions, series7800MortiseFunctions, series9200MortiseFunctions } from './mortiseFunctions';
 import { images } from '../../../images/images';
 
 export const series8200Locks = {
@@ -11,15 +11,14 @@ export const series8200Locks = {
 
 export const series7800Locks = {
     "name": "7800 Series",
+    "imageUrl": images.Mortise7800,
+
     "models": series7800MortiseFunctions.sort((a, b) => a.modelNumber.localeCompare(b.modelNumber))
 };
 
 export const series9200Locks = {
     "name": "9200 Series",
-    "models": series9200MortiseFunctions.sort((a, b) => a.modelNumber.localeCompare(b.modelNumber))
-};
+    "imageUrl": images.Mortise9200,
 
-export const seriesM9200Locks = {
-    "name": "M-9200 Series Mogul",
-    "models": seriesM9200MortiseFunctions.sort((a, b) => a.modelNumber.localeCompare(b.modelNumber))
+    "models": series9200MortiseFunctions.sort((a, b) => a.modelNumber.localeCompare(b.modelNumber))
 };

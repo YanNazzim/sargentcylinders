@@ -153,34 +153,3 @@ export const series9200MortiseFunctions = [
   { "modelNumber": "9222", "description": "Deadlock", "baseCylinder": { "partNumber": "#41", "type": "Mortise Cylinder" }, "prefixes": [{ "id": "Inside Cyl", "description": "", "addsCylinder": { "partNumber": "#41", "type": "Mortise Cylinder" }, "isDeviceSpecific": true }] },
   { "modelNumber": "9223", "description": "Classroom Deadlock", "baseCylinder": { "partNumber": "#41", "type": "Mortise Cylinder" }, "prefixes": [{ "id": "Inside Cyl", "description": "", "addsCylinder": { "partNumber": "#41", "type": "Mortise Cylinder" }, "isDeviceSpecific": true }] },
 ];
-
-export const seriesM9200MortiseFunctions = [
-  // M-9200 functions typically mirror the 9200 series but with Mogul cylinders.
-  // The catalog specifies M-9200 functions are available with the M-** option.
-  // Single Cylinder without Deadbolt
-  { "modelNumber": "M-9204", "description": "Storeroom or Closet", "baseCylinder": { "partNumber": "#41", "type": "Mogul Cylinder" }, "prefixes": [] },
-  { "modelNumber": "M-9205", "description": "Office or Entry", "baseCylinder": { "partNumber": "#41", "type": "Mogul Cylinder" }, "prefixes": [] },
-  { "modelNumber": "M-9206", "description": "Storeroom or Service", "baseCylinder": { "partNumber": "#41", "type": "Mogul Cylinder" }, "prefixes": [] },
-  { "modelNumber": "M-9237", "description": "Classroom", "baseCylinder": { "partNumber": "#41", "type": "Mogul Cylinder" }, "prefixes": [] },
-  { "modelNumber": "M-9255", "description": "Office or Entry", "baseCylinder": { "partNumber": "#41", "type": "Mogul Cylinder" }, "prefixes": [] },
-  // Single Cylinder with Deadbolt
-  { "modelNumber": "M-9224", "description": "Storeroom Door", "baseCylinder": { "partNumber": "#41", "type": "Mogul Cylinder" }, "prefixes": [] },
-  { "modelNumber": "M-9225", "description": "Dormitory or Exit", "baseCylinder": { "partNumber": "#41", "type": "Mogul Cylinder" }, "prefixes": [] },
-  { "modelNumber": "M-9235", "description": "Storeroom", "baseCylinder": { "partNumber": "#41", "type": "Mogul Cylinder" }, "prefixes": [] },
-  { "modelNumber": "M-9243", "description": "Apartment Corridor Door", "baseCylinder": { "partNumber": "#41", "type": "Mogul Cylinder" }, "prefixes": [] },
-  { "modelNumber": "M-9245", "description": "Dormitory or Exit", "baseCylinder": { "partNumber": "#41", "type": "Mogul Cylinder" }, "prefixes": [] },
-  { "modelNumber": "M-9250", "description": "Hotel Guest", "baseCylinder": null, "prefixes": [] }, // Not available with Mogul option
-  // Double Cylinder without Deadbolt
-  { "modelNumber": "M-9217", "description": "Asylum or Institutional", "baseCylinder": { "partNumber": "#41", "type": "Mogul Cylinder" }, "prefixes": [{ "id": "Inside Cyl", "description": "", "addsCylinder": { "partNumber": "#41", "type": "Mogul Cylinder" }, "isDeviceSpecific": true }] },
-  { "modelNumber": "M-9238", "description": "Classroom Security Intruder Latchbolt", "baseCylinder": { "partNumber": "#41", "type": "Mogul Cylinder" }, "prefixes": [{ "id": "Inside Cyl", "description": "", "addsCylinder": { "partNumber": "#41", "type": "Mogul Cylinder" }, "isDeviceSpecific": true }] },
-  // Double Cylinder with Deadbolt
-  { "modelNumber": "M-9226", "description": "Store Door", "baseCylinder": { "partNumber": "#41", "type": "Mogul Cylinder" }, "prefixes": [{ "id": "Inside Cyl", "description": "", "addsCylinder": { "partNumber": "#41", "type": "Mogul Cylinder" }, "isDeviceSpecific": true }] },
-  { "modelNumber": "M-9239", "description": "Classroom Security Intruder Deadbolt", "baseCylinder": { "partNumber": "#41", "type": "Mogul Cylinder" }, "prefixes": [{ "id": "Inside Cyl", "description": "", "addsCylinder": { "partNumber": "#41", "type": "Mogul Cylinder" }, "isDeviceSpecific": true }] },
-  { "modelNumber": "M-9240", "description": "Classroom Security Intruder Deadbolt", "baseCylinder": { "partNumber": "#41", "type": "Mogul Cylinder" }, "prefixes": [{ "id": "Inside Cyl", "description": "", "addsCylinder": { "partNumber": "#41", "type": "Mogul Cylinder" }, "isDeviceSpecific": true }] },
-  // Deadbolt Only
-  { "modelNumber": "M-9203", "description": "Classroom Deadlock", "baseCylinder": { "partNumber": "#41", "type": "Mogul Cylinder" }, "prefixes": [] },
-  { "modelNumber": "M-9220", "description": "Deadlock", "baseCylinder": { "partNumber": "#41", "type": "Mogul Cylinder" }, "prefixes": [] },
-  { "modelNumber": "M-9221", "description": "Deadlock", "baseCylinder": { "partNumber": "#41", "type": "Mogul Cylinder" }, "prefixes": [] },
-  { "modelNumber": "M-9222", "description": "Deadlock", "baseCylinder": { "partNumber": "#41", "type": "Mogul Cylinder" }, "prefixes": [{ "id": "Inside Cyl", "description": "Same as 03 function with cylinder inside", "addsCylinder": { "partNumber": "#41", "type": "Mogul Cylinder" }, "isDeviceSpecific": true }] },
-  { "modelNumber": "M-9223", "description": "Classroom Deadlock", "baseCylinder": { "partNumber": "#41", "type": "Mogul Cylinder" }, "prefixes": [{ "id": "Inside Cyl", "description": "Same as 03 function with cylinder inside", "addsCylinder": { "partNumber": "#41", "type": "Mogul Cylinder" }, "isDeviceSpecific": true }] },
-];

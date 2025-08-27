@@ -1,7 +1,11 @@
 // src/data/sargent/series/series90.js
 
+import {images} from '../../../images/images';
+
+
 export const series9400 = {
   "name": "9400 Series",
+    imageUrl: images.SeriesPE8600,
   "models": [
     { "modelNumber": "9404", "description": "Key Retracts Latch", "baseCylinder": { "partNumber": "#41", "type": "Mortise Cylinder" }, "prefixes": [] },
     { "modelNumber": "9410", "description": "No outside operation", "baseCylinder": null, "prefixes": [] },
