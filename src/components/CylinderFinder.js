@@ -1,3 +1,4 @@
+// src/components/CylinderFinder.js
 import React, { useState, useMemo, useEffect, useCallback } from "react";
 import { sargentData, cylinderPrefixCategories } from "../data/sargentData";
 import { images } from "../images/images";
@@ -30,18 +31,18 @@ const seriesImages = {
 };
 
 function CylinderFinder() {
-  const [currentView, setCurrentView] = useState("category"); // 'category', 'seriesGroup', 'series', 'model', 'options', 'results'
+  const [currentView, setCurrentView] = useState("category");
   const [selectedCategory, setSelectedCategory] = useState(null);
-  const [selectedSeriesGroup, setSelectedSeriesGroup] = useState(null); // For Exit Devices: e.g., '80 Series'
-  const [selectedSeriesName, setSelectedSeriesName] = useState(null); // The specific series name, e.g., '8800 Series Wide Rim'
+  const [selectedSeriesGroup, setSelectedSeriesGroup] = useState(null);
+  const [selectedSeriesName, setSelectedSeriesName] = useState(null);
   const [selectedModel, setSelectedModel] = useState(null);
   const [selectedDevicePrefixes, setSelectedDevicePrefixes] = useState([]);
   const [selectedCylinderPrefix, setSelectedCylinderPrefix] = useState(null);
   const [prefixSearchTerm, setPrefixSearchTerm] = useState("");
 
-  // New state for global search
   const [globalSearchTerm, setGlobalSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
+  const [showMultipleMatchesWarning, setShowMultipleMatchesWarning] = useState(false);
 
   // Flattened data for searching
   const allModels = useMemo(() => {
@@ -70,10 +71,11 @@ function CylinderFinder() {
     return models;
   }, []);
 
-  // Effect for handling global search
+  // Effect for handling global search and clearing the warning
   useEffect(() => {
-    if (globalSearchTerm.trim().length < 2) { // Lowered threshold for faster search
+    if (globalSearchTerm.trim().length < 2) {
       setSearchResults([]);
+      setShowMultipleMatchesWarning(false);
       return;
     }
     const lowercasedTerm = globalSearchTerm.toLowerCase();
@@ -83,23 +85,23 @@ function CylinderFinder() {
       model.seriesName.toLowerCase().includes(lowercasedTerm)
     );
     setSearchResults(results);
+    setShowMultipleMatchesWarning(false); // Clear warning on new search term
   }, [globalSearchTerm, allModels]);
-
 
   const handleSearchResultClick = (result) => {
     setSelectedCategory(result.category);
     setSelectedSeriesGroup(result.seriesGroup);
     setSelectedSeriesName(result.seriesName);
     setSelectedModel(result.modelNumber);
-    setGlobalSearchTerm(""); // Clear search
-    setSearchResults([]); // Clear results
+    setGlobalSearchTerm("");
+    setSearchResults([]);
 
     const fullModelData = sargentData.hardware
         .find(h => h.category === result.category)?.series
         .find(s => s.name === result.seriesName)?.models
         .find(m => m.modelNumber === result.modelNumber);
 
-    if (!fullModelData) return; // Should not happen
+    if (!fullModelData) return;
 
     const devicePrefixes = fullModelData.prefixes.filter(p => p.isDeviceSpecific);
 
@@ -107,6 +109,18 @@ function CylinderFinder() {
         setCurrentView("results");
     } else {
         setCurrentView("options");
+    }
+  };
+
+  // New function to handle key presses on the search bar
+  const handleSearchKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      if (searchResults.length === 1) {
+        handleSearchResultClick(searchResults[0]);
+      } else if (searchResults.length > 1) {
+        setShowMultipleMatchesWarning(true);
+      }
     }
   };
 
@@ -152,9 +166,7 @@ function CylinderFinder() {
           return false;
       })
       .map((s) => ({
-        id: s.name,
-        name: s.name,
-        imageUrl: s.imageUrl || seriesImages[selectedSeriesGroup] || categoryImages[selectedCategory],
+        id: s.name, name: s.name, imageUrl: s.imageUrl || seriesImages[selectedSeriesGroup] || categoryImages[selectedCategory],
       }));
   }, [selectedCategory, selectedSeriesGroup]);
 
@@ -181,13 +193,9 @@ function CylinderFinder() {
 
   const deviceTiedPrefixes = useMemo(() => {
     if (!activeModelData) return [];
-    const allDevicePrefixes = activeModelData.prefixes.filter((p) => p.isDeviceSpecific);
-    const universalPrefixes = ["16", "59", "AL"];
-    const is80Family = selectedSeriesGroup === "80 Series" || selectedSeriesGroup === "PE80 Series";
-    return is80Family
-      ? allDevicePrefixes.filter((p) => universalPrefixes.includes(p.id))
-      : allDevicePrefixes.filter((p) => !universalPrefixes.includes(p.id));
-  }, [activeModelData, selectedSeriesGroup]);
+    // Only display device-specific prefixes that are NOT "Inside Cyl"
+    return activeModelData.prefixes.filter((p) => p.isDeviceSpecific && p.id !== "Inside Cyl");
+  }, [activeModelData]);
 
   const cylinderOptionsCategories = useMemo(() => {
     if (!activeModelData) return [];
@@ -210,10 +218,18 @@ function CylinderFinder() {
     const hasKesoPrefix = selectedCylinderPrefix && kesoPrefixes.includes(selectedCylinderPrefix);
     const rawCylinderList = [];
     if (activeModelData.baseCylinder) rawCylinderList.push({ ...activeModelData.baseCylinder });
+    
+    // Automatically add the "Inside Cyl" if the model has it
+    const insideCylData = activeModelData.prefixes.find(p => p.id === "Inside Cyl" && p.addsCylinder);
+    if (insideCylData) {
+        rawCylinderList.push({ ...insideCylData.addsCylinder });
+    }
+
     selectedDevicePrefixes.forEach((prefixId) => {
       const prefixData = activeModelData.prefixes.find((p) => p.id === prefixId);
       if (prefixData?.addsCylinder) rawCylinderList.push({ ...prefixData.addsCylinder });
     });
+    
     const transformedCylinderList = rawCylinderList.map((cyl) => {
       const newCyl = { ...cyl };
       const partNumberBase = newCyl.partNumber.replace("#", "");
@@ -271,6 +287,14 @@ function CylinderFinder() {
   const handleSelectModel = (modelId) => {
     setSelectedModel(modelId);
     const currentActiveModelData = sargentData.hardware.find((h) => h.category === selectedCategory)?.series.find((s) => s.name === selectedSeriesName)?.models.find((m) => m.modelNumber === modelId);
+    
+    // Automatically select device-specific prefixes that add a cylinder
+    const prefixesToAdd = currentActiveModelData?.prefixes
+      .filter(p => p.isDeviceSpecific && p.addsCylinder)
+      .map(p => p.id) || [];
+    
+    setSelectedDevicePrefixes(prefixesToAdd);
+
     const devicePrefixes = currentActiveModelData?.prefixes.filter(p => p.isDeviceSpecific);
     setCurrentView(!currentActiveModelData?.baseCylinder && devicePrefixes?.length === 0 ? "results" : "options");
   };
@@ -325,8 +349,14 @@ function CylinderFinder() {
           placeholder="Search by model or function (e.g., 8800, 8815, classroom)..."
           value={globalSearchTerm}
           onChange={(e) => setGlobalSearchTerm(e.target.value)}
+          onKeyDown={handleSearchKeyDown}
           className="global-search-input"
         />
+        {showMultipleMatchesWarning && (
+            <div className="multiple-matches-warning">
+                Multiple matches found. Please select a device from the list below.
+            </div>
+        )}
       </div>
 
       {showWizard && (
