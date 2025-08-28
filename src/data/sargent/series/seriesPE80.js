@@ -1,5 +1,5 @@
 // src/data/sargent/series/seriesPE80.js
-import { devicePrefixesPE80Series } from '../devicePrefixes';
+import { devicePrefixesPE80Series, auxControl106Prefix, auxControl306Prefix } from '../devicePrefixes';
 import {images} from '../../../images/images';
 
 
@@ -65,16 +65,16 @@ export const seriesPE8600 = {
   "name": "PE8600 Series Wide CVR",
   imageUrl: images.SeriesPE8600,
   "models": [
-    { "modelNumber": "PE8606", "description": "Key unlocks Trim, Trim retracts latch/Trim relocks when key is removed", "baseCylinder": { "partNumber": "#41", "type": "Mortise Cylinder" }, "prefixes": [...devicePrefixesPE80Series] },
-    { "modelNumber": "PE8610", "description": "No outside operation Trim is used as Pull Only", "baseCylinder": null, "prefixes": [...devicePrefixesPE80Series] },
-    { "modelNumber": "PE8613", "description": "Key Outside Unlocks/locks Trim", "baseCylinder": { "partNumber": "#41", "type": "Mortise Cylinder" }, "prefixes": [...devicePrefixesPE80Series] },
-    { "modelNumber": "PE8615", "description": "Passage Only", "baseCylinder": null, "prefixes": [...devicePrefixesPE80Series] },
-    { "modelNumber": "PE8628", "description": "Thumbpiece - Passage Only", "baseCylinder": null, "prefixes": [...devicePrefixesPE80Series] },
-    { "modelNumber": "PE8640", "description": "Freewheeling Trim - No outside operation Dummy Trim", "baseCylinder": null, "prefixes": [...devicePrefixesPE80Series] },
-    { "modelNumber": "PE8643", "description": "Freewheeling Trim - Key Outside Unlocks/locks Trim", "baseCylinder": { "partNumber": "#41", "type": "Mortise Cylinder" }, "prefixes": [...devicePrefixesPE80Series] },
-    { "modelNumber": "PE8646", "description": "Freewheeling Trim - Key unlocks Trim, Trim retracts latch/Trim relocks when key is removed", "baseCylinder": { "partNumber": "#41", "type": "Mortise Cylinder" }, "prefixes": [...devicePrefixesPE80Series] },
-    { "modelNumber": "PE8673", "description": "Electrified Lever Trim - Fail Safe Power Off, Unlacks Lever", "baseCylinder": null, "prefixes": [...devicePrefixesPE80Series] },
-    { "modelNumber": "PE8674", "description": "Electrified Lever Trim - Fail Secure Power Off, Locks Lever", "baseCylinder": null, "prefixes": [...devicePrefixesPE80Series] }
+    { "modelNumber": "PE8606", "description": "Key unlocks Trim, Trim retracts latch/Trim relocks when key is removed", "baseCylinder": { "partNumber": "#41", "type": "Mortise Cylinder" }, "prefixes": [...devicePrefixesPE80Series, auxControl106Prefix] },
+    { "modelNumber": "PE8610", "description": "No outside operation Trim is used as Pull Only", "baseCylinder": null, "prefixes": [...devicePrefixesPE80Series, auxControl106Prefix] },
+    { "modelNumber": "PE8613", "description": "Key Outside Unlocks/locks Trim", "baseCylinder": { "partNumber": "#41", "type": "Mortise Cylinder" }, "prefixes": [...devicePrefixesPE80Series, auxControl106Prefix] },
+    { "modelNumber": "PE8615", "description": "Passage Only", "baseCylinder": null, "prefixes": [...devicePrefixesPE80Series, auxControl106Prefix] },
+    { "modelNumber": "PE8628", "description": "Thumbpiece - Passage Only", "baseCylinder": null, "prefixes": [...devicePrefixesPE80Series, auxControl106Prefix] },
+    { "modelNumber": "PE8640", "description": "Freewheeling Trim - No outside operation Dummy Trim", "baseCylinder": null, "prefixes": [...devicePrefixesPE80Series, auxControl106Prefix] },
+    { "modelNumber": "PE8643", "description": "Freewheeling Trim - Key Outside Unlocks/locks Trim", "baseCylinder": { "partNumber": "#41", "type": "Mortise Cylinder" }, "prefixes": [...devicePrefixesPE80Series, auxControl106Prefix] },
+    { "modelNumber": "PE8646", "description": "Freewheeling Trim - Key unlocks Trim, Trim retracts latch/Trim relocks when key is removed", "baseCylinder": { "partNumber": "#41", "type": "Mortise Cylinder" }, "prefixes": [...devicePrefixesPE80Series, auxControl106Prefix] },
+    { "modelNumber": "PE8673", "description": "Electrified Lever Trim - Fail Safe Power Off, Unlacks Lever", "baseCylinder": null, "prefixes": [...devicePrefixesPE80Series, auxControl106Prefix] },
+    { "modelNumber": "PE8674", "description": "Electrified Lever Trim - Fail Secure Power Off, Locks Lever", "baseCylinder": null, "prefixes": [...devicePrefixesPE80Series, auxControl106Prefix] }
   ].sort((a, b) => a.modelNumber.localeCompare(b.modelNumber))
 };
 
@@ -82,18 +82,18 @@ export const seriesPE8700 = {
   "name": "PE8700 Series Wide SVR",
   imageUrl: images.SeriesPE8700,
   "models": [
-    { "modelNumber": "PE8706", "description": "Key unlocks trim, trim retracts latch/trim relocks when key is removed", "baseCylinder": { "partNumber": "#41", "type": "Mortise Cylinder" }, "prefixes": [...devicePrefixesPE80Series] },
-    { "modelNumber": "PE8710", "description": "No outside operation; Trim is used as pull only", "baseCylinder": null, "prefixes": [...devicePrefixesPE80Series] },
-    { "modelNumber": "PE8713", "description": "Key outside unlocks/locks trim", "baseCylinder": { "partNumber": "#41", "type": "Mortise Cylinder" }, "prefixes": [...devicePrefixesPE80Series] },
-    { "modelNumber": "PE8715", "description": "Passage only", "baseCylinder": null, "prefixes": [...devicePrefixesPE80Series] },
-    { "modelNumber": "PE8728", "description": "Thumbpiece - Passage Only", "baseCylinder": null, "prefixes": [...devicePrefixesPE80Series] },
-    { "modelNumber": "PE8740", "description": "Freewheeling trim no outside operation dummy trim", "baseCylinder": null, "prefixes": [...devicePrefixesPE80Series] },
-    { "modelNumber": "PE8743", "description": "Freewheeling trim-key outside unlocks/locks trim", "baseCylinder": { "partNumber": "#41", "type": "Mortise Cylinder" }, "prefixes": [...devicePrefixesPE80Series] },
-    { "modelNumber": "PE8746", "description": "Freewheeling trim - key unlocks trim, trim retracts latch/trim relocks when key is removed", "baseCylinder": { "partNumber": "#41", "type": "Mortise Cylinder" }, "prefixes": [...devicePrefixesPE80Series] },
-    { "modelNumber": "PE8762", "description": "Thumbpiece - Key Unlocks/Locks, Retracts Latch", "baseCylinder": { "partNumber": "#34", "type": "Rim Cylinder" }, "prefixes": [...devicePrefixesPE80Series] },
-    { "modelNumber": "PE8763", "description": "Thumbpiece - Key Unlocks/Locks", "baseCylinder": { "partNumber": "#34", "type": "Rim Cylinder" }, "prefixes": [...devicePrefixesPE80Series] },
-    { "modelNumber": "PE8773", "description": "Electrified lever trin- fail safe power off, unlocks lever.", "baseCylinder": null, "prefixes": [...devicePrefixesPE80Series] },
-    { "modelNumber": "PE8774", "description": "Electrified lever trim - fail secure power off, locks lever", "baseCylinder": null, "prefixes": [...devicePrefixesPE80Series] },
+    { "modelNumber": "PE8706", "description": "Key unlocks trim, trim retracts latch/trim relocks when key is removed", "baseCylinder": { "partNumber": "#41", "type": "Mortise Cylinder" }, "prefixes": [...devicePrefixesPE80Series, auxControl306Prefix] },
+    { "modelNumber": "PE8710", "description": "No outside operation; Trim is used as pull only", "baseCylinder": null, "prefixes": [...devicePrefixesPE80Series, auxControl306Prefix] },
+    { "modelNumber": "PE8713", "description": "Key outside unlocks/locks trim", "baseCylinder": { "partNumber": "#41", "type": "Mortise Cylinder" }, "prefixes": [...devicePrefixesPE80Series, auxControl306Prefix] },
+    { "modelNumber": "PE8715", "description": "Passage only", "baseCylinder": null, "prefixes": [...devicePrefixesPE80Series, auxControl306Prefix] },
+    { "modelNumber": "PE8728", "description": "Thumbpiece - Passage Only", "baseCylinder": null, "prefixes": [...devicePrefixesPE80Series, auxControl306Prefix] },
+    { "modelNumber": "PE8740", "description": "Freewheeling trim no outside operation dummy trim", "baseCylinder": null, "prefixes": [...devicePrefixesPE80Series, auxControl306Prefix] },
+    { "modelNumber": "PE8743", "description": "Freewheeling trim-key outside unlocks/locks trim", "baseCylinder": { "partNumber": "#41", "type": "Mortise Cylinder" }, "prefixes": [...devicePrefixesPE80Series, auxControl306Prefix] },
+    { "modelNumber": "PE8746", "description": "Freewheeling trim - key unlocks trim, trim retracts latch/trim relocks when key is removed", "baseCylinder": { "partNumber": "#41", "type": "Mortise Cylinder" }, "prefixes": [...devicePrefixesPE80Series, auxControl306Prefix] },
+    { "modelNumber": "PE8762", "description": "Thumbpiece - Key Unlocks/Locks, Retracts Latch", "baseCylinder": { "partNumber": "#34", "type": "Rim Cylinder" }, "prefixes": [...devicePrefixesPE80Series, auxControl306Prefix] },
+    { "modelNumber": "PE8763", "description": "Thumbpiece - Key Unlocks/Locks", "baseCylinder": { "partNumber": "#34", "type": "Rim Cylinder" }, "prefixes": [...devicePrefixesPE80Series, auxControl306Prefix] },
+    { "modelNumber": "PE8773", "description": "Electrified lever trin- fail safe power off, unlocks lever.", "baseCylinder": null, "prefixes": [...devicePrefixesPE80Series, auxControl306Prefix] },
+    { "modelNumber": "PE8774", "description": "Electrified lever trim - fail secure power off, locks lever", "baseCylinder": null, "prefixes": [...devicePrefixesPE80Series, auxControl306Prefix] },
   ].sort((a, b) => a.modelNumber.localeCompare(b.modelNumber))
 };
 
@@ -111,7 +111,7 @@ export const seriesPE8800 = {
     { "modelNumber": "PE8840", "description": "No outside operation; Freewheeling trim.", "baseCylinder": null, "prefixes": [...devicePrefixesPE80Series] },
     { "modelNumber": "PE8843", "description": "Key outside unlocks/locks trim. Freewheeling trim.", "baseCylinder": { "partNumber": "#41", "type": "Mortise Cylinder" }, "prefixes": [...devicePrefixesPE80Series] },
     { "modelNumber": "PE8844", "description": "Key retracts latch. Freewheeling trim.", "baseCylinder": { "partNumber": "#34", "type": "Rim Cylinder" }, "prefixes": [...devicePrefixesPE80Series] },
-    { "modelNumber": "PE8846", "description": "Key unlocks trim, trim retracts latch/trim relocks when key is removed. Freewheeling trim.", "baseCylinder": { "partNumber": "#41", "type": "Mortise Cylinder" }, "prefixes": [...devicePrefixesPE80Series] },
+    { "modelNumber": "PE8846", "description": "Key unlocks trim, trim retracts latch/trim relocks when key is removed", "baseCylinder": { "partNumber": "#41", "type": "Mortise Cylinder" }, "prefixes": [...devicePrefixesPE80Series] },
     { "modelNumber": "PE8863", "description": "Thumbpiece - Key Unlocks/Locks", "baseCylinder": { "partNumber": "#34", "type": "Rim Cylinder" }, "prefixes": [...devicePrefixesPE80Series] },
     { "modelNumber": "PE8866", "description": "Thumbpiece - Key Outside Retracts, Inside Unlocks/Locks Trim", "baseCylinder": { "partNumber": "#34", "type": "Rim Cylinder" }, "prefixes": [{ "id": "Inside Cyl", "description": "Inside Cylinder for 8866 Function", "addsCylinder": { "partNumber": "#44", "type": "Mortise Cylinder" }, "isDeviceSpecific": true, "keywords": [] }, ...devicePrefixesPE80Series] },
     { "modelNumber": "PE8867", "description": "Push Button locks latchbolt/key releases button and latchbolt", "baseCylinder": null, "prefixes": [...devicePrefixesPE80Series] },

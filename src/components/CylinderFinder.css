@@ -8,11 +8,8 @@
     max-width: 960px;
     margin: 2rem auto;
     border: 1px solid #4a5568;
-    overflow: hidden;
     color: #fff;
     font-family: 'Inter', sans-serif;
-    /* NEW: Adjust padding to account for the sticky navbar */
-    padding-top: 5rem;
 }
 
 .cylinder-finder-header {
@@ -31,52 +28,50 @@
     color: #e2e8f0;
 }
 
-.cylinder-finder-reset-button {
-    background-color: #f56565; /* Red color for reset */
-    color: #fff;
-}
-
-.cylinder-finder-reset-button:hover {
-    background-color: #c53030;
-    transform: translateY(-2px);
+.finder-intro {
+    text-align: center;
+    margin-bottom: 2rem;
+    color: #a0aec0;
+    animation: fadeIn 0.5s ease-out;
 }
 
 /* Wizard Step Transition and Layout */
 .wizard-step {
-    display: none;
+    display: flex;
     flex-direction: column;
     gap: 2rem;
-    animation: fade-in 0.5s ease-in-out;
-}
-
-.wizard-step.active {
-    display: flex;
+    animation: fadeIn 0.5s ease-in-out;
 }
 
 .selected-hardware-note {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
     background-color: #1a202c;
     padding: 1.2rem;
     border-radius: 0.5rem;
     border: 1px solid #4a5568;
     font-weight: 500;
-    text-align: center;
+    text-align: left;
     color: #cbd5e0;
     box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+.selected-hardware-note p {
+    margin: 0;
+}
+
+.selected-hardware-desc {
+    font-size: 0.9rem;
+    color: #a0aec0;
 }
 
 .cylinder-finder-options-area {
-    display: grid;
-    /* This is the key change: it will automatically fit columns */
-    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    display: flex;
+    flex-direction: column;
     gap: 2rem;
 }
-
-/* The media query is no longer needed with auto-fit */
-/* @media (min-width: 768px) {
-    .cylinder-finder-options-area {
-        grid-template-columns: 1fr 1fr;
-    }
-} */
 
 .prefix-section {
     background-color: #1a202c;
@@ -84,9 +79,9 @@
     border-radius: 0.5rem;
     padding: 1.5rem;
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    /* Make the section fill the height of its grid row */
     display: flex;
     flex-direction: column;
+    animation: fadeIn 0.5s ease-in-out;
 }
 
 .prefix-section-title {
@@ -98,25 +93,21 @@
     text-align: center;
 }
 
+.hardware-selectors {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
 .wizard-controls {
     display: flex;
     justify-content: space-between;
     align-items: center;
     gap: 1rem;
-    padding: 1rem 2rem;
-    
-    /* NEW FIXED STYLES */
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    background-color: #2d3748; /* Adds a background to prevent content from showing through */
-    border-top: 1px solid #4a5568; /* Visual separation from content */
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-    z-index: 10;
+    margin-top: 2rem;
 }
 
-.wizard-next-button, .wizard-back-button, .wizard-find-button, .reset-button {
+.wizard-back-button, .wizard-find-button, .reset-button {
     padding: 0.75rem 2rem;
     border-radius: 0.5rem;
     border: none;
@@ -126,12 +117,14 @@
     transition: background-color 0.2s ease, transform 0.2s ease;
     text-shadow: 0 1px 2px rgba(0,0,0,0.1);
     box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    flex-grow: 1; /* Make buttons fill the space */
 }
 
 .wizard-back-button {
     background-color: #4a5568;
     color: #fff;
 }
+
 .wizard-back-button:hover {
     background-color: #6a768e;
     transform: translateY(-2px);
@@ -147,17 +140,18 @@
     transform: scale(1.05); /* Scales the button up on hover */
     cursor: pointer;
 }
+
 .reset-button {
     background-color: #e53e3e; /* A distinct, red color for the reset button */
     color: white;
 }
+
 .reset-button:hover {
     background-color: #c53030;
     transform: translateY(-2px);
 }
 
-
-@keyframes fade-in {
+@keyframes fadeIn {
     from {
         opacity: 0;
         transform: translateY(10px);
@@ -168,22 +162,34 @@
     }
 }
 
-/* --- Global Search Styles --- */
+.search-result-image {
+    max-width: 80px; /* Give the image a fixed width */
+    height: auto;
+    border-radius: 0.25rem;
+    background-color: #fff;
+    padding: 2px;
+    flex-shrink: 0; /* Prevent the image from shrinking */
+}
+
+
+/* --- NEW Styles for Search Bar and Results --- */
 .global-search-container {
-    padding: 0 0.5rem 1.5rem; /* Add some padding */
-    border-bottom: 1px solid #4a5568;
-    margin-bottom: 1.5rem;
+    position: relative;
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
 }
 
 .global-search-input {
     width: 100%;
-    padding: 0.8rem 1.2rem;
+    padding: 0.8rem 1rem;
     font-size: 1.1rem;
     border-radius: 0.5rem;
     border: 2px solid #4a5568;
     background-color: #1a202c;
     color: #fff;
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    padding-left: 3rem; /* Make space for the search icon */
 }
 
 .global-search-input:focus {
@@ -192,68 +198,99 @@
     box-shadow: 0 0 0 4px rgba(99, 179, 237, 0.4);
 }
 
+.global-search-container svg {
+    position: absolute;
+    left: 1rem;
+    color: #a0aec0;
+    width: 1.25rem;
+    height: 1.25rem;
+}
+
+.global-search-container .clear-search-button {
+    position: absolute;
+    right: 0.5rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #a0aec0;
+    transition: color 0.2s ease-in-out;
+}
+
+.global-search-container .clear-search-button:hover {
+    color: #fff;
+}
+
+.multiple-matches-warning {
+    background-color: #f6e05e;
+    color: #2d3748;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 1.5rem;
+    animation: fadeIn 0.5s ease-in-out;
+}
+
 .search-results-list {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    display: flex;
+    flex-direction: column;
     gap: 0.75rem;
-    max-height: 60vh;
+    max-height: 400px;
     overflow-y: auto;
-    padding-right: 0.5rem; /* For scrollbar spacing */
+    padding-right: 0.5rem;
 }
 
 .search-result-item {
     display: flex;
-    align-items: center; /* Vertically align image and text */
+    align-items: center;
     gap: 1rem;
-    padding: 0.75rem;
-    border-radius: 0.5rem;
+    padding: 1rem;
+    background-color: #1a202c;
     border: 1px solid #4a5568;
-    background-color: #2d3748;
-    cursor: pointer;
+    border-radius: 0.5rem;
     text-align: left;
     color: #cbd5e0;
-    transition: background-color 0.2s, border-color 0.2s;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    animation: fadeIn 0.5s ease-in-out;
 }
 
 .search-result-item:hover {
-    background-color: #4a5568;
-    border-color: #63b3ed;
-}
-
-.search-result-image {
-    width: 80px; /* Give the image a fixed width */
-    height: auto;
-    border-radius: 0.25rem;
-    background-color: #fff;
-    padding: 2px;
-    flex-shrink: 0; /* Prevent the image from shrinking */
+    background-color: #3182ce;
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
 .search-result-text {
     display: flex;
     flex-direction: column;
-    gap: 0.2rem;
 }
 
 .search-result-model {
     font-size: 1.1rem;
-    font-weight: 700;
-    color: #63b3ed;
+    font-weight: 600;
 }
 
-.search-result-desc {
+.search-result-desc, .search-result-series {
     font-size: 0.9rem;
-}
-
-.search-result-series {
-    font-size: 0.8rem;
-    font-style: italic;
     color: #a0aec0;
+    transition: color 0.2s ease-in-out;
 }
 
+.search-result-item:hover .search-result-desc,
+.search-result-item:hover .search-result-series {
+    color: #e2e8f0;
+}
 .no-search-results {
     text-align: center;
     padding: 2rem;
-    font-style: italic;
+    border: 2px dashed #4a5568;
+    border-radius: 0.5rem;
     color: #a0aec0;
+    animation: fadeIn 0.5s ease-in-out;
 }
