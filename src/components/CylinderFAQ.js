@@ -186,7 +186,7 @@ const allFaqs = [
     },
     {
         question: "What are Degree® Security Levels?",
-        answer: "The Degree system offers three tiers of security: DG1 (utility-patented keyway and bump-resistant), DG2 (adds a patented side bar and angled pins for picking resistance and geographic exclusivity), and DG3 (includes all DG2 features plus UL 437 certification for high security against physical attacks)."
+        answer: "The Degree system offers three tiers of security: DG1 (utility-patented keyway and bump-resistant), DG2 (adds a patented side bar and angled pins for picking resistance and geographic exclusivity), and DG3 (includes all DG2 features plus UL 437 certified protection against drilling and picking, including Degree DG3 and UL-Keso)."
     },
     {
         question: "What keyways are available?",
@@ -255,10 +255,10 @@ const allFaqs = [
             <>
                 <p>Functions that do not require a cylinder typically involve passage, privacy, or dummy operations. Based on the 7800, 8200, and 9200 series catalogs, the following functions do not require a cylinder to operate:</p>
                 <ul>
-                    <li>**Passage/Exit Latch:** 8213, 7813</li>
-                    <li>**Passage/Closet:** 8215, 7815, 9215</li>
-                    <li>**Privacy:** 8265, 7865, 8266, 7866, 8268, 7868, 9265, 9266</li>
-                    <li>**Dummy:** 8293, 7893, 8294, 7894, 8295, 7895, 8296, 7896, 8297, 7897</li>
+                    <li><strong>Passage/Exit Latch:</strong> 8213, 7813</li>
+                    <li><strong>Passage/Closet:</strong> 8215, 7815, 9215</li>
+                    <li><strong>Privacy:</strong> 8265, 7865, 8266, 7866, 8268, 7868, 9265, 9266</li>
+                    <li><strong>Dummy:</strong> 8293, 7893, 8294, 7894, 8295, 7895, 8296, 7896, 8297, 7897</li>
                 </ul>
             </>
         )
@@ -274,9 +274,9 @@ const allFaqs = [
             <>
                 <p>SARGENT mortise cylinders use different cams depending on the lock function.</p>
                 <ul>
-                    <li>**Standard Cam (13-0664):** Used for all functions except the 50 hotel function and the inside cam for 16 and 92 function locks.</li>
-                    <li>**Short Cam (-105 Cam, 13-0665):** Used for the inside cylinder of the 16 and 92 functions.</li>
-                    <li>**Hotel Cam (-115 Cam, 13-2045):** This cam is supplied with all 50 hotel function cylinders and is specifically for use with those functions.</li>
+                    <li><strong>Standard Cam (13-0664):</strong> Used for all functions except the 50 hotel function and the inside cam for 16 and 92 function locks.</li>
+                    <li><strong>Short Cam (-105 Cam, 13-0665):</strong> Used for the inside cylinder of the 16 and 92 functions.</li>
+                    <li><strong>Hotel Cam (-115 Cam, 13-2045):</strong> This cam is supplied with all 50 hotel function cylinders and is specifically for use with those functions.</li>
                 </ul>
             </>
         )
@@ -300,23 +300,23 @@ const allFaqs = [
     // --- START: NEW FAQ ITEMS ---
     {
         question: "What is the correct way to lubricate a cylinder?",
-        answer: "To ensure longevity and prevent malfunctions, it is recommended to use only a **dry film lubricant** in your lock cylinders. Avoid using oil, grease, or other similar substances. For cylinders with high usage or those exposed to harsh weather, lubricate every 60 days. Otherwise, lubricating once a year is sufficient."
+        answer: "To ensure longevity and prevent malfunctions, it is recommended to use only a <strong>dry film lubricant</strong> in your lock cylinders. Avoid using oil, grease, or other similar substances. For cylinders with high usage or those exposed to harsh weather, lubricate every 60 days. Otherwise, lubricating once a year is sufficient."
     },
     {
         question: "What is the purpose of a control key?",
-        answer: "A **control key** (CTL) is specifically used to install or remove interchangeable or removable cores. It allows you to rekey a lock without having to disassemble the entire lock from the door. A control key should be safeguarded like a master key because it provides access to the cylinder's core."
+        answer: "A <strong>control key</strong> (CTL) is specifically used to install or remove interchangeable or removable cores. It allows you to rekey a lock without having to disassemble the entire lock from the door. A control key should be safeguarded like a master key because it provides access to the cylinder's core."
     },
     {
         question: "What is the difference between a master key and a change key?",
-        answer: "A **change key** (CK) is an individual lock's key that operates only a single lock or a group of locks that are keyed alike. A **master key** (MK), on the other hand, is a key that can operate a group of cylinders with different change keys. In a well-structured system, a grand master key can operate all locks within a system that are already operated by master keys."
+        answer: "A <strong>change key</strong> (CK) is an individual lock's key that operates only a single lock or a group of locks that are keyed alike. A <strong>master key</strong> (MK), on the other hand, is a key that can operate a group of cylinders with different change keys. In a well-structured system, a grand master key can operate all locks within a system that are already operated by master keys."
     },
     {
         question: "How do security key systems protect against key duplication?",
-        answer: "Security key systems like **KESO F1** and **XC** are proprietary and patented. This gives the building owner full control over key duplication because F1 keys cannot be legally duplicated. These keys often have unique features, like dimpled or side-milled slots, that require specialized equipment to cut."
+        answer: "Security key systems like <strong>KESO F1</strong> and <strong>XC</strong> are proprietary and patented. This gives the building owner full control over key duplication because F1 keys cannot be legally duplicated. These keys often have unique features, like dimpled or side-milled slots, that require specialized equipment to cut."
     },
     {
         question: "What is the keying status for my SARGENT Degree system?",
-        answer: "The **SARGENT Degree** system is a factory-based key system that is independent and cannot be keyed into existing or conventional SARGENT master key systems. All DG keys are stamped with 'DO NOT DUPLICATE'."
+        answer: "The <strong>SARGENT Degree</strong> system is a factory-based key system that is independent and cannot be keyed into existing or conventional SARGENT master key systems. All DG keys are stamped with 'DO NOT DUPLICATE'."
     },
     {
         question: "How is the security of Keso F1 cylinders maintained?",
@@ -324,11 +324,11 @@ const allFaqs = [
     },
     {
         question: "How is the XC Key System different from a conventional key system?",
-        answer: "The **XC Key System** adds a unique, independent locking side pin to standard cylinder pins. This feature is activated by a side-milled slot on the XC key. While XC keys can operate non-XC cylinders, non-XC keys cannot operate XC cylinders, which provides a simple way to increase security where needed without issuing all new keys."
+        answer: "The <strong>XC Key System</strong> adds a unique, independent locking side pin to standard cylinder pins. This feature is activated by a side-milled slot on the XC key. While XC keys can operate non-XC cylinders, non-XC keys cannot operate XC cylinders, which provides a simple way to increase security where needed without issuing all new keys."
     },
     {
         question: "What does it mean for a cylinder to be UL 437 listed?",
-        answer: "UL 437 is a standard that certifies a cylinder's resistance to physical attack, including drilling and picking. **SARGENT's DG3** cylinders meet this standard by incorporating hardened drill-resistant inserts in the plug and body. These cylinders are recommended for high-security applications where doors are most vulnerable to physical assault."
+        answer: "UL 437 is a standard that certifies a cylinder's resistance to physical attack, including drilling and picking. <strong>SARGENT's DG3</strong> cylinders meet this standard by incorporating hardened drill-resistant inserts in the plug and body. These cylinders are recommended for high-security applications where doors are most vulnerable to physical assault."
     },
     {
         question: "What are the keying notes for SARGENT 8200/7800 Series locks?",
@@ -336,7 +336,7 @@ const allFaqs = [
     },
     {
         question: "How does Construction Master Keying with the '21-' option work?",
-        answer: "The **'21-' option** is a 'lost ball' feature for fixed core cylinders that simplifies the process of turning over a building. A temporary construction key can be used until the permanent change key is used for the first time. When the change key is turned, it allows a ball bearing to fall into a hole in the plug, permanently voiding the construction key and preventing it from being used again. This option is not available for LFIC cores; instead, you must specify the `64-` option."
+        answer: "The <strong>'21-' option</strong> is a 'lost ball' feature for fixed core cylinders that simplifies the process of turning over a building. A temporary construction key can be used until the permanent change key is used for the first time. When the change key is turned, it allows a ball bearing to fall into a hole in the plug, permanently voiding the construction key and preventing it from being used again. This option is not available for LFIC cores; instead, you must specify the `64-` option."
     },
     {
         question: "What are hollow driver pins and when are they used?",
@@ -352,7 +352,7 @@ const allFaqs = [
     },
     {
         question: "What is the recommended maintenance for Keso F1 cylinders?",
-        answer: "SARGENT recommends performing preventative maintenance on Keso F1 cylinders on a regular basis. At a minimum, cylinders should be lubricated once a year, but those with high usage or exposure to dirt and extreme weather should be lubricated every sixty days. Only a dry film lubricant should be used; avoid oil, grease, or similar substances."
+        answer: "SARGENT recommends performing preventative maintenance on Keso F1 cylinders on a regular basis. At a minimum, cylinders should be lubricated once a year, but those with high usage or exposure to dirt and extreme weather should be lubricate every sixty days. Only a dry film lubricant should be used; avoid oil, grease, or similar substances."
     },
     {
         question: "Are there any special installation instructions for LFIC cores?",
@@ -360,7 +360,7 @@ const allFaqs = [
     },
     {
         question: "What is the keying status for SARGENT Degree DG2 and DG3 systems?",
-        answer: "The **SARGENT Degree** DG2 and DG3 key systems provide geographical exclusivity and require specific randomized security codes for each order. All keys are stamped with a key set symbol and the key system register number. Keys are protected from unauthorized duplication, and the systems cannot be keyed into existing or conventional SARGENT master key systems."
+        answer: "The <strong>SARGENT Degree</strong> DG2 and DG3 key systems provide geographical exclusivity and require specific randomized security codes for each order. All keys are stamped with a key set symbol and the key system register number. Keys are protected from unauthorized duplication, and the systems cannot be keyed into existing or conventional SARGENT master key systems."
     },
     {
         question: "How can I upgrade an existing 6300 core to a Degree or XC Series?",
@@ -377,7 +377,48 @@ const allFaqs = [
     {
         question: "Can I use an XC key blank on a standard key duplicating machine?",
         answer: "Yes, XC key blanks are designed so that the standard cuts can be made on a standard key duplicating machine. However, the XC key has a unique side-milled slot which is what activates the special locking side pin mechanism in an XC cylinder."
-    }
+    },
+    {
+        question: "What are the bitting specifications for LFIC Cores?",
+        answer: "",
+        children: (
+            <>
+                <p>The standard bitting specifications for LFIC cores are:</p>
+                <ul>
+                    <li><strong>SC B 6300 R/C 1 Bitted Cores:</strong> Day Keys: 111111, Control Keys: 113511</li>
+                </ul>
+                <p>For construction cores:</p>
+                <ul>
+                    <li><strong>Prefix `64-` (Construction Core):</strong> Construction Key: HF 387436, Construction Control Key: HF 743658</li>
+                </ul>
+            </>
+        )
+    },
+    {
+        question: "What are the bitting specifications for SFIC Cores?",
+        answer: "",
+        children: (
+            <>
+                <p>The standard bitting specifications for SFIC and XC SFIC cores are:</p>
+                <ul>
+                    <li><strong>`72-` 6 Pin SFIC Blue or Purple Cores:</strong> E keyway cut to A2 spec tip to bow, Control: 743652, Master: 654341</li>
+                    <li><strong>`(11-) 72-` 7 Pin SFIC (and XC) Temp Cores:</strong> E keyway cut to A2 spec tip to bow, Control: 0743652, Master: 0654341</li>
+                </ul>
+            </>
+        )
+    },
+    {
+        question: "What are the bitting specifications for Old Style Removable Cores?",
+        answer: "",
+        children: (
+            <>
+                <p>The bitting specifications for old style removable cores are:</p>
+                <ul>
+                    <li><strong>Prefix `52-` (Old Style Construction):</strong> Construction Master Key: LL 6174727, Construction Control Key: LL 2738363</li>
+                </ul>
+            </>
+        )
+    },
 ];
 
 function CylinderFAQ() {

@@ -1,12 +1,11 @@
-import React, { useState, useMemo } from 'react';
+// src/components/CategorizedPrefixSelector.js
+import React, { useState, useMemo, useEffect } from 'react';
 import './CategorizedPrefixSelector.css';
 
-function CategorizedPrefixSelector({ categories, selectedPrefixes, onChange, searchTerm }) {
+// REMOVE the `searchTerm` prop from here, we will manage it internally
+function CategorizedPrefixSelector({ categories, selectedPrefixes, onChange }) {
   const [openCategory, setOpenCategory] = useState(null);
-
-  const toggleCategory = (categoryName) => {
-    setOpenCategory(openCategory === categoryName ? null : categoryName);
-  };
+  const [searchTerm, setSearchTerm] = useState(''); // NEW state for the internal search term
 
   const filteredCategories = useMemo(() => {
     if (!searchTerm) return categories;
@@ -39,10 +38,32 @@ function CategorizedPrefixSelector({ categories, selectedPrefixes, onChange, sea
       .filter(Boolean);
   }, [categories, searchTerm]);
 
+  useEffect(() => {
+    if (searchTerm && filteredCategories.length > 0) {
+      setOpenCategory(filteredCategories[0].name);
+    } else if (!searchTerm) {
+      setOpenCategory(null);
+    }
+  }, [searchTerm, filteredCategories]);
+
+  const toggleCategory = (categoryName) => {
+    setOpenCategory(openCategory === categoryName ? null : categoryName);
+  };
+
   return (
     <div className="categorized-prefix-selector-container">
+      <div className="prefix-search-wrapper">
+        <input
+          type="text"
+          placeholder="Search prefixes by name, number, or keyword..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)} // USE the internal state handler
+          className="prefix-search-bar"
+        />
+      </div>
+
       {filteredCategories.map((category) => (
-        <div key={category.name} className={`category-group ${openCategory === category.name ? 'open' : ''}`}>
+        <div key={category.name} className={`category-group ${openCategory === category.name || searchTerm ? 'open' : ''}`}>
           <button
             className="category-header"
             onClick={() => toggleCategory(category.name)}
@@ -56,15 +77,14 @@ function CategorizedPrefixSelector({ categories, selectedPrefixes, onChange, sea
             id={`category-content-${category.name.replace(/ /g, '-')}`}
             className="category-content"
             role="region"
-            aria-labelledby={`category-header-${category.name.replace(/ /g, '-')}`}
           >
             {category.prefixes.length === 0 ? (
               <p className="no-options-message">No options in this category.</p>
             ) : (
               <div className="prefix-list">
                 {category.prefixes.map((prefix) => (
-                  <label 
-                    key={prefix.id} 
+                  <label
+                    key={prefix.id}
                     className={`prefix-item-label ${selectedPrefixes.includes(prefix.id) ? 'selected' : ''}`}
                     data-tooltip={prefix.description}
                   >

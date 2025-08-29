@@ -6,17 +6,80 @@
     gap: 1rem;
 }
 
+/* --- NEW STYLES for Animated Search Bar --- */
+
+/* This wrapper will hold the animation */
+.prefix-search-wrapper {
+    position: relative;
+    padding: 3px;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    grid-column: 1 / -1;
+    margin-bottom: 1rem;
+    /* NEW: Use a linear gradient for the background image */
+    background: linear-gradient(to right, #63b3ed, #805ad5, #4fd1c5, #63b3ed);
+    background-size: 200% 200%;
+    animation: moveGradient 4s linear infinite;
+}
+
+@keyframes moveGradient {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+/* The pseudo-element for the rotating gradient */
+.prefix-search-wrapper::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 200%;
+    height: 200%;
+    background: conic-gradient(
+        from 0deg,
+        #63b3ed,
+        #805ad5,
+        #4fd1c5,
+        #63b3ed
+    );
+    animation: rotateGradient 4s linear infinite;
+    pointer-events: none;
+}
+
+/* The rotation animation */
+@keyframes rotateGradient {
+    from {
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+    to {
+        transform: translate(-50%, -50%) rotate(360deg);
+    }
+}
+
+/* MODIFIED original search bar style */
 .prefix-search-bar {
     width: 100%;
     padding: 0.75rem;
-    margin-bottom: 1rem;
     border-radius: 0.375rem;
-    border: 1px solid #4a5568;
+    border: none; /* Remove the original border */
     background-color: #1a202c;
     color: #fff;
     font-size: 1rem;
-    grid-column: 1 / -1; /* Make search bar span full width */
+    position: relative;
+    z-index: 2;
 }
+
+.prefix-search-bar:focus {
+    outline: none;
+}
+
 
 .category-group {
     margin-bottom: 0; /* Gap is now controlled by the grid */
