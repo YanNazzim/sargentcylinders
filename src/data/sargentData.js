@@ -47,8 +47,8 @@ const boredLocks = {
     "series": [
         series10XLine,
         series11Line,
-        series6Line,
         series7Line,
+        series6Line,
         series8XLine,
         series6500Line
     ]

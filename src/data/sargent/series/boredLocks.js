@@ -10,7 +10,7 @@ const allCylinderPrefixes = cylinderPrefixCategories.flatMap(
 export const series10XLine = {
   name: "10X Line",
   imageUrl: images.Bored10XLine,
-  excludedPrefixes: ["51-", "52-"], // <-- Add this line
+  excludedPrefixes: ["51-", "52-"],
 
   models: [
     {
@@ -18,12 +18,14 @@ export const series10XLine = {
       description: "Storeroom or Closet",
       baseCylinder: { partNumber: "C10X-1", type: "Key-in-Lever Cylinder" },
       prefixes: [...allCylinderPrefixes],
+      imageUrl: images.Func10XG04, // <-- Add this line
     },
     {
       modelNumber: "10XG05",
       description: "Entrance or Office",
       baseCylinder: { partNumber: "C10X-1", type: "Key-in-Lever Cylinder" },
       prefixes: [...allCylinderPrefixes],
+      imageUrl: images.Func10XG05, // <-- Add this line
     },
     {
       modelNumber: "10XG07",
@@ -38,6 +40,7 @@ export const series10XLine = {
         },
         ...allCylinderPrefixes,
       ],
+      imageUrl: images.Func10XG07, // <-- Add this line
     },
     {
       modelNumber: "10XG08",
@@ -52,30 +55,35 @@ export const series10XLine = {
         },
         ...allCylinderPrefixes,
       ],
+      imageUrl: images.Func10XG08, // <-- Add this line
     },
     {
       modelNumber: "10XG13",
       description: "Exit",
       baseCylinder: null,
       prefixes: [...allCylinderPrefixes],
+      imageUrl: images.Func10XG13, // <-- Add this line
     },
     {
       modelNumber: "10XG14",
       description: "Patio or Privacy",
       baseCylinder: null,
       prefixes: [...allCylinderPrefixes],
+      imageUrl: images.Func10XG14, // <-- Add this line
     },
     {
       modelNumber: "10XU15",
       description: "Passage",
       baseCylinder: null,
       prefixes: [...allCylinderPrefixes],
+      imageUrl: images.Func10XU15, // <-- Add this line
     },
     {
-      modelNumber: "10XG15-3",
+      modelNumber: "10XG15 3",
       description: "Exit or Communicating",
       baseCylinder: null,
       prefixes: [...allCylinderPrefixes],
+      imageUrl: images.Func10XG15_3, // <-- Add this line
     },
     {
       modelNumber: "10XG16",
@@ -90,6 +98,7 @@ export const series10XLine = {
         },
         ...allCylinderPrefixes,
       ],
+      imageUrl: images.Func10XG16, // <-- Add this line
     },
     {
       modelNumber: "10XG17",
@@ -104,6 +113,7 @@ export const series10XLine = {
         },
         ...allCylinderPrefixes,
       ],
+      imageUrl: images.Func10XG17, // <-- Add this line
     },
     {
       modelNumber: "10XG24",
@@ -118,6 +128,7 @@ export const series10XLine = {
         },
         ...allCylinderPrefixes,
       ],
+      imageUrl: images.Func10XG24, // <-- Add this line
     },
     {
       modelNumber: "10XG26",
@@ -132,6 +143,7 @@ export const series10XLine = {
         },
         ...allCylinderPrefixes,
       ],
+      imageUrl: images.Func10XG26, // <-- Add this line
     },
     {
       modelNumber: "10XG30",
@@ -146,12 +158,14 @@ export const series10XLine = {
         },
         ...allCylinderPrefixes,
       ],
+      imageUrl: images.Func10XG30, // <-- Add this line
     },
     {
       modelNumber: "10XG37",
       description: "Classroom",
       baseCylinder: { partNumber: "C10X-1", type: "Key-in-Lever Cylinder" },
       prefixes: [...allCylinderPrefixes],
+      imageUrl: images.Func10XG37, // <-- Add this line
     },
     {
       modelNumber: "10XG38",
@@ -166,6 +180,7 @@ export const series10XLine = {
         },
         ...allCylinderPrefixes,
       ],
+      imageUrl: images.Func10XG38, // <-- Add this line
     },
     {
       modelNumber: "10XG44",
@@ -180,82 +195,106 @@ export const series10XLine = {
         },
         ...allCylinderPrefixes,
       ],
+      imageUrl: images.Func10XG44, // <-- Add this line
     },
     {
       modelNumber: "10XG50",
       description: "Hotel, Dormitory or Apartment",
       baseCylinder: { partNumber: "C10X-1", type: "Key-in-Lever Cylinder" },
       prefixes: [...allCylinderPrefixes],
+      imageUrl: images.Func10XG50, // <-- Add this line
     },
     {
       modelNumber: "10XG53",
       description: "Corridor, Dormitory",
       baseCylinder: { partNumber: "C10X-1", type: "Key-in-Lever Cylinder" },
       prefixes: [...allCylinderPrefixes],
+      imageUrl: images.Func10XG53, // <-- Add this line
     },
     {
       modelNumber: "10XG54",
       description: "Corridor, Dormitory",
       baseCylinder: { partNumber: "C10X-1", type: "Key-in-Lever Cylinder" },
       prefixes: [...allCylinderPrefixes],
+      imageUrl: images.Func10XG54, // <-- Add this line
     },
     {
       modelNumber: "10XG60",
       description: "Barrier Free Storeroom/Public Restroom",
       baseCylinder: { partNumber: "C10X-1", type: "Key-in-Lever Cylinder" },
       prefixes: [...allCylinderPrefixes],
+      imageUrl: images.Func10XG60, // <-- Add this line
     },
     {
       modelNumber: "10XG64",
       description: "Time Out Lock",
       baseCylinder: null,
       prefixes: [...allCylinderPrefixes],
+      imageUrl: images.Func10XG64, // <-- Add this line
     },
     {
       modelNumber: "10XU65",
       description: "Privacy/Bathroom",
       baseCylinder: null,
       prefixes: [...allCylinderPrefixes],
+      imageUrl: images.Func10XU65, // <-- Add this line
     },
     {
       modelNumber: "10XU66",
       description: "Privacy/Bathroom",
       baseCylinder: null,
       prefixes: [...allCylinderPrefixes],
+      imageUrl: images.Func10XU66, // <-- Add this line
     },
     {
       modelNumber: "10XU68",
       description: "Hospital Privacy",
       baseCylinder: null,
       prefixes: [...allCylinderPrefixes],
+      imageUrl: images.Func10XU68, // <-- Add this line
     },
     {
       modelNumber: "10XU93",
       description: "Single Lever Pull",
       baseCylinder: null,
       prefixes: [...allCylinderPrefixes],
+      imageUrl: images.Func10XU93, // <-- Add this line
     },
     {
       modelNumber: "10XU94",
       description: "Double Lever Pull",
       baseCylinder: null,
       prefixes: [...allCylinderPrefixes],
+      imageUrl: images.Func10XU94, // <-- Add this line
     },
     {
       modelNumber: "10XU94-2",
       description: "Double Lever Pull",
       baseCylinder: null,
       prefixes: [...allCylinderPrefixes],
+      imageUrl: images.Func10XU94_2, // <-- Add this line
     },
-  ].sort(
-    (a, b) =>
-      parseInt(a.modelNumber.slice(-2)) - parseInt(b.modelNumber.slice(-2))
-  ),
-};
+  ].sort((a, b) => {
+    // Helper function to create a sortable representation
+    const getSortable = (model) => {
+        let tempModel = model.modelNumber;
+        // Special case for 10XU15
+        if (tempModel === '10XU15') {
+            tempModel = '10XG15';
+        }
+        return tempModel;
+    };
 
+    const sortableA = getSortable(a);
+    const sortableB = getSortable(b);
+
+    return sortableA.localeCompare(sortableB, undefined, { numeric: true });
+  }),
+};
 export const series11Line = {
   name: "11 Line",
   excludedPrefixes: ["51-", "52-"], // <-- Add this line
+  imageUrl: images.Bored11Line,
 
   models: [
     {
@@ -300,62 +339,28 @@ export const series11Line = {
       baseCylinder: null,
       prefixes: [...allCylinderPrefixes],
     },
-  ].sort(
-    (a, b) =>
-      parseInt(a.modelNumber.slice(-2)) - parseInt(b.modelNumber.slice(-2))
-  ),
-};
+  ].sort((a, b) => {
+    // Helper function to create a sortable representation
+    const getSortable = (model) => {
+        let tempModel = model.modelNumber;
+        // Special case for 10XU15
+        if (tempModel === '10XU15') {
+            tempModel = '10XG15';
+        }
+        return tempModel;
+    };
 
-export const series6Line = {
-  name: "6 Line",
-  excludedPrefixes: ["51-", "52-"], // <-- Add this line
+    const sortableA = getSortable(a);
+    const sortableB = getSortable(b);
 
-  models: [
-    {
-      modelNumber: "6G04",
-      description: "Storeroom or Closet",
-      baseCylinder: { partNumber: "C6-1B", type: "Key-in-Knob Cylinder" },
-      prefixes: [...allCylinderPrefixes],
-    },
-    {
-      modelNumber: "6G05",
-      description: "Entrance or Office",
-      baseCylinder: { partNumber: "C6-1B", type: "Key-in-Knob Cylinder" },
-      prefixes: [...allCylinderPrefixes],
-    },
-    {
-      modelNumber: "6U15",
-      description: "Passage",
-      baseCylinder: null,
-      prefixes: [...allCylinderPrefixes],
-    },
-    {
-      modelNumber: "6G37",
-      description: "Classroom",
-      baseCylinder: { partNumber: "C6-1B", type: "Key-in-Knob Cylinder" },
-      prefixes: [...allCylinderPrefixes],
-    },
-    {
-      modelNumber: "6U65",
-      description: "Privacy/Bathroom",
-      baseCylinder: null,
-      prefixes: [...allCylinderPrefixes],
-    },
-    {
-      modelNumber: "6U93",
-      description: "Single Knob Pull",
-      baseCylinder: null,
-      prefixes: [...allCylinderPrefixes],
-    },
-  ].sort(
-    (a, b) =>
-      parseInt(a.modelNumber.slice(-2)) - parseInt(b.modelNumber.slice(-2))
-  ),
+    return sortableA.localeCompare(sortableB, undefined, { numeric: true });
+  }),
 };
 
 export const series7Line = {
   name: "7 Line",
   excludedPrefixes: ["51-", "52-"], // <-- Add this line
+  imageUrl: images.Bored7Line,
 
   models: [
     {
@@ -418,15 +423,88 @@ export const series7Line = {
       baseCylinder: null,
       prefixes: [...allCylinderPrefixes],
     },
-  ].sort(
-    (a, b) =>
-      parseInt(a.modelNumber.slice(-2)) - parseInt(b.modelNumber.slice(-2))
-  ),
+  ].sort((a, b) => {
+    // Helper function to create a sortable representation
+    const getSortable = (model) => {
+        let tempModel = model.modelNumber;
+        // Special case for 10XU15
+        if (tempModel === '10XU15') {
+            tempModel = '10XG15';
+        }
+        return tempModel;
+    };
+
+    const sortableA = getSortable(a);
+    const sortableB = getSortable(b);
+
+    return sortableA.localeCompare(sortableB, undefined, { numeric: true });
+  }),
 };
+export const series6Line = {
+  name: "6 Line",
+  excludedPrefixes: ["51-", "52-"], // <-- Add this line
+  imageUrl: images.Bored6Line,
+
+  models: [
+    {
+      modelNumber: "6G04",
+      description: "Storeroom or Closet",
+      baseCylinder: { partNumber: "C6-1B", type: "Key-in-Knob Cylinder" },
+      prefixes: [...allCylinderPrefixes],
+    },
+    {
+      modelNumber: "6G05",
+      description: "Entrance or Office",
+      baseCylinder: { partNumber: "C6-1B", type: "Key-in-Knob Cylinder" },
+      prefixes: [...allCylinderPrefixes],
+    },
+    {
+      modelNumber: "6U15",
+      description: "Passage",
+      baseCylinder: null,
+      prefixes: [...allCylinderPrefixes],
+    },
+    {
+      modelNumber: "6G37",
+      description: "Classroom",
+      baseCylinder: { partNumber: "C6-1B", type: "Key-in-Knob Cylinder" },
+      prefixes: [...allCylinderPrefixes],
+    },
+    {
+      modelNumber: "6U65",
+      description: "Privacy/Bathroom",
+      baseCylinder: null,
+      prefixes: [...allCylinderPrefixes],
+    },
+    {
+      modelNumber: "6U93",
+      description: "Single Knob Pull",
+      baseCylinder: null,
+      prefixes: [...allCylinderPrefixes],
+    },
+  ].sort((a, b) => {
+    // Helper function to create a sortable representation
+    const getSortable = (model) => {
+        let tempModel = model.modelNumber;
+        // Special case for 10XU15
+        if (tempModel === '10XU15') {
+            tempModel = '10XG15';
+        }
+        return tempModel;
+    };
+
+    const sortableA = getSortable(a);
+    const sortableB = getSortable(b);
+
+    return sortableA.localeCompare(sortableB, undefined, { numeric: true });
+  }),
+};
+
 
 export const series8XLine = {
   name: "8X Line",
   excludedPrefixes: ["51-", "52-"], // <-- Add this line
+  imageUrl: images.Bored8XLine,
 
   models: [
     {
@@ -471,15 +549,28 @@ export const series8XLine = {
       baseCylinder: null,
       prefixes: [...allCylinderPrefixes],
     },
-  ].sort(
-    (a, b) =>
-      parseInt(a.modelNumber.slice(-2)) - parseInt(b.modelNumber.slice(-2))
-  ),
+  ].sort((a, b) => {
+    // Helper function to create a sortable representation
+    const getSortable = (model) => {
+        let tempModel = model.modelNumber;
+        // Special case for 10XU15
+        if (tempModel === '10XU15') {
+            tempModel = '10XG15';
+        }
+        return tempModel;
+    };
+
+    const sortableA = getSortable(a);
+    const sortableB = getSortable(b);
+
+    return sortableA.localeCompare(sortableB, undefined, { numeric: true });
+  }),
 };
 
 export const series6500Line = {
   name: "6500 Line",
   excludedPrefixes: ["51-", "52-"], // <-- Add this line
+  imageUrl: images.Bored6500Line,
 
   models: [
     {
@@ -530,8 +621,20 @@ export const series6500Line = {
       baseCylinder: null,
       prefixes: [...allCylinderPrefixes],
     },
-  ].sort(
-    (a, b) =>
-      parseInt(a.modelNumber.slice(-2)) - parseInt(b.modelNumber.slice(-2))
-  ),
+  ].sort((a, b) => {
+    // Helper function to create a sortable representation
+    const getSortable = (model) => {
+        let tempModel = model.modelNumber;
+        // Special case for 10XU15
+        if (tempModel === '10XU15') {
+            tempModel = '10XG15';
+        }
+        return tempModel;
+    };
+
+    const sortableA = getSortable(a);
+    const sortableB = getSortable(b);
+
+    return sortableA.localeCompare(sortableB, undefined, { numeric: true });
+  }),
 };

@@ -43,6 +43,25 @@ export const cylinderPrefixCategories = [
     ]
   },
   {
+    name: "Large Format Interchangeable Core (LFIC)",
+    prefixes: [
+      { id: "60-", description: "Device to accept SARGENT Permanent Large Format Interchangeable Core, Disposable plastic Core provided (Permanent Cores ordered separately)", keywords: ["LFIC", "Large Format Interchangeable Core", "removable core"] },
+      { id: "63-", description: "Device provided with Large Format Interchangeable Core Cylinder- (Includes masterkeying, grand masterkeying)", keywords: ["LFIC", "Large Format Interchangeable Core", "removable core"] },
+      { id: "64-", description: "Device provided with Keyed construction core to accept Permanent Large Format Interchangeable Core (ordered separately)", keywords: ["LFIC", "Large Format Interchangeable Core", "removable core"] },
+    ]
+  },
+  {
+    name: "Small Format Interchangeable Core (SFIC)",
+    prefixes: [
+      { id: "70-", description: "Device to accept 6 or 7-Pin SFIC Permanent Cores, plastic disposable core provided", keywords: ["SFIC", "Small Format Interchangeable Core", "removable core"] },
+      { id: "72-", description: "Device to accept 6- or 7-Pin SFIC (6-Pin Keyed Construction Core provided) Cylinder (Permanent Core ordered separately)", keywords: ["SFIC", "Small Format Interchangeable Core", "removable core"] },
+      { id: "73-", description: "Device provided with 6-Pin SFIC (Includes masterkeying, grand masterkeying)", keywords: ["SFIC", "Small Format Interchangeable Core", "removable core"] },
+      { id: "65-73-", description: "Device provided to accept Uncombinated 6-Pin SFIC (Permanent) Core - (Packed Loose for field keying)", keywords: ["SFIC", "Small Format Interchangeable Core", "removable core"] },
+      { id: "65-73-7P-", description: "Device provided to accept Uncombinated 7-Pin SFIC (Permanent) Core - (Packed Loose for field keying)", keywords: ["SFIC", "Small Format Interchangeable Core", "removable core"] },
+      { id: "73-7P-", description: "Device provided with Small Format 7-Pin Interchangeable Core (Includes masterkeying, grand masterkeying)", keywords: ["SFIC", "Small Format Interchangeable Core", "removable core"] },
+    ]
+  },
+  {
     name: "XC-Key System",
     prefixes: [
       { id: "11-", description: "XC Key System (Not available with other Key systems unless specified)", keywords: [] },
@@ -72,25 +91,6 @@ export const cylinderPrefixCategories = [
     prefixes: [
       { id: "51-", description: "Removable Core Cylinder (Old Style) provided (existing systems only)", keywords: ["removable core", "Old Style"] },
       { id: "52-", description: "Removable Construction Core (Old Style) Permanent core ordered separately (existing systems only)", keywords: ["removable core", "Old Style"] },
-    ]
-  },
-  {
-    name: "Large Format Interchangeable Core (LFIC)",
-    prefixes: [
-      { id: "60-", description: "Device to accept SARGENT Permanent Large Format Interchangeable Core, Disposable plastic Core provided (Permanent Cores ordered separately)", keywords: ["LFIC", "Large Format Interchangeable Core", "removable core"] },
-      { id: "63-", description: "Device provided with Large Format Interchangeable Core Cylinder- (Includes masterkeying, grand masterkeying)", keywords: ["LFIC", "Large Format Interchangeable Core", "removable core"] },
-      { id: "64-", description: "Device provided with Keyed construction core to accept Permanent Large Format Interchangeable Core (ordered separately)", keywords: ["LFIC", "Large Format Interchangeable Core", "removable core"] },
-    ]
-  },
-  {
-    name: "Small Format Interchangeable Core (SFIC)",
-    prefixes: [
-      { id: "70-", description: "Device to accept 6 or 7-Pin SFIC Permanent Cores, plastic disposable core provided", keywords: ["SFIC", "Small Format Interchangeable Core", "removable core"] },
-      { id: "72-", description: "Device to accept 6- or 7-Pin SFIC (6-Pin Keyed Construction Core provided) Cylinder (Permanent Core ordered separately)", keywords: ["SFIC", "Small Format Interchangeable Core", "removable core"] },
-      { id: "73-", description: "Device provided with 6-Pin SFIC (Includes masterkeying, grand masterkeying)", keywords: ["SFIC", "Small Format Interchangeable Core", "removable core"] },
-      { id: "65-73-", description: "Device provided to accept Uncombinated 6-Pin SFIC (Permanent) Core - (Packed Loose for field keying)", keywords: ["SFIC", "Small Format Interchangeable Core", "removable core"] },
-      { id: "65-73-7P-", description: "Device provided to accept Uncombinated 7-Pin SFIC (Permanent) Core - (Packed Loose for field keying)", keywords: ["SFIC", "Small Format Interchangeable Core", "removable core"] },
-      { id: "73-7P-", description: "Device provided with Small Format 7-Pin Interchangeable Core (Includes masterkeying, grand masterkeying)", keywords: ["SFIC", "Small Format Interchangeable Core", "removable core"] },
     ]
   },
   {

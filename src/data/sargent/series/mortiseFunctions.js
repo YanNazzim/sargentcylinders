@@ -1,12 +1,17 @@
 // src/data/sargent/series/mortiseFunctions.js
 import { cylinderPrefixCategories } from "../cylinderPrefixes"; // Import cylinder prefixes
-
+import { images } from '../../../images/images'; // Import images
 const allCylinderPrefixes = cylinderPrefixCategories.flatMap(category => category.prefixes);
 
 export const series8200MortiseFunctions = [
   // Single Cylinder without Deadbolt
-  { "modelNumber": "8204", "description": "Storeroom or Closet", "baseCylinder": { "partNumber": "#41", "type": "Mortise Cylinder" }, "prefixes": [...allCylinderPrefixes] },
-  { "modelNumber": "8205", "description": "Office or Entry", "baseCylinder": { "partNumber": "#41", "type": "Mortise Cylinder" }, "prefixes": [...allCylinderPrefixes] },
+  { 
+    "modelNumber": "8204", 
+    "description": "Storeroom or Closet", 
+    "baseCylinder": { "partNumber": "#41", "type": "Mortise Cylinder" }, 
+    "prefixes": [...allCylinderPrefixes],
+    "imageUrl": images.Func8204, // <-- Add this line
+  },  { "modelNumber": "8205", "description": "Office or Entry", "baseCylinder": { "partNumber": "#41", "type": "Mortise Cylinder" }, "prefixes": [...allCylinderPrefixes] },
   { "modelNumber": "8206", "description": "Storeroom or Service", "baseCylinder": { "partNumber": "#41", "type": "Mortise Cylinder" }, "prefixes": [...allCylinderPrefixes] },
   { "modelNumber": "8231", "description": "Utility", "baseCylinder": { "partNumber": "#41", "type": "Mortise Cylinder" }, "prefixes": [...allCylinderPrefixes] },
   { "modelNumber": "8236", "description": "Closet", "baseCylinder": { "partNumber": "#41", "type": "Mortise Cylinder" }, "prefixes": [...allCylinderPrefixes] },

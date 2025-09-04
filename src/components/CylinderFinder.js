@@ -1,19 +1,13 @@
 // src/components/CylinderFinder.js
-import React, {
-  useState,
-  useMemo,
-  useEffect,
-  useRef,
-  useCallback,
-} from "react";
+import { useState, useMemo, useEffect, useRef, useCallback } from "react";
 import { sargentData, cylinderPrefixCategories } from "../data/sargentData";
 import HardwareSelector from "./HardwareSelector";
+import ResultsDisplay from "./ResultsDisplay";
 import PrefixSelector from "./PrefixSelector";
 import CategorizedPrefixSelector from "./CategorizedPrefixSelector";
-import ResultsDisplay from "./ResultsDisplay";
 import "./CylinderFinder.css";
 import { images } from "../images/images";
-import { SearchIcon, ClearIcon } from "./Icons";
+import { SearchIcon, ClearIcon, ExpandIcon } from "./Icons";
 
 function CylinderFinder() {
   const [selectedCategory, setSelectedCategory] = useState("");
@@ -21,20 +15,18 @@ function CylinderFinder() {
   const [selectedModel, setSelectedModel] = useState("");
   const [selectedDevicePrefixes, setSelectedDevicePrefixes] = useState([]);
   const [selectedCylinderPrefix, setSelectedCylinderPrefix] = useState(null);
-  const [currentStep, setCurrentStep] = useState("deviceSelection"); // New state for steps
+  const [currentStep, setCurrentStep] = useState("deviceSelection");
 
   const [globalSearchTerm, setGlobalSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [showMultipleMatchesWarning, setShowMultipleMatchesWarning] =
     useState(false);
 
-  // Refs for auto-scrolling
   const deviceOptionsRef = useRef(null);
   const cylinderOptionsRef = useRef(null);
   const resultsRef = useRef(null);
   const searchResultsRef = useRef(null);
 
-  // Auto-scroll when a new step is activated
   useEffect(() => {
     if (currentStep === "deviceOptions" && deviceOptionsRef.current) {
       deviceOptionsRef.current.scrollIntoView({
@@ -91,22 +83,35 @@ function CylinderFinder() {
         model.seriesName.toLowerCase().includes(lowercasedTerm)
     );
     setSearchResults(results);
-    setShowMultipleMatchesWarning(false); // Clear warning on new search term
+    setShowMultipleMatchesWarning(false);
   }, [globalSearchTerm, allModels]);
 
   const groupedCategoryOptions = useMemo(() => {
-    return sargentData.hardware.map((h) => ({
-      label: h.category,
-      options: [
-        { label: h.category, value: h.category, imageUrl: images.sargentlogo },
-      ],
-    }));
+    return sargentData.hardware.map((h) => {
+      let imageUrl;
+      switch (h.category) {
+        case "Exit Devices":
+          imageUrl = images.RimExit80;
+          break;
+        case "Mortise Locks":
+          imageUrl = images.Mortise8200;
+          break;
+        case "Bored Locks":
+          imageUrl = images.Bored10XLine;
+          break;
+        default:
+          imageUrl = images.sargentlogo;
+      }
+      return {
+        label: h.category,
+        options: [{ label: h.category, value: h.category, imageUrl: imageUrl }],
+      };
+    });
   }, []);
 
   const groupedSeriesOptions = useMemo(() => {
     if (!selectedCategory) return [];
 
-    // Logic to group series for Exit Devices
     const exitDeviceSeries =
       sargentData.hardware.find((h) => h.category === "Exit Devices")?.series ||
       [];
@@ -133,7 +138,6 @@ function CylinderFinder() {
       sargentData.hardware.find((h) => h.category === selectedCategory)
         ?.series || [];
 
-    // Combine all groups into a single array for the selector
     const allOptions = [];
 
     if (selectedCategory === "Exit Devices") {
@@ -183,61 +187,39 @@ function CylinderFinder() {
   }, [selectedCategory, selectedSeriesName]);
 
   const activeModelData = useMemo(() => {
-    if (!selectedModel) return null;
-    return allModels.find((m) => m.modelNumber === selectedModel);
-  }, [selectedModel, allModels]);
+    if (!selectedModel || !selectedCategory || !selectedSeriesName) return null;
+
+    const categoryData = sargentData.hardware.find(
+      (h) => h.category === selectedCategory
+    );
+    if (!categoryData) return null;
+
+    const seriesData = categoryData.series.find(
+      (s) => s.name === selectedSeriesName
+    );
+    if (!seriesData) return null;
+
+    const modelData = seriesData.models.find(
+      (m) => m.modelNumber === selectedModel
+    );
+    if (!modelData) return null;
+
+    return {
+      ...modelData,
+      category: selectedCategory,
+      seriesName: selectedSeriesName,
+      imageUrl: modelData.imageUrl || seriesData.imageUrl || images.sargentlogo,
+    };
+  }, [selectedModel, selectedCategory, selectedSeriesName]);
 
   const deviceTiedPrefixes = useMemo(() => {
     if (!activeModelData) return [];
-    const fullModelData = sargentData.hardware
-      .find((h) => h.category === activeModelData.category)
-      ?.series.find((s) => s.name === activeModelData.seriesName)
-      ?.models.find((m) => m.modelNumber === activeModelData.modelNumber);
 
     return (
-      fullModelData?.prefixes.filter(
+      activeModelData.prefixes?.filter(
         (p) => p.isDeviceSpecific && p.id !== "Inside Cyl"
       ) || []
     );
-  }, [activeModelData]);
-
-  const cylinderOptionsCategories = useMemo(() => {
-    if (!activeModelData) return [];
-
-    // Find the series data to access the excludedPrefixes array
-    const seriesData = sargentData.hardware
-      .flatMap((h) => h.series)
-      .find((s) => s.name === activeModelData.seriesName);
-
-    if (!seriesData) return [];
-
-    // Get the excluded prefixes from the series data, defaulting to an empty array
-    const excludedPrefixes = seriesData.excludedPrefixes || [];
-
-    const fullModelData = seriesData.models.find(
-      (m) => m.modelNumber === activeModelData.modelNumber
-    );
-
-    if (!fullModelData) return [];
-
-    let allowedPrefixIds = new Set(fullModelData.prefixes.map((p) => p.id));
-
-    return cylinderPrefixCategories
-      .map((cat) => ({
-        ...cat,
-        prefixes: cat.prefixes.filter((p) => {
-          // Check for conflicts defined in the prefix itself (Option 2)
-          const hasConflict =
-            p.conflictsWithSeries &&
-            p.conflictsWithSeries.includes(activeModelData.seriesName);
-
-          // NEW and CORRECTED check for exclusions defined in the series (Option 1)
-          const isExcluded = excludedPrefixes.includes(p.id);
-
-          return allowedPrefixIds.has(p.id) && !hasConflict && !isExcluded;
-        }),
-      }))
-      .filter((cat) => cat.prefixes.length > 0);
   }, [activeModelData]);
 
   const getCylinderLengthDescription = (partNumber) => {
@@ -306,11 +288,7 @@ function CylinderFinder() {
       });
     }
 
-    const fullModelData = sargentData.hardware
-      .find((h) => h.category === activeModelData.category)
-      ?.series.find((s) => s.name === activeModelData.seriesName)
-      ?.models.find((m) => m.modelNumber === activeModelData.modelNumber);
-    const insideCylData = fullModelData?.prefixes.find(
+    const insideCylData = activeModelData.prefixes?.find(
       (p) => p.id === "Inside Cyl" && p.addsCylinder
     );
     if (insideCylData) {
@@ -322,7 +300,9 @@ function CylinderFinder() {
     }
 
     selectedDevicePrefixes.forEach((prefixId) => {
-      const prefixData = fullModelData?.prefixes.find((p) => p.id === prefixId);
+      const prefixData = activeModelData.prefixes?.find(
+        (p) => p.id === prefixId
+      );
       if (prefixData?.addsCylinder) {
         rawCylinderList.push({
           ...prefixData.addsCylinder,
@@ -384,8 +364,8 @@ function CylinderFinder() {
         const prefixDesc = prefixData
           ? prefixData.description.replace("Device", "Housing")
           : "";
-
         let newNotes = cyl.notes;
+
         if (cyl.role === "Outside Cylinder" || cyl.role === "Inside Cylinder") {
           newNotes = `For the ${
             cyl.role.toLowerCase().split(" ")[0]
@@ -413,11 +393,9 @@ function CylinderFinder() {
         } else {
           newNotes = `For ${cyl.role} which is: ${cyl.notes}`;
         }
-
         const newDescription = `${getCylinderLengthDescription(
           cyl.partNumber
         )} ${cyl.type}`;
-
         return {
           ...cyl,
           partNumber: `${cyl.partNumber} x Keying Details x Finish`,
@@ -471,7 +449,24 @@ function CylinderFinder() {
     }
   };
 
-  // Handle changes for each step of the wizard
+  const handleProceedFromDeviceSelection = () => {
+    if (!selectedModel) return;
+
+    const hasDeviceOptions =
+      selectedCategory === "Exit Devices" && deviceTiedPrefixes.length > 0;
+    const hasCylinderOptions =
+      activeModelData?.baseCylinder ||
+      activeModelData?.prefixes.some((p) => p.addsCylinder);
+
+    if (!hasCylinderOptions) {
+      setCurrentStep("results");
+    } else if (hasDeviceOptions) {
+      setCurrentStep("deviceOptions");
+    } else {
+      setCurrentStep("cylinderOptions");
+    }
+  };
+
   const handleCategoryChange = (categoryId) => {
     setSelectedCategory(categoryId);
     setSelectedSeriesName("");
@@ -494,36 +489,13 @@ function CylinderFinder() {
 
   const handleModelChange = (modelId) => {
     setSelectedModel(modelId);
-    if (modelId) {
-      setSelectedDevicePrefixes([]); // Ensure device prefixes are unchecked by default
-      const currentActiveModelData = sargentData.hardware
-        .find((h) => h.category === selectedCategory)
-        ?.series.find((s) => s.name === selectedSeriesName)
-        ?.models.find((m) => m.modelNumber === modelId);
-      const hasDeviceOptions =
-        currentActiveModelData?.prefixes.filter(
-          (p) => p.isDeviceSpecific && p.id !== "Inside Cyl"
-        ).length > 0;
-      const hasCylinderOptions =
-        currentActiveModelData?.baseCylinder ||
-        currentActiveModelData?.prefixes.some((p) => p.addsCylinder);
-
-      if (!hasCylinderOptions) {
-        setCurrentStep("results");
-      } else if (hasDeviceOptions) {
-        setCurrentStep("deviceOptions");
-      } else {
-        setCurrentStep("cylinderOptions");
-      }
-    } else {
-      setCurrentStep("deviceSelection");
-    }
+    setSelectedDevicePrefixes([]);
   };
 
   const handleDevicePrefixChange = (prefixId) => {
     setSelectedDevicePrefixes((prev) =>
       prev.includes(prefixId)
-        ? prev.filter((id) => id !== prefixId)
+        ? prev.filter((p) => p !== prefixId)
         : [...prev, prefixId]
     );
   };
@@ -542,16 +514,18 @@ function CylinderFinder() {
     if (currentStep === "deviceOptions") {
       setCurrentStep("deviceSelection");
     } else if (currentStep === "cylinderOptions") {
-      const hasDeviceOptions = deviceTiedPrefixes.length > 0;
-      if (hasDeviceOptions) {
-        setCurrentStep("deviceOptions");
-      } else {
-        setCurrentStep("deviceSelection");
-      }
+      const hasDeviceOptions =
+        deviceTiedPrefixes.length > 0 && selectedCategory === "Exit Devices";
+      setCurrentStep(hasDeviceOptions ? "deviceOptions" : "deviceSelection");
     } else if (currentStep === "results") {
-      setCurrentStep("cylinderOptions");
+      const hasCylinderOptions =
+        activeModelData?.baseCylinder ||
+        activeModelData?.prefixes.some((p) => p.addsCylinder);
+      setCurrentStep(
+        hasCylinderOptions ? "cylinderOptions" : "deviceSelection"
+      );
     }
-  }, [currentStep, deviceTiedPrefixes]);
+  }, [currentStep, deviceTiedPrefixes, selectedCategory, activeModelData]);
 
   const handleReset = () => {
     setSelectedCategory("");
@@ -559,7 +533,6 @@ function CylinderFinder() {
     setSelectedModel("");
     setSelectedDevicePrefixes([]);
     setSelectedCylinderPrefix(null);
-    // setPrefixSearchTerm(""); // This variable is not defined anywhere in the component.
     setGlobalSearchTerm("");
     setSearchResults([]);
     setShowMultipleMatchesWarning(false);
@@ -572,7 +545,6 @@ function CylinderFinder() {
 
   const isInitialState = !globalSearchTerm;
 
-  // Render logic based on the current step and search state
   const renderStep = () => {
     if (isInitialState) {
       switch (currentStep) {
@@ -608,6 +580,13 @@ function CylinderFinder() {
               </div>
               <div className="wizard-controls">
                 <button
+                  onClick={handleProceedFromDeviceSelection}
+                  className="wizard-find-button"
+                  disabled={!selectedModel}
+                >
+                  Find Cylinder
+                </button>
+                <button
                   onClick={handleReset}
                   className="wizard-find-button reset-button"
                 >
@@ -620,39 +599,15 @@ function CylinderFinder() {
         case "deviceOptions":
           return (
             <div ref={deviceOptionsRef} className="wizard-step active">
-              <div className="selected-hardware-note">
-                <img
-                  src={activeModelData?.imageUrl || images.sargentlogo}
-                  alt={activeModelData?.modelNumber}
-                  className="search-result-image"
+              <div className="prefix-section">
+                <h3 className="prefix-section-title">
+                  Step 2 of 3: Select Device Options
+                </h3>
+                <PrefixSelector
+                  prefixes={deviceTiedPrefixes}
+                  selectedPrefixes={selectedDevicePrefixes}
+                  onChange={handleDevicePrefixChange}
                 />
-                <p>
-                  Selected Device: <strong>{selectedModel}</strong>
-                  <br />
-                  <span className="selected-hardware-desc">
-                    {activeModelData?.description}
-                  </span>
-                </p>
-              </div>
-              <p className="finder-intro">
-                **Step 2 of 3: Select Device Options**
-                <br />
-                Select any additional options for your device.
-              </p>
-              <div className="cylinder-finder-options-area">
-                <div className="prefix-section device-options-section">
-                  <h3 className="prefix-section-title">
-                    Device Options <br />
-                    <br />
-                    (Choosing one of these will add cylinders for this prefix as
-                    well)
-                  </h3>
-                  <PrefixSelector
-                    prefixes={deviceTiedPrefixes}
-                    selectedPrefixes={selectedDevicePrefixes}
-                    onChange={handleDevicePrefixChange}
-                  />
-                </div>
               </div>
               <div className="wizard-controls">
                 <button onClick={handleBack} className="wizard-back-button">
@@ -661,6 +616,12 @@ function CylinderFinder() {
                 <button onClick={handleNext} className="wizard-find-button">
                   Next
                 </button>
+                <button
+                  onClick={handleReset}
+                  className="wizard-find-button reset-button"
+                >
+                  Reset
+                </button>
               </div>
             </div>
           );
@@ -668,38 +629,22 @@ function CylinderFinder() {
         case "cylinderOptions":
           return (
             <div ref={cylinderOptionsRef} className="wizard-step active">
-              <div className="selected-hardware-note">
-                <img
-                  src={activeModelData?.imageUrl || images.sargentlogo}
-                  alt={activeModelData?.modelNumber}
-                  className="search-result-image"
+              <div className="prefix-section">
+                <h3 className="prefix-section-title">
+                  Step 3 of 3: Select Cylinder Options
+                </h3>
+                <CategorizedPrefixSelector
+                  categories={cylinderPrefixCategories.map((category) => ({
+                    ...category,
+                    prefixes: category.prefixes.filter(
+                      (p) => !activeModelData?.excludedPrefixes?.includes(p.id)
+                    ),
+                  }))}
+                  selectedPrefixes={
+                    selectedCylinderPrefix ? [selectedCylinderPrefix] : []
+                  }
+                  onChange={handleCylinderPrefixChange}
                 />
-                <p>
-                  Selected Device: <strong>{selectedModel}</strong>
-                  <br />
-                  <span className="selected-hardware-desc">
-                    {activeModelData?.description}
-                  </span>
-                </p>
-              </div>
-              <p className="finder-intro">
-                **Step 3 of 3: Select Cylinder Options**
-                <br />
-                Select any cylinder keying systems or prefixes you need.
-              </p>
-              <div className="cylinder-finder-options-area">
-                {cylinderOptionsCategories.length > 0 && (
-                  <div className="prefix-section cylinder-options-section">
-                    <h3 className="prefix-section-title">
-                      Cylinder Options (Please select one if needed)
-                    </h3>
-                    <CategorizedPrefixSelector
-                      categories={cylinderOptionsCategories}
-                      selectedPrefixes={[selectedCylinderPrefix]}
-                      onChange={handleCylinderPrefixChange}
-                    />
-                  </div>
-                )}
               </div>
               <div className="wizard-controls">
                 <button onClick={handleBack} className="wizard-back-button">
@@ -711,6 +656,12 @@ function CylinderFinder() {
                 >
                   Find Cylinder
                 </button>
+                <button
+                  onClick={handleReset}
+                  className="wizard-find-button reset-button"
+                >
+                  Reset
+                </button>
               </div>
             </div>
           );
@@ -719,11 +670,23 @@ function CylinderFinder() {
           return (
             <div ref={resultsRef} className="wizard-step active">
               <div className="selected-hardware-note">
-                <img
-                  src={activeModelData?.imageUrl || images.sargentlogo}
-                  alt={activeModelData?.modelNumber}
-                  className="search-result-image"
-                />
+                <div className="selected-hardware-image-wrapper">
+                  <img
+                    src={activeModelData?.imageUrl || images.sargentlogo}
+                    alt={activeModelData?.modelNumber}
+                    className="search-result-image"
+                  />
+                  <button
+                    className="open-image-button"
+                    onClick={() =>
+                      window.open(activeModelData?.imageUrl, "_blank")
+                    }
+                    title="Open image in new tab"
+                  >
+                    <ExpandIcon />
+                  </button>
+
+                </div>
                 <p>
                   Selected Device: <strong>{selectedModel}</strong>
                   <br />
@@ -748,65 +711,40 @@ function CylinderFinder() {
           );
 
         default:
+          // This case should ideally not be reached if currentStep is always one of the defined states.
           return null;
       }
-    } else {
-      return (
-        <div ref={searchResultsRef} className="wizard-step active">
-          <p className="finder-intro">
-            Search results for "{globalSearchTerm}".
-          </p>
-          {showMultipleMatchesWarning && (
-            <div className="multiple-matches-warning">
-              Multiple matches found. Please select a device from the list below
-              or refine your search.
-            </div>
-          )}
-          {searchResults.length > 0 ? (
-            <div className="search-results-list">
-              {searchResults.map((result, index) => (
-                <button
-                  key={`${result.modelNumber}-${index}`}
-                  className="search-result-item"
-                  onClick={() => handleSearchClick(result)}
-                >
-                  {result.imageUrl && (
-                    <img
-                      src={result.imageUrl}
-                      alt={result.modelNumber}
-                      className="search-result-image"
-                    />
-                  )}
-                  <div className="search-result-text">
-                    <span className="search-result-model">
-                      {result.modelNumber}
-                    </span>
-                    <span className="search-result-desc">
-                      {result.description}
-                    </span>
-                    <span className="search-result-series">
-                      {result.seriesName}
-                    </span>
-                  </div>
-                </button>
-              ))}
-            </div>
-          ) : (
-            <div className="no-search-results">
-              No models found for "{globalSearchTerm}".
-            </div>
-          )}
-          <div className="wizard-controls">
-            <button
-              onClick={handleReset}
-              className="wizard-find-button reset-button"
-            >
-              Start Over
-            </button>
-          </div>
-        </div>
-      );
     }
+    // If not in the initial state (i.e., a global search is active), render search results.
+    return (
+      <div ref={searchResultsRef} className="search-results-container">
+        {showMultipleMatchesWarning && (
+          <p className="warning-message">
+            Multiple matches found. Please select one.
+          </p>
+        )}
+        {searchResults.map((result) => (
+          <div
+            key={result.modelNumber}
+            className="search-result-item"
+            onClick={() => handleSearchClick(result)}
+          >
+            <img
+              src={result.imageUrl}
+              alt={result.modelNumber}
+              className="search-result-image"
+            />
+            <div className="search-result-info">
+              <p className="search-result-model">
+                {result.category} &gt; {result.seriesName} &gt;{" "}
+                <strong>{result.modelNumber}</strong>
+              </p>
+              <p className="search-result-desc">{result.description}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    );
   };
 
   return (
