@@ -21,7 +21,7 @@
     border: 1px dashed var(--border-color);
     border-radius: 0.5rem;
     font-style: italic;
-    background-color: #f8f9fa;
+    background-color: var(--background-color);
 }
 
 .results-display-list {
@@ -31,17 +31,17 @@
 }
 
 .results-display-item {
-    background-color: #f8f9fa;
+    background-color: var(--background-color);
     padding: 1.25rem;
     border-radius: 0.6rem;
     border: 1px solid var(--border-color);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
 }
 
 .results-display-item:hover {
     transform: translateY(-3px);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
 }
 
 .results-display-item-part-number {

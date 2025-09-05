@@ -91,7 +91,7 @@
     border-radius: 8px;
     max-height: 350px;
     overflow-y: auto;
-    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
 }
 
 .option-group-label {
@@ -123,7 +123,7 @@
 }
 
 .custom-option:hover {
-    background-color: #f8f9fa;
+    background-color: #1a1a1a;
 }
 
 .custom-option.selected {
@@ -133,10 +133,10 @@
 }
 
 .option-image {
-    width: 80px;
+    width: 150px;
     height: auto;
-    border-radius: 6px;
-    background-color: #fff;
+    border-radius: 25px;
+    background-color: #2a2a2a;
     padding: 4px;
     border: 1px solid var(--border-color);
 }
@@ -144,14 +144,14 @@
 .option-label {
     font-size: 1.1em;
     color: var(--text-color);
-    font-weight: 500;
+    font-weight: 45000;
     margin: 0;
 }
 
 .custom-option:hover .option-label,
 .custom-option.selected .option-label {
     color: #fff;
-    font-weight: 700;
+    font-weight: 600;
 }
 
 .selected-option-content {
@@ -160,13 +160,15 @@
     justify-content: center;
     gap: 1rem;
     width: 100%;
+    color: var(--text-color);
 }
 
 .selected-option-image {
-    width: 60px;
+    width: 150px;
     height: auto;
-    border-radius: 4px;
-    background-color: #fff;
+    border-radius: 25px;
+    background-color: #2a2a2a;
+    border: 1px solid var(--border-color);
     padding: 2px;
 }
 

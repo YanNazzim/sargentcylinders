@@ -5,7 +5,7 @@
 
 .prefix-selector-empty {
     padding: 1rem;
-    border: 1px dashed #ced4da;
+    border: 1px dashed var(--border-color);
     border-radius: 0.375rem;
     text-align: center;
     color: var(--subtle-text);
@@ -13,7 +13,7 @@
 
 .prefix-selector-options {
     padding: 1rem;
-    background-color: rgba(248, 249, 250, 0.5);
+    background-color: rgba(30, 30, 30, 0.5);
     border-radius: 0.375rem;
     border: 1px solid var(--border-color);
     display: flex;
@@ -33,7 +33,7 @@
 }
 
 .prefix-selector-option-label:hover {
-    background-color: #e9ecef;
+    background-color: #333333;
 }
 
 .prefix-selector-option-label.selected {
@@ -73,8 +73,8 @@
     height: 1.25rem;
     width: 1.25rem;
     border-radius: 0.25rem;
-    background-color: #ced4da;
-    border: 1px solid #adb5bd;
+    background-color: var(--border-color);
+    border: 1px solid #4a4a4a;
     appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;

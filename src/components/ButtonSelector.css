@@ -53,14 +53,14 @@
 }
 
 .selection-button:hover:not(.active) {
-    background-color: #f8f9fa;
+    background-color: #1a1a1a;
     transform: translateY(-5px) scale(1.05);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
 }
 
 .selection-button.text-only:hover:not(.active) {
     transform: translateY(-2px) scale(1.02);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .selection-button.active {
@@ -79,7 +79,7 @@
     max-width: 150px;
     max-height: 100px;
     margin-bottom: 0.5rem;
-    background-color: #fff;
+    background-color: var(--background-color);
     padding: 0.5rem;
     border-radius: 0.375rem;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);

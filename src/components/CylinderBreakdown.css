@@ -4,11 +4,11 @@
 }
 
 .breakdown-image-wrapper {
-    background-color: #fff;
+    background-color: #2a2a2a;
     border-radius: 0.5rem;
     padding: 1rem;
     margin-bottom: 2rem;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
     border: 1px solid var(--border-color);
 }
 
@@ -84,7 +84,7 @@
 }
 
 .component-item:not(:last-child) {
-    border-bottom: 1px dashed #dee2e6;
+    border-bottom: 1px dashed var(--border-color);
 }
 
 .component-part-number {
@@ -100,8 +100,8 @@
 }
 
 .highlighted-text {
-    background-color: #cce5ff; /* A light blue for highlighting */
-    color: #004085;
+    background-color: #334455;
+    color: #fff;
     border-radius: 0.2rem;
     padding: 0.1rem 0.2rem;
 }
@@ -132,16 +132,16 @@
 }
 
 .glossary-table th {
-    background-color: #f8f9fa;
+    background-color: var(--background-color);
     font-weight: 600;
 }
 
 .glossary-table tbody tr:nth-child(odd) {
-    background-color: #f8f9fa;
+    background-color: var(--background-color);
 }
 
 .glossary-table tbody tr:hover {
-    background-color: #e9ecef;
+    background-color: #333333;
 }
 
 @media screen and (max-width: 768px) {
@@ -159,7 +159,7 @@
         display: block;
         text-align: right;
         border: none;
-        border-bottom: 1px solid #e9ecef;
+        border-bottom: 1px solid #2a2a2a;
         position: relative;
         padding-left: 50%;
     }

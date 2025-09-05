@@ -3,7 +3,7 @@
     background-color: var(--card-background);
     padding: 2.5rem;
     border-radius: 12px;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
     max-width: 1200px;
     margin: 2rem auto;
     color: var(--text-color);
@@ -103,7 +103,7 @@
 }
 
 .glossary-filter-buttons button:hover {
-    background-color: #dee2e6;
+    background-color: #3a3a3a;
     color: var(--text-color);
 }
 
@@ -137,14 +137,14 @@
 }
 
 .cylinder-section-header:hover {
-    background-color: #f8f9fa;
+    background-color: #1a1a1a;
 }
 
 .header-image {
     width: 120px;
     height: auto;
     border-radius: 8px;
-    background-color: #fff;
+    background-color: #2a2a2a;
     padding: 0.5rem;
     border: 1px solid var(--border-color);
 }

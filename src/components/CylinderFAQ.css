@@ -3,7 +3,7 @@
     background-color: var(--card-background);
     padding: 2.5rem;
     border-radius: 12px;
-    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
     max-width: 1000px;
     margin: 2rem auto;
     color: var(--text-color);
@@ -167,10 +167,10 @@
 .image-container {
     margin-top: 1.5rem;
     text-align: center;
-    background-color: #fff;
+    background-color: #2a2a2a;
     padding: 1.5rem;
     border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     border: 1px solid var(--border-color);
 }
 
@@ -206,7 +206,7 @@
 }
 
 .keyway-table th {
-    background-color: #f8f9fa;
+    background-color: var(--background-color);
     font-weight: 700;
     color: var(--text-color);
     text-transform: uppercase;
@@ -218,7 +218,7 @@
 }
 
 .keyway-table tbody tr:hover {
-    background-color: #f1f3f5;
+    background-color: #333333;
 }
 
 .keyway-table td[data-label="System"] {
