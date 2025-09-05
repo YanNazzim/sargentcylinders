@@ -18,14 +18,14 @@ export const series10XLine = {
       description: "Storeroom or Closet",
       baseCylinder: { partNumber: "C10X-1", type: "Key-in-Lever Cylinder" },
       prefixes: [...allCylinderPrefixes],
-      imageUrl: images.Func10XG04, // <-- Add this line
+      imageUrl: images.Func10XG04,
     },
     {
       modelNumber: "10XG05",
       description: "Entrance or Office",
       baseCylinder: { partNumber: "C10X-1", type: "Key-in-Lever Cylinder" },
       prefixes: [...allCylinderPrefixes],
-      imageUrl: images.Func10XG05, // <-- Add this line
+      imageUrl: images.Func10XG05,
     },
     {
       modelNumber: "10XG07",
@@ -40,7 +40,7 @@ export const series10XLine = {
         },
         ...allCylinderPrefixes,
       ],
-      imageUrl: images.Func10XG07, // <-- Add this line
+      imageUrl: images.Func10XG07,
     },
     {
       modelNumber: "10XG08",
@@ -55,35 +55,35 @@ export const series10XLine = {
         },
         ...allCylinderPrefixes,
       ],
-      imageUrl: images.Func10XG08, // <-- Add this line
+      imageUrl: images.Func10XG08,
     },
     {
       modelNumber: "10XG13",
       description: "Exit",
       baseCylinder: null,
       prefixes: [...allCylinderPrefixes],
-      imageUrl: images.Func10XG13, // <-- Add this line
+      imageUrl: images.Func10XG13,
     },
     {
       modelNumber: "10XG14",
       description: "Patio or Privacy",
       baseCylinder: null,
       prefixes: [...allCylinderPrefixes],
-      imageUrl: images.Func10XG14, // <-- Add this line
+      imageUrl: images.Func10XG14,
     },
     {
       modelNumber: "10XU15",
       description: "Passage",
       baseCylinder: null,
       prefixes: [...allCylinderPrefixes],
-      imageUrl: images.Func10XU15, // <-- Add this line
+      imageUrl: images.Func10XU15,
     },
     {
       modelNumber: "10XG15 3",
       description: "Exit or Communicating",
       baseCylinder: null,
       prefixes: [...allCylinderPrefixes],
-      imageUrl: images.Func10XG15_3, // <-- Add this line
+      imageUrl: images.Func10XG15_3,
     },
     {
       modelNumber: "10XG16",
@@ -98,7 +98,7 @@ export const series10XLine = {
         },
         ...allCylinderPrefixes,
       ],
-      imageUrl: images.Func10XG16, // <-- Add this line
+      imageUrl: images.Func10XG16,
     },
     {
       modelNumber: "10XG17",
@@ -113,7 +113,7 @@ export const series10XLine = {
         },
         ...allCylinderPrefixes,
       ],
-      imageUrl: images.Func10XG17, // <-- Add this line
+      imageUrl: images.Func10XG17,
     },
     {
       modelNumber: "10XG24",
@@ -128,7 +128,7 @@ export const series10XLine = {
         },
         ...allCylinderPrefixes,
       ],
-      imageUrl: images.Func10XG24, // <-- Add this line
+      imageUrl: images.Func10XG24,
     },
     {
       modelNumber: "10XG26",
@@ -143,7 +143,7 @@ export const series10XLine = {
         },
         ...allCylinderPrefixes,
       ],
-      imageUrl: images.Func10XG26, // <-- Add this line
+      imageUrl: images.Func10XG26,
     },
     {
       modelNumber: "10XG30",
@@ -158,14 +158,14 @@ export const series10XLine = {
         },
         ...allCylinderPrefixes,
       ],
-      imageUrl: images.Func10XG30, // <-- Add this line
+      imageUrl: images.Func10XG30,
     },
     {
       modelNumber: "10XG37",
       description: "Classroom",
       baseCylinder: { partNumber: "C10X-1", type: "Key-in-Lever Cylinder" },
       prefixes: [...allCylinderPrefixes],
-      imageUrl: images.Func10XG37, // <-- Add this line
+      imageUrl: images.Func10XG37,
     },
     {
       modelNumber: "10XG38",
@@ -180,7 +180,7 @@ export const series10XLine = {
         },
         ...allCylinderPrefixes,
       ],
-      imageUrl: images.Func10XG38, // <-- Add this line
+      imageUrl: images.Func10XG38,
     },
     {
       modelNumber: "10XG44",
@@ -195,84 +195,84 @@ export const series10XLine = {
         },
         ...allCylinderPrefixes,
       ],
-      imageUrl: images.Func10XG44, // <-- Add this line
+      imageUrl: images.Func10XG44,
     },
     {
       modelNumber: "10XG50",
       description: "Hotel, Dormitory or Apartment",
       baseCylinder: { partNumber: "C10X-1", type: "Key-in-Lever Cylinder" },
       prefixes: [...allCylinderPrefixes],
-      imageUrl: images.Func10XG50, // <-- Add this line
+      imageUrl: images.Func10XG50,
     },
     {
       modelNumber: "10XG53",
       description: "Corridor, Dormitory",
       baseCylinder: { partNumber: "C10X-1", type: "Key-in-Lever Cylinder" },
       prefixes: [...allCylinderPrefixes],
-      imageUrl: images.Func10XG53, // <-- Add this line
+      imageUrl: images.Func10XG53,
     },
     {
       modelNumber: "10XG54",
       description: "Corridor, Dormitory",
       baseCylinder: { partNumber: "C10X-1", type: "Key-in-Lever Cylinder" },
       prefixes: [...allCylinderPrefixes],
-      imageUrl: images.Func10XG54, // <-- Add this line
+      imageUrl: images.Func10XG54,
     },
     {
       modelNumber: "10XG60",
       description: "Barrier Free Storeroom/Public Restroom",
       baseCylinder: { partNumber: "C10X-1", type: "Key-in-Lever Cylinder" },
       prefixes: [...allCylinderPrefixes],
-      imageUrl: images.Func10XG60, // <-- Add this line
+      imageUrl: images.Func10XG60,
     },
     {
       modelNumber: "10XG64",
       description: "Time Out Lock",
       baseCylinder: null,
       prefixes: [...allCylinderPrefixes],
-      imageUrl: images.Func10XG64, // <-- Add this line
+      imageUrl: images.Func10XG64,
     },
     {
       modelNumber: "10XU65",
       description: "Privacy/Bathroom",
       baseCylinder: null,
       prefixes: [...allCylinderPrefixes],
-      imageUrl: images.Func10XU65, // <-- Add this line
+      imageUrl: images.Func10XU65,
     },
     {
       modelNumber: "10XU66",
       description: "Privacy/Bathroom",
       baseCylinder: null,
       prefixes: [...allCylinderPrefixes],
-      imageUrl: images.Func10XU66, // <-- Add this line
+      imageUrl: images.Func10XU66,
     },
     {
       modelNumber: "10XU68",
       description: "Hospital Privacy",
       baseCylinder: null,
       prefixes: [...allCylinderPrefixes],
-      imageUrl: images.Func10XU68, // <-- Add this line
+      imageUrl: images.Func10XU68,
     },
     {
       modelNumber: "10XU93",
       description: "Single Lever Pull",
       baseCylinder: null,
       prefixes: [...allCylinderPrefixes],
-      imageUrl: images.Func10XU93, // <-- Add this line
+      imageUrl: images.Func10XU93,
     },
     {
       modelNumber: "10XU94",
       description: "Double Lever Pull",
       baseCylinder: null,
       prefixes: [...allCylinderPrefixes],
-      imageUrl: images.Func10XU94, // <-- Add this line
+      imageUrl: images.Func10XU94,
     },
     {
       modelNumber: "10XU94-2",
       description: "Double Lever Pull",
       baseCylinder: null,
       prefixes: [...allCylinderPrefixes],
-      imageUrl: images.Func10XU94_2, // <-- Add this line
+      imageUrl: images.Func10XU94_2,
     },
   ].sort((a, b) => {
     // Helper function to create a sortable representation
@@ -293,7 +293,7 @@ export const series10XLine = {
 };
 export const series11Line = {
   name: "11 Line",
-  excludedPrefixes: ["51-", "52-"], // <-- Add this line
+  excludedPrefixes: ["51-", "52-"],
   imageUrl: images.Bored11Line,
 
   models: [
@@ -302,42 +302,49 @@ export const series11Line = {
       description: "Storeroom or Closet",
       baseCylinder: { partNumber: "C11-1", type: "Key-in-Lever Cylinder" },
       prefixes: [...allCylinderPrefixes],
+      imageUrl: images.Func10XG04,
     },
     {
       modelNumber: "11G05",
       description: "Entrance or Office",
       baseCylinder: { partNumber: "C11-1", type: "Key-in-Lever Cylinder" },
       prefixes: [...allCylinderPrefixes],
+      imageUrl: images.Func10XG05,
     },
     {
       modelNumber: "11U15",
       description: "Passage",
       baseCylinder: null,
       prefixes: [...allCylinderPrefixes],
+      imageUrl: images.Func10XU15,
     },
     {
       modelNumber: "11G16",
       description: "Classroom Security",
       baseCylinder: { partNumber: "C11-1", type: "Key-in-Lever Cylinder" },
       prefixes: [...allCylinderPrefixes],
+      imageUrl: images.Func10XG16,
     },
     {
       modelNumber: "11G37",
       description: "Classroom",
       baseCylinder: { partNumber: "C11-1", type: "Key-in-Lever Cylinder" },
       prefixes: [...allCylinderPrefixes],
+      imageUrl: images.Func10XG37,
     },
     {
       modelNumber: "11G38",
       description: "Classroom Security Intruder",
       baseCylinder: { partNumber: "C11-1", type: "Key-in-Lever Cylinder" },
       prefixes: [...allCylinderPrefixes],
+      imageUrl: images.Func10XG38,
     },
     {
       modelNumber: "11U65",
       description: "Privacy/Bathroom",
       baseCylinder: null,
       prefixes: [...allCylinderPrefixes],
+      imageUrl: images.Func10XU65,
     },
   ].sort((a, b) => {
     // Helper function to create a sortable representation
@@ -359,7 +366,7 @@ export const series11Line = {
 
 export const series7Line = {
   name: "7 Line",
-  excludedPrefixes: ["51-", "52-"], // <-- Add this line
+  excludedPrefixes: ["51-", "52-"],
   imageUrl: images.Bored7Line,
 
   models: [
@@ -368,60 +375,70 @@ export const series7Line = {
       description: "Storeroom or Closet",
       baseCylinder: { partNumber: "C10-1", type: "Key-in-Lever Cylinder" },
       prefixes: [...allCylinderPrefixes],
+      imageUrl: images.Func10XG04,
     },
     {
       modelNumber: "7G05",
       description: "Entrance or Office",
       baseCylinder: { partNumber: "C10-1", type: "Key-in-Lever Cylinder" },
       prefixes: [...allCylinderPrefixes],
+      imageUrl: images.Func10XG05,
     },
     {
       modelNumber: "7U15",
       description: "Passage",
       baseCylinder: null,
       prefixes: [...allCylinderPrefixes],
+      imageUrl: images.Func10XU15,
     },
     {
       modelNumber: "7G15-3",
       description: "Exit or Communicating",
       baseCylinder: null,
       prefixes: [...allCylinderPrefixes],
+      imageUrl: images.Func10XG15_3,
     },
     {
       modelNumber: "7G37",
       description: "Classroom",
       baseCylinder: { partNumber: "C10-1", type: "Key-in-Lever Cylinder" },
       prefixes: [...allCylinderPrefixes],
+      imageUrl: images.Func10XG37,
     },
     {
       modelNumber: "7U65",
       description: "Privacy/Bathroom",
       baseCylinder: null,
       prefixes: [...allCylinderPrefixes],
+      imageUrl: images.Func10XU65,
     },
     {
       modelNumber: "7U68",
       description: "Hospital Privacy",
       baseCylinder: null,
       prefixes: [...allCylinderPrefixes],
+      imageUrl: images.Func10XU68,
     },
     {
       modelNumber: "7U93",
       description: "Single Lever Pull",
       baseCylinder: null,
       prefixes: [...allCylinderPrefixes],
+      imageUrl: images.Func10XU93,
     },
     {
       modelNumber: "7U94",
       description: "Double Lever Pull",
       baseCylinder: null,
       prefixes: [...allCylinderPrefixes],
+      imageUrl: images.Func10XU94,
     },
     {
       modelNumber: "7U94-2",
       description: "Double Lever Pull",
       baseCylinder: null,
       prefixes: [...allCylinderPrefixes],
+      imageUrl: images.Func10XU94_2,
     },
   ].sort((a, b) => {
     // Helper function to create a sortable representation
@@ -442,7 +459,7 @@ export const series7Line = {
 };
 export const series6Line = {
   name: "6 Line",
-  excludedPrefixes: ["51-", "52-"], // <-- Add this line
+  excludedPrefixes: ["51-", "52-"],
   imageUrl: images.Bored6Line,
 
   models: [
@@ -503,7 +520,7 @@ export const series6Line = {
 
 export const series8XLine = {
   name: "8X Line",
-  excludedPrefixes: ["51-", "52-"], // <-- Add this line
+  excludedPrefixes: ["51-", "52-"],
   imageUrl: images.Bored8XLine,
 
   models: [
@@ -569,7 +586,7 @@ export const series8XLine = {
 
 export const series6500Line = {
   name: "6500 Line",
-  excludedPrefixes: ["51-", "52-"], // <-- Add this line
+  excludedPrefixes: ["51-", "52-"],
   imageUrl: images.Bored6500Line,
 
   models: [

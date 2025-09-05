@@ -8,7 +8,8 @@
     border-radius: 0.5rem;
     padding: 1rem;
     margin-bottom: 2rem;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+    border: 1px solid var(--border-color);
 }
 
 .breakdown-image {
@@ -25,8 +26,8 @@
 }
 
 .part-card {
-    background-color: #1a202c;
-    border: 1px solid #4a5568;
+    background-color: var(--card-background);
+    border: 1px solid var(--border-color);
     border-radius: 0.5rem;
     padding: 1rem;
     display: flex;
@@ -35,18 +36,18 @@
 
 .part-card-header {
     display: flex;
-    border-bottom: 1px solid #4a5568;
+    border-bottom: 1px solid var(--border-color);
     padding-bottom: 0.75rem;
     margin-bottom: 0.75rem;
 }
 
 .part-name {
-    background-color: #3182ce;
+    background-color: var(--primary-color);
     color: #fff;
     font-weight: bold;
     font-size: 1.1rem;
     padding: 0.5rem 1rem;
-    border-radius: 9999px; /* This creates the pill shape */
+    border-radius: 9999px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -83,24 +84,24 @@
 }
 
 .component-item:not(:last-child) {
-    border-bottom: 1px dashed #2d3748;
+    border-bottom: 1px dashed #dee2e6;
 }
 
 .component-part-number {
     font-weight: 600;
-    color: #63b3ed;
+    color: var(--primary-color);
     font-family: 'Courier New', Courier, monospace;
 }
 
 .component-description {
     font-size: 0.9rem;
-    color: #a0aec0;
+    color: var(--subtle-text);
     margin-top: 0.25rem;
 }
 
 .highlighted-text {
-    background-color: #f6e05e; /* yellow-400 */
-    color: #2d3748; /* gray-800 */
+    background-color: #cce5ff; /* A light blue for highlighting */
+    color: #004085;
     border-radius: 0.2rem;
     padding: 0.1rem 0.2rem;
 }
@@ -119,31 +120,30 @@
     width: 100%;
     border-collapse: collapse;
     margin-top: 1rem;
-    color: #cbd5e0;
+    color: var(--text-color);
     font-size: 0.9rem;
 }
 
 .glossary-table th,
 .glossary-table td {
-    border: 1px solid #4a5568;
+    border: 1px solid var(--border-color);
     padding: 0.6rem;
     text-align: left;
 }
 
 .glossary-table th {
-    background-color: #2d3748;
+    background-color: #f8f9fa;
     font-weight: 600;
 }
 
 .glossary-table tbody tr:nth-child(odd) {
-    background-color: #232a3b;
+    background-color: #f8f9fa;
 }
 
 .glossary-table tbody tr:hover {
-    background-color: #4a5568;
+    background-color: #e9ecef;
 }
 
-/* Responsive Table Styles */
 @media screen and (max-width: 768px) {
     .responsive-table thead {
         display: none;
@@ -151,7 +151,7 @@
     .responsive-table tr {
         display: block;
         margin-bottom: 1rem;
-        border: 1px solid #4a5568;
+        border: 1px solid var(--border-color);
         border-radius: 0.5rem;
         overflow: hidden;
     }
@@ -159,7 +159,7 @@
         display: block;
         text-align: right;
         border: none;
-        border-bottom: 1px solid #2d3748;
+        border-bottom: 1px solid #e9ecef;
         position: relative;
         padding-left: 50%;
     }
@@ -174,6 +174,6 @@
         padding-right: 0.75rem;
         font-weight: 600;
         text-align: left;
-        color: #63b3ed;
+        color: var(--primary-color);
     }
 }

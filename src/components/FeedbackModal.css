@@ -5,23 +5,22 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0, 0, 0, 0.75);
+    background-color: rgba(0, 0, 0, 0.5);
     display: flex;
     align-items: center;
     justify-content: center;
     z-index: 1000;
-    animation: fadeIn 0.3s ease-out;
 }
 
 .modal-content {
-    background-color: #2d3748;
+    background-color: var(--card-background);
     padding: 2.5rem;
     border-radius: 0.75rem;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
     width: 90%;
     max-width: 500px;
     position: relative;
-    border: 1px solid #4a5568;
+    border: 1px solid var(--border-color);
 }
 
 .modal-close-button {
@@ -31,7 +30,7 @@
     background: none;
     border: none;
     font-size: 1.75rem;
-    color: #a0aec0;
+    color: var(--subtle-text);
     cursor: pointer;
     line-height: 1;
 }
@@ -40,7 +39,7 @@
     margin-top: 0;
     margin-bottom: 1.5rem;
     text-align: center;
-    color: #fff;
+    color: var(--text-color);
 }
 
 .feedback-form .form-group {
@@ -50,7 +49,7 @@
 .feedback-form label {
     display: block;
     margin-bottom: 0.5rem;
-    color: #cbd5e0;
+    color: var(--text-color);
     font-weight: 500;
 }
 
@@ -59,9 +58,9 @@
     width: 100%;
     padding: 0.75rem;
     border-radius: 0.375rem;
-    border: 1px solid #4a5568;
-    background-color: #1a202c;
-    color: #fff;
+    border: 1px solid var(--border-color);
+    background-color: #fff;
+    color: var(--text-color);
     font-size: 1rem;
     transition: border-color 0.2s, box-shadow 0.2s;
 }
@@ -69,8 +68,8 @@
 .feedback-form input:focus,
 .feedback-form textarea:focus {
     outline: none;
-    border-color: #63b3ed;
-    box-shadow: 0 0 0 3px rgba(99, 179, 237, 0.4);
+    border-color: var(--focus-ring);
+    box-shadow: 0 0 0 3px rgba(0, 95, 158, 0.25);
 }
 
 .feedback-form textarea {
@@ -82,7 +81,7 @@
     padding: 0.8rem;
     border: none;
     border-radius: 0.375rem;
-    background-color: #3182ce;
+    background-color: var(--primary-color);
     color: #fff;
     font-size: 1.1rem;
     font-weight: bold;
@@ -91,11 +90,11 @@
 }
 
 .submit-button:hover:not(:disabled) {
-    background-color: #2c6cb5;
+    background-color: var(--primary-dark);
 }
 
 .submit-button:disabled {
-    background-color: #555;
+    background-color: #6c757d;
     cursor: not-allowed;
 }
 
@@ -106,15 +105,10 @@
     margin-bottom: 1rem;
 }
 .modal-message.success {
-    background-color: #2f855a;
-    color: #fff;
+    background-color: #d4edda;
+    color: #155724;
 }
 .modal-message.error {
-    background-color: #c53030;
-    color: #fff;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+    background-color: #f8d7da;
+    color: #721c24;
 }

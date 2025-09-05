@@ -1,24 +1,27 @@
 /* src/components/CylinderGlossary.css */
 .glossary-container {
-    background-color: #2d3748;
-    padding: 2rem;
-    border-radius: 0.75rem;
-    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+    background-color: var(--card-background);
+    padding: 2.5rem;
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05);
     max-width: 1200px;
     margin: 2rem auto;
-    color: #fff;
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
 }
 
 .glossary-title {
-    font-size: clamp(1.5rem, 4vw, 2.2rem);
+    font-size: clamp(2rem, 4vw, 2.5rem);
     font-weight: bold;
-    margin-bottom: 1.5rem;
-    color: #fff;
+    margin-bottom: 2rem;
+    color: var(--text-color);
     text-align: center;
+    border-bottom: 2px solid var(--primary-color);
+    padding-bottom: 1rem;
 }
 
 .glossary-controls {
-    margin-bottom: 2rem;
+    margin-bottom: 2.5rem;
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
@@ -33,26 +36,27 @@
 .search-bar-wrapper svg {
     position: absolute;
     left: 1rem;
-    color: #a0aec0;
-    width: 1.25rem;
-    height: 1.25rem;
+    color: var(--subtle-text);
+    width: 1.5rem;
+    height: 1.5rem;
 }
 
 .glossary-search-bar {
     width: 100%;
-    padding: 0.8rem 3rem; /* Make space for both icons */
+    padding: 1rem 1.5rem;
     font-size: 1.1rem;
-    border-radius: 0.5rem;
-    border: 2px solid #4a5568;
-    background-color: #1a202c;
-    color: #fff;
+    border-radius: 10px;
+    border: 2px solid var(--border-color);
+    background-color: var(--background-color);
+    color: var(--text-color);
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    padding-left: 3.5rem;
 }
 
 .glossary-search-bar:focus {
     outline: none;
-    border-color: #63b3ed;
-    box-shadow: 0 0 0 4px rgba(99, 179, 237, 0.4);
+    border-color: var(--focus-ring);
+    box-shadow: 0 0 0 4px rgba(0, 95, 158, 0.25);
 }
 
 .clear-search-button {
@@ -65,56 +69,57 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #a0aec0;
+    color: var(--subtle-text);
     transition: color 0.2s ease-in-out;
 }
 
 .clear-search-button:hover {
-    color: #fff;
+    color: var(--text-color);
 }
 
 .clear-search-button svg {
-    width: 1.25rem;
-    height: 1.25rem;
+    width: 1.5rem;
+    height: 1.5rem;
 }
 
 .glossary-filter-buttons {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.75rem;
+    gap: 1rem;
     justify-content: center;
 }
 
 .glossary-filter-buttons button {
-    padding: 0.6rem 1.2rem;
-    font-size: 0.9rem;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
     font-weight: 600;
     border: none;
-    border-radius: 0.375rem;
+    border-radius: 8px;
     cursor: pointer;
-    background-color: #4a5568;
-    color: #cbd5e0;
+    background-color: var(--border-color);
+    color: var(--text-color);
     transition: all 0.2s ease-in-out;
+    text-transform: uppercase;
 }
 
 .glossary-filter-buttons button:hover {
-    background-color: #6a768e;
-    color: #fff;
+    background-color: #dee2e6;
+    color: var(--text-color);
 }
 
 .glossary-filter-buttons button.active {
-    background-color: #3182ce;
+    background-color: var(--primary-color);
     color: #fff;
-    box-shadow: 0 4px 10px rgba(49, 130, 206, 0.3);
+    box-shadow: 0 4px 10px rgba(0, 95, 158, 0.2);
     transform: translateY(-2px);
 }
 
 .cylinder-section {
-    margin-bottom: 1.5rem;
-    border: 1px solid #4a5568;
-    border-radius: 0.75rem;
-    background-color: #1a202c;
-    overflow: hidden; /* Important for animation */
+    margin-bottom: 2rem;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    background-color: var(--background-color);
+    overflow: hidden;
 }
 
 .cylinder-section-header {
@@ -122,37 +127,39 @@
     align-items: center;
     gap: 1.5rem;
     width: 100%;
-    padding: 1rem 1.5rem;
-    background-color: #2d3748;
+    padding: 1.5rem;
+    background-color: var(--card-background);
     border: none;
     cursor: pointer;
     text-align: left;
-    color: #fff;
+    color: var(--text-color);
     transition: background-color 0.2s ease-in-out;
 }
 
 .cylinder-section-header:hover {
-    background-color: #4a5568;
+    background-color: #f8f9fa;
 }
 
 .header-image {
-    width: 100px;
+    width: 120px;
     height: auto;
-    border-radius: 0.5rem;
+    border-radius: 8px;
     background-color: #fff;
-    padding: 0.25rem;
+    padding: 0.5rem;
+    border: 1px solid var(--border-color);
 }
 
 .cylinder-section-title {
     font-size: 1.5rem;
     font-weight: 700;
-    color: #e2e8f0;
+    color: var(--text-color);
     margin: 0;
-    flex-grow: 1; /* Pushes the toggle icon to the right */
+    flex-grow: 1;
 }
 
 .toggle-icon {
-    font-size: 1.2rem;
+    font-size: 1.5rem;
+    color: var(--primary-color);
     transition: transform 0.3s ease-in-out;
 }
 
@@ -161,46 +168,46 @@
 }
 
 .cylinder-section-parts {
-    padding: 1.5rem;
-    border-top: 1px solid #4a5568;
-    animation: fadeIn 0.5s ease-out;
+    padding: 2rem;
+    border-top: 1px solid var(--border-color);
 }
 
 .no-results-message {
     text-align: center;
-    font-size: 1.1rem;
-    color: #a0aec0;
-    padding: 2rem;
-    border: 2px dashed #4a5568;
-    border-radius: 0.5rem;
+    font-size: 1.2rem;
+    color: var(--subtle-text);
+    padding: 3rem;
+    border: 2px dashed var(--border-color);
+    border-radius: 12px;
 }
 
 .glossary-initial-view {
     text-align: center;
-    padding: 3rem 1rem;
-    border: 2px dashed #4a5568;
-    border-radius: 0.75rem;
-    color: #a0aec0;
+    padding: 4rem 1.5rem;
+    border: 2px dashed var(--border-color);
+    border-radius: 12px;
+    color: var(--subtle-text);
 }
 
 .glossary-initial-view svg {
-    width: 3.5rem;
-    height: 3.5rem;
-    margin-bottom: 1rem;
-    color: #63b3ed;
+    width: 4rem;
+    height: 4rem;
+    margin-bottom: 1.5rem;
+    color: var(--primary-color);
 }
 
 .glossary-initial-view h3 {
-    font-size: 1.5rem;
-    color: #e2e8f0;
+    font-size: 1.75rem;
+    color: var(--text-color);
     margin-bottom: 0.5rem;
 }
 
-@keyframes fadeIn {
-    from {
-        opacity: 0;
+@media (max-width: 600px) {
+    .glossary-filter-buttons {
+        gap: 0.75rem;
     }
-    to {
-        opacity: 1;
+    .glossary-filter-buttons button {
+        padding: 0.6rem 1rem;
+        font-size: 0.9em;
     }
 }

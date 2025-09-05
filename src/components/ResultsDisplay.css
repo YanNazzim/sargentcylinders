@@ -1,29 +1,27 @@
 /* src/components/ResultsDisplay.css */
 .results-display-container {
     width: 100%;
-    margin-top: 2rem; 
-    animation: fadeIn 0.7s ease-out;
+    margin-top: 2rem;
 }
 
 .results-display-heading {
-    font-size: clamp(1.1rem, 3vw, 1.4rem); 
+    font-size: clamp(1.1rem, 3vw, 1.4rem);
     font-weight: 700;
-    color: #fff;
-    margin-bottom: 1rem; 
-    border-bottom: 2px solid #3182ce;
-    padding-bottom: 0.75rem; 
+    color: var(--text-color);
+    margin-bottom: 1rem;
+    border-bottom: 2px solid var(--primary-color);
+    padding-bottom: 0.75rem;
     text-align: center;
 }
 
 .results-display-empty-message {
-    color: #a0a0a0;
+    color: var(--subtle-text);
     text-align: center;
     padding: 2rem;
-    border: 1px dashed #4a5568;
+    border: 1px dashed var(--border-color);
     border-radius: 0.5rem;
     font-style: italic;
-    background-color: #1a202c; 
-    animation: fadeIn 0.5s ease-out;
+    background-color: #f8f9fa;
 }
 
 .results-display-list {
@@ -33,29 +31,29 @@
 }
 
 .results-display-item {
-    background-color: #2d3748;
+    background-color: #f8f9fa;
     padding: 1.25rem;
     border-radius: 0.6rem;
-    border: 1px solid #4a5568;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+    border: 1px solid var(--border-color);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
     transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
 }
 
 .results-display-item:hover {
     transform: translateY(-3px);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
 }
 
 .results-display-item-part-number {
     font-size: clamp(1rem, 2.5vw, 1.125rem);
     font-weight: 600;
-    color: #63b3ed;
+    color: var(--primary-color);
     margin-bottom: 0.5rem;
 }
 
 .results-display-item-quantity {
     font-style: italic;
-    color: #38a169;
+    color: #28a745;
     font-weight: bold;
     margin-left: 0.5rem;
 }
@@ -63,12 +61,12 @@
 .results-display-item-description {
     font-size: clamp(0.9rem, 2vw, 1rem);
     font-weight: 400;
-    color: #cbd5e0;
+    color: var(--text-color);
     margin-bottom: 0.5rem;
 }
 
 .results-display-item-notes {
-    color: #a0a0a0;
+    color: var(--subtle-text);
     margin-top: 0.5rem;
     font-size: clamp(0.8rem, 2vw, 0.875rem);
     line-height: 1.5;

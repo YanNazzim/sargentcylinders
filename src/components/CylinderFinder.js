@@ -7,7 +7,7 @@ import PrefixSelector from "./PrefixSelector";
 import CategorizedPrefixSelector from "./CategorizedPrefixSelector";
 import "./CylinderFinder.css";
 import { images } from "../images/images";
-import { SearchIcon, ClearIcon, ExpandIcon } from "./Icons";
+import { SearchIcon, ClearIcon } from "./Icons";
 
 function CylinderFinder() {
   const [selectedCategory, setSelectedCategory] = useState("");
@@ -563,20 +563,24 @@ function CylinderFinder() {
                   value={selectedCategory}
                   onChange={handleCategoryChange}
                 />
-                <HardwareSelector
-                  label="Series"
-                  options={groupedSeriesOptions}
-                  value={selectedSeriesName}
-                  onChange={handleSeriesChange}
-                  disabled={!selectedCategory}
-                />
-                <HardwareSelector
-                  label="Model"
-                  options={groupedModelOptions}
-                  value={selectedModel}
-                  onChange={handleModelChange}
-                  disabled={!selectedSeriesName}
-                />
+                {selectedCategory && (
+                  <HardwareSelector
+                    label="Series"
+                    options={groupedSeriesOptions}
+                    value={selectedSeriesName}
+                    onChange={handleSeriesChange}
+                    disabled={!selectedCategory}
+                  />
+                )}
+                {selectedSeriesName && (
+                  <HardwareSelector
+                    label="Model"
+                    options={groupedModelOptions}
+                    value={selectedModel}
+                    onChange={handleModelChange}
+                    disabled={!selectedSeriesName}
+                  />
+                )}
               </div>
               <div className="wizard-controls">
                 <button
@@ -671,29 +675,22 @@ function CylinderFinder() {
             <div ref={resultsRef} className="wizard-step active">
               <div className="selected-hardware-note">
                 <div className="selected-hardware-image-wrapper">
-                  <img
-                    src={activeModelData?.imageUrl || images.sargentlogo}
-                    alt={activeModelData?.modelNumber}
-                    className="search-result-image"
-                  />
-                  <button
-                    className="open-image-button"
-                    onClick={() =>
-                      window.open(activeModelData?.imageUrl, "_blank")
-                    }
-                    title="Open image in new tab"
-                  >
-                    <ExpandIcon />
-                  </button>
-
+                  <a href={activeModelData?.imageUrl} target="_blank" rel="noopener noreferrer">
+                    <img
+                      src={activeModelData?.imageUrl || images.sargentlogo}
+                      alt={activeModelData?.modelNumber}
+                      className="search-result-image"
+                    />
+                  </a>
                 </div>
-                <p>
-                  Selected Device: <strong>{selectedModel}</strong>
-                  <br />
+                <div className="selected-hardware-text">
+                  <p>
+                    Selected Device: <strong>{selectedModel}</strong>
+                  </p>
                   <span className="selected-hardware-desc">
                     {activeModelData?.description}
                   </span>
-                </p>
+                </div>
               </div>
               <ResultsDisplay cylinders={finalCylinders} />
               <div className="wizard-controls">
@@ -711,7 +708,6 @@ function CylinderFinder() {
           );
 
         default:
-          // This case should ideally not be reached if currentStep is always one of the defined states.
           return null;
       }
     }
@@ -719,7 +715,7 @@ function CylinderFinder() {
     return (
       <div ref={searchResultsRef} className="search-results-container">
         {showMultipleMatchesWarning && (
-          <p className="warning-message">
+          <p className="multiple-matches-warning">
             Multiple matches found. Please select one.
           </p>
         )}
@@ -736,7 +732,6 @@ function CylinderFinder() {
             />
             <div className="search-result-info">
               <p className="search-result-model">
-                {result.category} &gt; {result.seriesName} &gt;{" "}
                 <strong>{result.modelNumber}</strong>
               </p>
               <p className="search-result-desc">{result.description}</p>

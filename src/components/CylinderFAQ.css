@@ -1,64 +1,68 @@
 /* src/components/CylinderFAQ.css */
 .faq-container {
-    background-color: #2d3748;
-    padding: 2rem;
-    border-radius: 0.75rem;
-    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
-    max-width: 900px;
+    background-color: var(--card-background);
+    padding: 2.5rem;
+    border-radius: 12px;
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.05);
+    max-width: 1000px;
     margin: 2rem auto;
-    color: #fff;
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
 }
 
 .faq-title {
-    font-size: clamp(1.5rem, 4vw, 2.2rem);
+    font-size: clamp(2rem, 4vw, 2.5rem);
     font-weight: bold;
-    margin-bottom: 0.5rem;
+    margin-bottom: 1.5rem;
     text-align: center;
+    border-bottom: 2px solid var(--primary-color);
+    padding-bottom: 1rem;
 }
 
 .faq-intro {
-    font-size: clamp(0.9rem, 2.5vw, 1.05rem);
-    color: #a0a0a0;
-    margin-bottom: 2rem;
+    font-size: clamp(1rem, 2.5vw, 1.15rem);
+    color: var(--subtle-text);
+    margin-bottom: 2.5rem;
     text-align: center;
+    line-height: 1.5;
 }
 
-/* --- NEW STYLES for search bar wrapper and button --- */
 .search-bar-wrapper {
     position: relative;
     display: flex;
     align-items: center;
-    margin-bottom: 1.5rem; /* Add margin below the search bar */
+    margin-bottom: 2rem;
 }
 
 .search-bar-wrapper svg {
     position: absolute;
-    left: 1rem;
-    color: #a0aec0;
-    width: 1.25rem;
-    height: 1.25rem;
+    left: 1.25rem;
+    color: var(--subtle-text);
+    width: 1.5rem;
+    height: 1.5rem;
 }
 
 .faq-search-input {
     width: 100%;
-    padding: 0.8rem 3rem; /* Make space for both icons */
+    padding: 1rem 1.5rem;
     font-size: 1.1rem;
-    border-radius: 0.5rem;
-    border: 2px solid #4a5568;
-    background-color: #1a202c;
-    color: #fff;
+    border-radius: 10px;
+    border: 2px solid var(--border-color);
+    background-color: var(--background-color);
+    color: var(--text-color);
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    padding-left: 3.5rem;
 }
 
 .faq-search-input:focus {
     outline: none;
-    border-color: #63b3ed;
-    box-shadow: 0 0 0 4px rgba(99, 179, 237, 0.4);
+    border-color: var(--focus-ring);
+    box-shadow: 0 0 0 4px rgba(0, 95, 158, 0.25);
 }
 
 .clear-search-button {
     position: absolute;
-    right: 1rem;
+    right: 1.25rem;
     background: none;
     border: none;
     cursor: pointer;
@@ -66,22 +70,23 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #a0aec0;
+    color: var(--subtle-text);
     transition: color 0.2s ease-in-out;
 }
 
 .clear-search-button:hover {
-    color: #fff;
+    color: var(--text-color);
 }
 
 .clear-search-button svg {
-    width: 1.25rem;
-    height: 1.25rem;
+    width: 1.5rem;
+    height: 1.5rem;
 }
 
 .faq-item {
-    border-bottom: 1px solid #4a5568;
-    margin-bottom: 1rem;
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
 }
 
 .faq-item:last-child {
@@ -93,46 +98,62 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1.25rem 0;
+    padding: 1.5rem 0;
     background: none;
     border: none;
-    color: #e2e8f0;
-    font-size: 1.15rem;
-    font-weight: 500;
+    color: var(--text-color);
+    font-size: 1.2rem;
+    font-weight: 600;
     text-align: left;
     cursor: pointer;
+    transition: color 0.2s;
+}
+
+.faq-question:hover {
+    color: var(--primary-color);
 }
 
 .faq-toggle {
-    font-size: 1.5rem;
-    color: #63b3ed;
-    transition: transform 0.2s ease-in-out;
+    font-size: 2rem;
+    color: var(--primary-color);
+    transition: transform 0.3s ease-in-out;
+    line-height: 1;
+}
+
+.faq-item.open .faq-toggle {
+    transform: rotate(180deg);
 }
 
 .faq-answer {
-    padding-bottom: 1.5rem;
-    color: #cbd5e0;
+    padding-bottom: 0.5rem;
+    color: var(--text-color);
     line-height: 1.7;
-    animation: fadeIn 0.4s ease-out;
 }
 
 .faq-answer p {
     margin-top: 0;
+    font-size: 1.05rem;
 }
 
 .faq-answer ul {
-    padding-left: 20px;
+    padding-left: 1.5rem;
+    margin-top: 0.5rem;
+}
+
+.faq-answer li {
+    margin-bottom: 0.5rem;
 }
 
 .video-container {
     position: relative;
-    padding-bottom: 56.25%; /* 16:9 aspect ratio */
+    padding-bottom: 56.25%;
     height: 0;
     overflow: hidden;
     max-width: 100%;
     background: #000;
-    border-radius: 0.5rem;
-    margin-top: 1rem;
+    border-radius: 8px;
+    margin-top: 1.5rem;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 .video-container iframe {
@@ -143,13 +164,14 @@
     height: 100%;
 }
 
-/* --- NEW STYLES for image container --- */
 .image-container {
     margin-top: 1.5rem;
     text-align: center;
     background-color: #fff;
-    padding: 1rem;
-    border-radius: 0.5rem;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border: 1px solid var(--border-color);
 }
 
 .faq-image {
@@ -159,32 +181,36 @@
     margin: 0 auto;
 }
 
-/* --- NEW Keyway Table Styles (unchanged from original) --- */
 .keyway-table-container {
     margin-top: 1.5rem;
     overflow-x: auto;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
 }
 
 .keyway-table {
     width: 100%;
     border-collapse: separate;
     border-spacing: 0;
-    border: 1px solid #4a5568;
-    border-radius: 0.5rem;
-    overflow: hidden; /* Ensures border-radius is respected */
+    overflow: hidden;
+    color: var(--text-color);
+    font-size: 1rem;
 }
 
 .keyway-table th,
 .keyway-table td {
-    padding: 0.8rem 1rem;
+    padding: 1rem 1.25rem;
     text-align: left;
-    border-bottom: 1px solid #4a5568;
+    border-bottom: 1px solid var(--border-color);
+    vertical-align: top;
 }
 
 .keyway-table th {
-    background-color: #1a202c;
-    font-weight: 600;
-    color: #e2e8f0;
+    background-color: #f8f9fa;
+    font-weight: 700;
+    color: var(--text-color);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
 }
 
 .keyway-table tbody tr:last-child td {
@@ -192,13 +218,12 @@
 }
 
 .keyway-table tbody tr:hover {
-    background-color: #354155;
+    background-color: #f1f3f5;
 }
 
 .keyway-table td[data-label="System"] {
     font-weight: bold;
-    color: #63b3ed;
-    vertical-align: middle;
+    color: var(--primary-color);
 }
 
 @media screen and (max-width: 600px) {
@@ -207,88 +232,29 @@
     }
     .keyway-table tr {
         display: block;
-        margin-bottom: 1rem;
+        margin-bottom: 1.5rem;
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        overflow: hidden;
     }
     .keyway-table td {
         display: block;
         text-align: right;
-        border-bottom: 1px dotted #4a5568;
+        border-bottom: 1px dotted var(--border-color);
+        position: relative;
+        padding-left: 50%;
     }
-    .keyway-table td[data-label]:before {
+    .keyway-table td:last-child {
+        border-bottom: 0;
+    }
+    .keyway-table td::before {
         content: attr(data-label);
-        float: left;
-        font-weight: bold;
-        color: #a0aec0;
+        position: absolute;
+        left: 1.25rem;
+        width: calc(50% - 1.25rem);
+        padding-right: 0.75rem;
+        font-weight: 600;
+        text-align: left;
+        color: var(--primary-color);
     }
-    .keyway-table td[rowspan] {
-        display: block;
-    }
-}
-
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(-10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-/* --- NEW STYLES for search bar wrapper and button --- */
-.search-bar-wrapper {
-    position: relative;
-    display: flex;
-    align-items: center;
-    margin-bottom: 1.5rem; /* Add margin below the search bar */
-}
-
-.search-bar-wrapper svg {
-    position: absolute;
-    left: 1rem;
-    color: #a0aec0;
-    width: 1.25rem;
-    height: 1.25rem;
-}
-
-.faq-search-input {
-    width: 100%;
-    padding: 0.8rem 3rem; /* Make space for both icons */
-    font-size: 1.1rem;
-    border-radius: 0.5rem;
-    border: 2px solid #4a5568;
-    background-color: #1a202c;
-    color: #fff;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-.faq-search-input:focus {
-    outline: none;
-    border-color: #63b3ed;
-    box-shadow: 0 0 0 4px rgba(99, 179, 237, 0.4);
-}
-
-.clear-search-button {
-    position: absolute;
-    right: 1.8rem;
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0.5rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #a0aec0;
-    transition: color 0.2s ease-in-out;
-}
-
-.clear-search-button:hover {
-    color: #fff;
-}
-
-.clear-search-button svg {
-    width: 1.25rem;
-    height: 1.25rem;
 }

@@ -6,93 +6,35 @@
     gap: 1rem;
 }
 
-/* --- NEW STYLES for Animated Search Bar --- */
-
-/* This wrapper will hold the animation */
 .prefix-search-wrapper {
     position: relative;
-    padding: 3px;
-    border-radius: 0.5rem;
-    overflow: hidden;
     grid-column: 1 / -1;
     margin-bottom: 1rem;
-    /* NEW: Use a linear gradient for the background image */
-    background: linear-gradient(to right, #63b3ed, #805ad5, #4fd1c5, #63b3ed);
-    background-size: 200% 200%;
-    animation: moveGradient 4s linear infinite;
 }
 
-@keyframes moveGradient {
-    0% {
-        background-position: 0% 50%;
-    }
-    50% {
-        background-position: 100% 50%;
-    }
-    100% {
-        background-position: 0% 50%;
-    }
-}
-
-/* The pseudo-element for the rotating gradient */
-.prefix-search-wrapper::before {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 200%;
-    height: 200%;
-    background: conic-gradient(
-        from 0deg,
-        #63b3ed,
-        #805ad5,
-        #4fd1c5,
-        #63b3ed
-    );
-    animation: rotateGradient 4s linear infinite;
-    pointer-events: none;
-}
-
-/* The rotation animation */
-@keyframes rotateGradient {
-    from {
-        transform: translate(-50%, -50%) rotate(0deg);
-    }
-    to {
-        transform: translate(-50%, -50%) rotate(360deg);
-    }
-}
-
-/* MODIFIED original search bar style */
 .prefix-search-bar {
     width: 100%;
     padding: 0.75rem;
     border-radius: 0.375rem;
-    border: none; /* Remove the original border */
-    background-color: #1a202c;
-    color: #fff;
+    border: 1px solid var(--border-color);
+    background-color: var(--card-background);
+    color: var(--text-color);
     font-size: 1rem;
-    position: relative;
-    z-index: 2;
 }
 
 .prefix-search-bar:focus {
     outline: none;
+    border-color: var(--focus-ring);
+    box-shadow: 0 0 0 3px rgba(0, 95, 158, 0.25);
 }
-
 
 .category-group {
-    margin-bottom: 0; /* Gap is now controlled by the grid */
-    border: 1px solid #4a5568;
+    margin-bottom: 0;
+    border: 1px solid var(--border-color);
     border-radius: 0.375rem;
-    break-inside: avoid; /* Prevents categories from breaking across columns */
+    break-inside: avoid;
     display: flex;
     flex-direction: column;
-}
-
-
-.category-group.open:hover .category-content {
-    overflow: visible;
 }
 
 .category-header {
@@ -101,18 +43,18 @@
     justify-content: space-between;
     align-items: center;
     padding: 0.8rem 1rem;
-    background-color: #2d3748;
-    color: #fff;
+    background-color: #e9ecef;
+    color: var(--text-color);
     font-weight: 600;
     border: none;
     cursor: pointer;
     transition: background-color 0.2s ease-in-out;
-    min-height: 4.5rem; /* This ensures all buttons have the same minimum height */
-    text-align: left; /* Aligns text to the left for a cleaner look */
+    min-height: 4.5rem;
+    text-align: left;
 }
 
 .category-header:hover {
-    background-color: #4a5568;
+    background-color: #dee2e6;
 }
 
 .category-title {
@@ -133,19 +75,19 @@
     overflow: hidden;
     transition: max-height 0.4s ease-in-out;
     padding: 0 1rem;
-    background-color: #1a202c;
+    background-color: var(--card-background);
 }
 
 .category-group.open .category-content {
     max-height: 500px;
     overflow-y: auto;
     padding: 1rem;
-    border-top: 1px solid #4a5568;
+    border-top: 1px solid var(--border-color);
 }
 
 .prefix-list {
     display: grid;
-    grid-template-columns: 1fr; /* Default to a single column inside a category */
+    grid-template-columns: 1fr;
     gap: 0.75rem;
 }
 
@@ -161,14 +103,12 @@
 }
 
 .prefix-item-label:hover {
-    background-color: #4a5568;
+    background-color: #f8f9fa;
 }
 
 .prefix-item-label.selected {
-    background-color: #3182ce;
-    border-color: #63b3ed;
-    transform: scale(1.05);
-    box-shadow: 0 0 15px rgba(49, 130, 206, 0.5);
+    background-color: var(--primary-color);
+    border-color: var(--primary-dark);
     color: #fff;
 }
 
@@ -179,12 +119,11 @@
     left: 50%;
     transform: translateX(-50%) scale(0.9);
     transform-origin: bottom;
-    background-color: #1a202c;
+    background-color: var(--text-color);
     color: #fff;
     padding: 0.5rem 0.75rem;
     border-radius: 0.375rem;
-    border: 1px solid #63b3ed;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
     z-index: 100;
     white-space: pre-wrap;
     width: max-content;
@@ -204,8 +143,8 @@
     height: 1.25rem;
     width: 1.25rem;
     border-radius: 0.25rem;
-    background-color: #4a5568;
-    border: 1px solid #718096;
+    background-color: #ced4da;
+    border: 1px solid #adb5bd;
     appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;
@@ -217,12 +156,12 @@
 }
 
 .prefix-item-checkbox:checked {
-    background-color: #3182ce;
-    border-color: #3182ce;
+    background-color: var(--primary-color);
+    border-color: var(--primary-dark);
 }
 
 .prefix-item-checkbox:focus {
-    box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.5);
+    box-shadow: 0 0 0 3px rgba(0, 95, 158, 0.25);
 }
 
 .prefix-item-checkbox::after {
@@ -245,10 +184,30 @@
 
 .prefix-item-text {
     margin-left: 0.75rem;
-    color: #cbd5e0;
+    color: var(--text-color);
 }
 
 .prefix-item-label.selected .prefix-item-text {
     color: #fff;
     font-weight: bold;
+}
+
+/* Mobile adjustments */
+@media (max-width: 600px) {
+    .categorized-prefix-selector-container {
+        grid-template-columns: 1fr; /* Stack categories in a single column */
+    }
+
+    .category-header {
+        padding: 0.6rem 0.8rem;
+        min-height: auto; /* Allow header to be more compact */
+    }
+
+    .category-title {
+        font-size: 1rem; /* Reduce title font size */
+    }
+
+    .prefix-item-text {
+        font-size: 0.9rem; /* Make the option text smaller */
+    }
 }
