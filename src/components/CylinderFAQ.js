@@ -70,6 +70,7 @@ const allFaqs = [
                                 <th>Size #</th>
                                 <th>Cylinder Length</th>
                                 <th>Order As:</th>
+                                <th>Key systems available</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -77,51 +78,61 @@ const allFaqs = [
                                 <td data-label="Size #">41</td>
                                 <td data-label="Cylinder Length">1-1/8" (29mm)</td>
                                 <td data-label="Order As:">41 x Finish x Keying Details</td>
+                                <td data-label="Key systems available">Conventional</td>
                             </tr>
                             <tr>
                                 <td data-label="Size #">42</td>
                                 <td data-label="Cylinder Length">1-1/4" (32mm)</td>
                                 <td data-label="Order As:">42 x Finish x Keying Details</td>
+                                <td data-label="Key systems available">Conventional<br/>LFIC (60-, 63-, 64-)</td>
                             </tr>
                             <tr>
                                 <td data-label="Size #">43</td>
                                 <td data-label="Cylinder Length">1-3/8" (35mm)</td>
                                 <td data-label="Order As:">43 x Finish x Keying Details</td>
+                                <td data-label="Key systems available">Conventional<br/>SFIC (70-, 72-, 73-)<br/>LFIC (60-, 63-, 64-)</td>
                             </tr>
                             <tr>
                                 <td data-label="Size #">44</td>
                                 <td data-label="Cylinder Length">1-1/2" (38mm)</td>
                                 <td data-label="Order As:">44 x Finish x Keying Details</td>
+                                <td data-label="Key systems available">Conventional<br/>LFIC (60-, 63-, 64-)</td>
                             </tr>
                             <tr>
                                 <td data-label="Size #">46</td>
                                 <td data-label="Cylinder Length">1-3/4" (44mm)</td>
                                 <td data-label="Order As:">46 x Finish x Keying Details</td>
+                                <td data-label="Key systems available">Conventional<br/>SFIC (70-, 72-, 73-)<br/>LFIC (60-, 63-, 64-)</td>
                             </tr>
                             <tr>
                                 <td data-label="Size #">48</td>
                                 <td data-label="Cylinder Length">2" (51mm)</td>
                                 <td data-label="Order As:">48 x Finish x Keying Details</td>
+                                <td data-label="Key systems available">Conventional</td>
                             </tr>
                             <tr>
                                 <td data-label="Size #">50</td>
                                 <td data-label="Cylinder Length">2-1/4" (57mm)</td>
                                 <td data-label="Order As:">50 x Finish x Keying Details</td>
+                                <td data-label="Key systems available">Conventional</td>
                             </tr>
                             <tr>
                                 <td data-label="Size #">52</td>
                                 <td data-label="Cylinder Length">2-1/2" (64mm)</td>
                                 <td data-label="Order As:">52 x Finish x Keying Details</td>
+                                <td data-label="Key systems available">Conventional</td>
                             </tr>
                             <tr>
                                 <td data-label="Size #">54</td>
                                 <td data-label="Cylinder Length">2-3/4" (70mm)</td>
                                 <td data-label="Order As:">54 x Finish x Keying Details</td>
+                                <td data-label="Key systems available">Conventional</td>
                             </tr>
                             <tr>
                                 <td data-label="Size #">56</td>
                                 <td data-label="Cylinder Length">3" (76mm)</td>
                                 <td data-label="Order As:">56 x Finish x Keying Details</td>
+                                <td data-label="Key systems available">Conventional</td>
                             </tr>
                         </tbody>
                     </table>
@@ -149,6 +160,8 @@ const allFaqs = [
                                 <td data-label="Size #">34</td>
                                 <td data-label="Cylinder Length">1-1/8" (29mm)</td>
                                 <td data-label="Order As:">34 x Finish x Keying Details</td>
+                                <td data-label="Key systems available">Conventional<br/>SFIC (70-, 72-, 73-)<br/>LFIC (60-, 63-, 64-)</td>
+
                             </tr>
                         </tbody>
                     </table>
@@ -205,7 +218,7 @@ const allFaqs = [
                         </thead>
                         <tbody>
                             <tr>
-                                <td data-label="Family">Conventional & LFIC</td>
+                                <td data-label="Family">Conventional & LFIC (60-, 63-, 64-)</td>
                                 <td data-label="Keyways">
                                     <p><strong>L Family:</strong> LA, LB, LC, LE, LF, LG, LJ, LK, LL, LD, LH, LM, LN, LDH, LDM, LHM</p>
                                     <p><strong>R Family:</strong> RA, RB, RC, RE, RF, RG, RJ, RK, RL, RD, RH, RM, RN, RDH, RDM, RHM</p>
@@ -352,7 +365,7 @@ const allFaqs = [
     },
     {
         question: "What is the recommended maintenance for Keso F1 cylinders?",
-        answer: "SARGENT recommends performing preventative maintenance on Keso F1 cylinders on a regular basis. At a minimum, cylinders should be lubricated once a year, but those with high usage or exposure to dirt and extreme weather should be lubricate every sixty days. Only a dry film lubricant should be used; avoid oil, grease, or similar substances."
+        answer: "SARGENT recommends performing preventative maintenance on Keso F1 cylinders on a regular basis. At a minimum, cylinders should be lubricate once a year, but those with high usage or exposure to dirt and extreme weather should be lubricate every sixty days. Only a dry film lubricant should be used; avoid oil, grease, or similar substances."
     },
     {
         question: "Are there any special installation instructions for LFIC cores?",

@@ -238,6 +238,43 @@ function CylinderFinder() {
     return lengths[partNumber.replace("#", "")] || "";
   };
 
+  const allPrefixes = useMemo(() => {
+    const modelPrefixes = activeModelData?.prefixes?.filter(
+      (p) => !p.isDeviceSpecific
+    ) || [];
+    const devicePrefixes = activeModelData?.prefixes?.filter(
+      (p) => p.isDeviceSpecific && p.id !== "Inside Cyl"
+    ) || [];
+    const cylinderPrefixes = cylinderPrefixCategories.flatMap(
+      (category) => category.prefixes
+    );
+  
+    return [...modelPrefixes, ...devicePrefixes, ...cylinderPrefixes];
+  }, [activeModelData]);
+
+  const getChosenPrefixes = () => {
+    const chosenPrefixes = [];
+    if (selectedCylinderPrefix) {
+      const prefix = allPrefixes.find((p) => p.id === selectedCylinderPrefix);
+      if (prefix) {
+        chosenPrefixes.push({
+          id: prefix.id,
+          description: prefix.description,
+        });
+      }
+    }
+    selectedDevicePrefixes.forEach((id) => {
+      const prefix = allPrefixes.find((p) => p.id === id);
+      if (prefix) {
+        chosenPrefixes.push({
+          id: prefix.id,
+          description: prefix.description,
+        });
+      }
+    });
+    return chosenPrefixes;
+  };
+  
   const finalCylinders = useMemo(() => {
     if (!activeModelData) return [];
     const lficPrefixes = [
@@ -510,23 +547,6 @@ function CylinderFinder() {
     }
   };
 
-  const handleBack = useCallback(() => {
-    if (currentStep === "deviceOptions") {
-      setCurrentStep("deviceSelection");
-    } else if (currentStep === "cylinderOptions") {
-      const hasDeviceOptions =
-        deviceTiedPrefixes.length > 0 && selectedCategory === "Exit Devices";
-      setCurrentStep(hasDeviceOptions ? "deviceOptions" : "deviceSelection");
-    } else if (currentStep === "results") {
-      const hasCylinderOptions =
-        activeModelData?.baseCylinder ||
-        activeModelData?.prefixes.some((p) => p.addsCylinder);
-      setCurrentStep(
-        hasCylinderOptions ? "cylinderOptions" : "deviceSelection"
-      );
-    }
-  }, [currentStep, deviceTiedPrefixes, selectedCategory, activeModelData]);
-
   const handleReset = () => {
     setSelectedCategory("");
     setSelectedSeriesName("");
@@ -538,12 +558,55 @@ function CylinderFinder() {
     setShowMultipleMatchesWarning(false);
     setCurrentStep("deviceSelection");
   };
+  
+  const handleBack = useCallback(() => {
+    if (currentStep === "results") {
+      const hasCylinderOptions =
+        activeModelData?.baseCylinder ||
+        activeModelData?.prefixes.some((p) => p.addsCylinder);
+      if (hasCylinderOptions) {
+        setCurrentStep("cylinderOptions");
+      } else {
+        handleReset();
+      }
+    } else if (currentStep === "cylinderOptions") {
+      const hasDeviceOptions =
+        deviceTiedPrefixes.length > 0 && selectedCategory === "Exit Devices";
+      if (hasDeviceOptions) {
+        setCurrentStep("deviceOptions");
+      } else {
+        handleReset();
+      }
+    } else if (currentStep === "deviceOptions") {
+      handleReset();
+    }
+  }, [currentStep, deviceTiedPrefixes, selectedCategory, activeModelData]);
+  
 
   const handleFindCylinder = () => {
     setCurrentStep("results");
   };
 
   const isInitialState = !globalSearchTerm;
+  const chosenPrefixes = getChosenPrefixes();
+
+  // Create filtered categories for the cylinder prefix selector
+  const availableCylinderPrefixCategories = useMemo(() => {
+    return cylinderPrefixCategories.map((category) => ({
+      ...category,
+      prefixes: category.prefixes.filter((p) => 
+        !activeModelData?.excludedPrefixes?.some(excludedPrefix => 
+          p.id.startsWith(excludedPrefix)
+        )
+      ),
+    }));
+  }, [activeModelData]);
+
+  // Check if there are any available cylinder prefixes to display
+  const hasAvailableCylinderPrefixes = useMemo(() => {
+    return availableCylinderPrefixCategories.some(c => c.prefixes.length > 0);
+  }, [availableCylinderPrefixCategories]);
+
 
   const renderStep = () => {
     if (isInitialState) {
@@ -633,23 +696,22 @@ function CylinderFinder() {
         case "cylinderOptions":
           return (
             <div ref={cylinderOptionsRef} className="wizard-step active">
-              <div className="prefix-section">
-                <h3 className="prefix-section-title">
-                  Step 3 of 3: Select Cylinder Options
-                </h3>
-                <CategorizedPrefixSelector
-                  categories={cylinderPrefixCategories.map((category) => ({
-                    ...category,
-                    prefixes: category.prefixes.filter(
-                      (p) => !activeModelData?.excludedPrefixes?.includes(p.id)
-                    ),
-                  }))}
-                  selectedPrefixes={
-                    selectedCylinderPrefix ? [selectedCylinderPrefix] : []
-                  }
-                  onChange={handleCylinderPrefixChange}
-                />
-              </div>
+              {hasAvailableCylinderPrefixes ? (
+                <div className="prefix-section">
+                  <h3 className="prefix-section-title">
+                    Step 3 of 3: Select Cylinder Options
+                  </h3>
+                  <CategorizedPrefixSelector
+                    categories={availableCylinderPrefixCategories}
+                    selectedPrefixes={
+                      selectedCylinderPrefix ? [selectedCylinderPrefix] : []
+                    }
+                    onChange={handleCylinderPrefixChange}
+                  />
+                </div>
+              ) : (
+                <div className="no-options-message">No cylinder options available for this device.</div>
+              )}
               <div className="wizard-controls">
                 <button onClick={handleBack} className="wizard-back-button">
                   Back
@@ -692,6 +754,19 @@ function CylinderFinder() {
                   </span>
                 </div>
               </div>
+              {chosenPrefixes.length > 0 && (
+                <div className="chosen-prefixes-container">
+                  <h4 className="chosen-prefixes-title">Prefixes Chosen:</h4>
+                  <ul className="chosen-prefixes-list">
+                    {chosenPrefixes.map((prefix) => (
+                      <li key={prefix.id} className="chosen-prefix-item">
+                        <span className="chosen-prefix-id">{prefix.id}</span>
+                        <span className="chosen-prefix-description">{prefix.description}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
               <ResultsDisplay cylinders={finalCylinders} />
               <div className="wizard-controls">
                 <button onClick={handleBack} className="wizard-back-button">

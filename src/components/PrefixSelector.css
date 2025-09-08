@@ -45,20 +45,21 @@
 .prefix-selector-option-label::after {
     content: attr(data-tooltip);
     position: absolute;
-    bottom: 100%;
-    left: 50%;
-    transform: translateX(-50%) scale(0.9);
-    transform-origin: bottom;
+    /* Move tooltip to the right side of the element */
+    left: 100%;
+    top: 50%;
+    /* Adjust position and scale on hover */
+    transform: translateY(-50%) translateX(10px) scale(0.9);
+    transform-origin: left center;
     background-color: var(--text-color);
-    color: #fff;
+    color: var(--background-color);
     padding: 0.5rem 0.75rem;
     border-radius: 0.375rem;
     box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-    z-index: 100;
+    z-index: 101;
     white-space: pre-wrap;
     width: max-content;
     max-width: 300px;
-    margin-bottom: 8px;
     pointer-events: none;
     opacity: 0;
     transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
@@ -66,7 +67,7 @@
 
 .prefix-selector-option-label:hover::after {
     opacity: 1;
-    transform: translateX(-50%) scale(1);
+    transform: translateY(-50%) translateX(10px) scale(1);
 }
 
 .prefix-selector-checkbox {
