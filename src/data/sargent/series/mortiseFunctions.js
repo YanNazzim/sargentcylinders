@@ -168,7 +168,7 @@ export const series8200MortiseFunctions = [
     baseCylinder: { partNumber: "#43", type: "Mortise Cylinder" },
     prefixes: [...allCylinderPrefixes],
     imageUrl: images.Func8250,
-    excludedPrefixes: ["10-", "11-", "21-", "11-21-", "11-60-", "11-63-", "11-64-", "51-", "52-"],
+      excludedPrefixes: ["10-","DG1-21-","DG2-21-","DG3-21-","21-", "70-", "72-", "73-", "65-73-7P", "65-73-", "11-", "SE-", "SC-", "83-", "F1-83-", "51-", "52-"],
 
   },
   {
@@ -683,9 +683,11 @@ export const series7800MortiseFunctions = [
   {
     modelNumber: "7850",
     description: "Hotel Guest",
-    baseCylinder: { partNumber: "#50", type: "Mortise Cylinder" },
+    baseCylinder: { partNumber: "#43", type: "Mortise Cylinder" },
     prefixes: [...allCylinderPrefixes],
     imageUrl: images.Func8250,
+      excludedPrefixes: ["10-","DG1-21-","DG2-21-","DG3-21-","21-", "70-", "72-", "73-", "65-73-7P", "65-73-", "11-", "SE-", "SC-", "83-", "F1-83-", "51-", "52-"],
+
   },
   {
     modelNumber: "7851",
@@ -1037,8 +1039,10 @@ export const series9200MortiseFunctions = [
   {
     modelNumber: "9250",
     description: "Hotel Guest",
-    baseCylinder: { partNumber: "#50", type: "Mortise Cylinder" },
+    baseCylinder: { partNumber: "#43", type: "Mortise Cylinder" },
     prefixes: [...allCylinderPrefixes],
+      excludedPrefixes: ["10-","DG1-21-","DG2-21-","DG3-21-","21-", "70-", "72-", "73-", "65-73-7P", "65-73-", "11-", "SE-", "SC-", "83-", "F1-83-", "51-", "52-"],
+
   },
   // Double Cylinder without Deadbolt
   {

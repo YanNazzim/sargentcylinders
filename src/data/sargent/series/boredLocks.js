@@ -10,7 +10,7 @@ const allCylinderPrefixes = cylinderPrefixCategories.flatMap(
 export const series10XLine = {
   name: "10X Line",
   imageUrl: images.Bored10XLine,
-  excludedPrefixes: ["51-", "52-"],
+  excludedPrefixes: ["51-", "52-", "83-", "F1-83-"],
 
   models: [
     {
@@ -199,6 +199,7 @@ export const series10XLine = {
     },
     {
       modelNumber: "10XG50",
+      excludedPrefixes: ["10-","DG1-21-","DG2-21-","DG3-21-","21-", "70-", "72-", "73-", "65-73-7P", "65-73-", "11-", "SE-", "SC-", "83-", "F1-83-", "51-", "52-"],
       description: "Hotel, Dormitory or Apartment",
       baseCylinder: { partNumber: "C10X-1", type: "Key-in-Lever Cylinder" },
       prefixes: [...allCylinderPrefixes],
@@ -277,12 +278,12 @@ export const series10XLine = {
   ].sort((a, b) => {
     // Helper function to create a sortable representation
     const getSortable = (model) => {
-        let tempModel = model.modelNumber;
-        // Special case for 10XU15
-        if (tempModel === '10XU15') {
-            tempModel = '10XG15';
-        }
-        return tempModel;
+      let tempModel = model.modelNumber;
+      // Special case for 10XU15
+      if (tempModel === "10XU15") {
+        tempModel = "10XG15";
+      }
+      return tempModel;
     };
 
     const sortableA = getSortable(a);
@@ -293,7 +294,7 @@ export const series10XLine = {
 };
 export const series11Line = {
   name: "11 Line",
-  excludedPrefixes: ["51-", "52-"],
+  excludedPrefixes: ["51-", "52-", "83-", "F1-83-"],
   imageUrl: images.Bored11Line,
 
   models: [
@@ -349,12 +350,12 @@ export const series11Line = {
   ].sort((a, b) => {
     // Helper function to create a sortable representation
     const getSortable = (model) => {
-        let tempModel = model.modelNumber;
-        // Special case for 10XU15
-        if (tempModel === '10XU15') {
-            tempModel = '10XG15';
-        }
-        return tempModel;
+      let tempModel = model.modelNumber;
+      // Special case for 10XU15
+      if (tempModel === "10XU15") {
+        tempModel = "10XG15";
+      }
+      return tempModel;
     };
 
     const sortableA = getSortable(a);
@@ -366,7 +367,7 @@ export const series11Line = {
 
 export const series7Line = {
   name: "7 Line",
-  excludedPrefixes: ["51-", "52-"],
+  excludedPrefixes: ["51-", "52-", "83-", "F1-83-"],
   imageUrl: images.Bored7Line,
 
   models: [
@@ -443,12 +444,12 @@ export const series7Line = {
   ].sort((a, b) => {
     // Helper function to create a sortable representation
     const getSortable = (model) => {
-        let tempModel = model.modelNumber;
-        // Special case for 10XU15
-        if (tempModel === '10XU15') {
-            tempModel = '10XG15';
-        }
-        return tempModel;
+      let tempModel = model.modelNumber;
+      // Special case for 10XU15
+      if (tempModel === "10XU15") {
+        tempModel = "10XG15";
+      }
+      return tempModel;
     };
 
     const sortableA = getSortable(a);
@@ -459,7 +460,7 @@ export const series7Line = {
 };
 export const series6Line = {
   name: "6 Line",
-  excludedPrefixes: ["51-", "52-"],
+  excludedPrefixes: ["51-", "52-", "83-", "F1-83-"],
   imageUrl: images.Bored6Line,
 
   models: [
@@ -502,12 +503,12 @@ export const series6Line = {
   ].sort((a, b) => {
     // Helper function to create a sortable representation
     const getSortable = (model) => {
-        let tempModel = model.modelNumber;
-        // Special case for 10XU15
-        if (tempModel === '10XU15') {
-            tempModel = '10XG15';
-        }
-        return tempModel;
+      let tempModel = model.modelNumber;
+      // Special case for 10XU15
+      if (tempModel === "10XU15") {
+        tempModel = "10XG15";
+      }
+      return tempModel;
     };
 
     const sortableA = getSortable(a);
@@ -517,10 +518,9 @@ export const series6Line = {
   }),
 };
 
-
 export const series8XLine = {
   name: "8X Line",
-  excludedPrefixes: ["51-", "52-"],
+  excludedPrefixes: ["51-", "52-", "83-", "F1-83-"],
   imageUrl: images.Bored8XLine,
 
   models: [
@@ -569,12 +569,12 @@ export const series8XLine = {
   ].sort((a, b) => {
     // Helper function to create a sortable representation
     const getSortable = (model) => {
-        let tempModel = model.modelNumber;
-        // Special case for 10XU15
-        if (tempModel === '10XU15') {
-            tempModel = '10XG15';
-        }
-        return tempModel;
+      let tempModel = model.modelNumber;
+      // Special case for 10XU15
+      if (tempModel === "10XU15") {
+        tempModel = "10XG15";
+      }
+      return tempModel;
     };
 
     const sortableA = getSortable(a);
@@ -586,7 +586,7 @@ export const series8XLine = {
 
 export const series6500Line = {
   name: "6500 Line",
-  excludedPrefixes: ["51-", "52-"],
+  excludedPrefixes: ["51-", "52-", "83-", "F1-83-", "81-", "82-", "F1-82-", "84-"],
   imageUrl: images.Bored6500Line,
 
   models: [
@@ -641,12 +641,12 @@ export const series6500Line = {
   ].sort((a, b) => {
     // Helper function to create a sortable representation
     const getSortable = (model) => {
-        let tempModel = model.modelNumber;
-        // Special case for 10XU15
-        if (tempModel === '10XU15') {
-            tempModel = '10XG15';
-        }
-        return tempModel;
+      let tempModel = model.modelNumber;
+      // Special case for 10XU15
+      if (tempModel === "10XU15") {
+        tempModel = "10XG15";
+      }
+      return tempModel;
     };
 
     const sortableA = getSortable(a);

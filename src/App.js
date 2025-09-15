@@ -41,6 +41,7 @@ export default function App() {
         <header className="app-header">
           <img className="logo" src={images.sargentlogo} alt='logo'/>
           <h1 className="app-title">Sargent Cylinders</h1>
+          <h2 className="app-subtitle">Cylinder Selection & Information Tool</h2>
         </header>
 
         <nav className="app-navigation">

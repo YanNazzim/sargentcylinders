@@ -74,6 +74,15 @@ body {
     text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
 }
 
+.app-subtitle {
+    font-size: 1.25rem;
+    font-weight: 500;
+    color: var(--subtle-text);
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    letter-spacing: 0.02em;
+}
+
 .app-navigation {
     display: flex;
     flex-wrap: wrap;

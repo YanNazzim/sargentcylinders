@@ -204,14 +204,21 @@ function CylinderFinder() {
     );
     if (!modelData) return null;
 
+    // Combine the excluded prefixes from both the series and the model
+    const combinedExcludedPrefixes = [
+      ...(seriesData.excludedPrefixes || []),
+      ...(modelData.excludedPrefixes || []),
+    ];
+
     return {
       ...modelData,
       category: selectedCategory,
       seriesName: selectedSeriesName,
       imageUrl: modelData.imageUrl || seriesData.imageUrl || images.sargentlogo,
+      // Use the combined array
+      excludedPrefixes: combinedExcludedPrefixes,
     };
   }, [selectedModel, selectedCategory, selectedSeriesName]);
-
   const deviceTiedPrefixes = useMemo(() => {
     if (!activeModelData) return [];
 
@@ -239,16 +246,16 @@ function CylinderFinder() {
   };
 
   const allPrefixes = useMemo(() => {
-    const modelPrefixes = activeModelData?.prefixes?.filter(
-      (p) => !p.isDeviceSpecific
-    ) || [];
-    const devicePrefixes = activeModelData?.prefixes?.filter(
-      (p) => p.isDeviceSpecific && p.id !== "Inside Cyl"
-    ) || [];
+    const modelPrefixes =
+      activeModelData?.prefixes?.filter((p) => !p.isDeviceSpecific) || [];
+    const devicePrefixes =
+      activeModelData?.prefixes?.filter(
+        (p) => p.isDeviceSpecific && p.id !== "Inside Cyl"
+      ) || [];
     const cylinderPrefixes = cylinderPrefixCategories.flatMap(
       (category) => category.prefixes
     );
-  
+
     return [...modelPrefixes, ...devicePrefixes, ...cylinderPrefixes];
   }, [activeModelData]);
 
@@ -274,7 +281,7 @@ function CylinderFinder() {
     });
     return chosenPrefixes;
   };
-  
+
   const finalCylinders = useMemo(() => {
     if (!activeModelData) return [];
     const lficPrefixes = [
@@ -558,7 +565,7 @@ function CylinderFinder() {
     setShowMultipleMatchesWarning(false);
     setCurrentStep("deviceSelection");
   };
-  
+
   const handleBack = useCallback(() => {
     if (currentStep === "results") {
       const hasCylinderOptions =
@@ -581,7 +588,6 @@ function CylinderFinder() {
       handleReset();
     }
   }, [currentStep, deviceTiedPrefixes, selectedCategory, activeModelData]);
-  
 
   const handleFindCylinder = () => {
     setCurrentStep("results");
@@ -594,19 +600,19 @@ function CylinderFinder() {
   const availableCylinderPrefixCategories = useMemo(() => {
     return cylinderPrefixCategories.map((category) => ({
       ...category,
-      prefixes: category.prefixes.filter((p) => 
-        !activeModelData?.excludedPrefixes?.some(excludedPrefix => 
-          p.id.startsWith(excludedPrefix)
-        )
+      prefixes: category.prefixes.filter(
+        (p) =>
+          !activeModelData?.excludedPrefixes?.some((excludedPrefix) =>
+            p.id.startsWith(excludedPrefix)
+          )
       ),
     }));
   }, [activeModelData]);
 
   // Check if there are any available cylinder prefixes to display
   const hasAvailableCylinderPrefixes = useMemo(() => {
-    return availableCylinderPrefixCategories.some(c => c.prefixes.length > 0);
+    return availableCylinderPrefixCategories.some((c) => c.prefixes.length > 0);
   }, [availableCylinderPrefixCategories]);
-
 
   const renderStep = () => {
     if (isInitialState) {
@@ -668,7 +674,7 @@ function CylinderFinder() {
             <div ref={deviceOptionsRef} className="wizard-step active">
               <div className="prefix-section">
                 <h3 className="prefix-section-title">
-                  Step 2 of 3: Select Device Options
+                  Step 2 of 3: Select Keyed Device Options
                 </h3>
                 <PrefixSelector
                   prefixes={deviceTiedPrefixes}
@@ -710,7 +716,9 @@ function CylinderFinder() {
                   />
                 </div>
               ) : (
-                <div className="no-options-message">No cylinder options available for this device.</div>
+                <div className="no-options-message">
+                  No cylinder options available for this device.
+                </div>
               )}
               <div className="wizard-controls">
                 <button onClick={handleBack} className="wizard-back-button">
@@ -737,7 +745,11 @@ function CylinderFinder() {
             <div ref={resultsRef} className="wizard-step active">
               <div className="selected-hardware-note">
                 <div className="selected-hardware-image-wrapper">
-                  <a href={activeModelData?.imageUrl} target="_blank" rel="noopener noreferrer">
+                  <a
+                    href={activeModelData?.imageUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     <img
                       src={activeModelData?.imageUrl || images.sargentlogo}
                       alt={activeModelData?.modelNumber}
@@ -761,12 +773,27 @@ function CylinderFinder() {
                     {chosenPrefixes.map((prefix) => (
                       <li key={prefix.id} className="chosen-prefix-item">
                         <span className="chosen-prefix-id">{prefix.id}</span>
-                        <span className="chosen-prefix-description">{prefix.description}</span>
+                        <span className="chosen-prefix-description">
+                          {prefix.description}
+                        </span>
                       </li>
                     ))}
                   </ul>
                 </div>
               )}
+              <div className="note-container">
+                <p>
+                  <span className="note-text">
+                    **Note:** All listed parts are for a <strong>1-3/4" door</strong>. If
+                    your door is thicker or has thermal panels, please contact
+                    our technical support team at{" "}
+                    <a href="mailto:techsupport.sargent@assaabloy.com">
+                      techsupport.sargent@assaabloy.com
+                    </a>{" "}
+                    for assistance.
+                  </span>
+                </p>
+              </div>
               <ResultsDisplay cylinders={finalCylinders} />
               <div className="wizard-controls">
                 <button onClick={handleBack} className="wizard-back-button">
