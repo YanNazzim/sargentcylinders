@@ -437,7 +437,14 @@ export const series8800 = {
           isDeviceSpecific: true,
           keywords: [],
         },
-        ...devicePrefixes80Series,
+        ...devicePrefixes80Series.filter(p => p.id !== "127 - Mortise Cylinder Thumbturn"), // Exclude 127 from here
+        { 
+          "id": "127 - Mortise Cylinder Thumbturn", 
+          "description": "Turns your inside Keyed Cylinder into a detachable mortise thumbturn", 
+          "addsCylinder": { "partNumber": "#44", "type": "Mortise Cylinder", "notes": "For alarm kit control." }, 
+          "isDeviceSpecific": true, 
+          "keywords": ["127", "thumbturn", "TT"] 
+        },
         ...allCylinderPrefixes,
       ],
     },

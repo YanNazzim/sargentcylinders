@@ -207,7 +207,7 @@ const allFaqs = [
         children: (
             <>
                 <p>SARGENT offers a wide range of keyways for different systems.</p>
-                <p><strong>L Family</strong> keyways are the standard stock keyways. <strong>C Family</strong> keyways are for hotel functions. <strong>H Family</strong> and <strong>R Family</strong> keyways are used for contract master key systems.</p>
+                <p><strong>L Family</strong> keyways are the standard stock keyways. <strong>C Family</strong> keyways are for hotel functions. <strong>R Family</strong> keyways are used for contract master key systems.</p>
                 <div className="keyway-table-container">
                     <table className="keyway-table">
                         <thead>
@@ -268,7 +268,7 @@ const allFaqs = [
             <>
                 <p>Functions that do not require a cylinder typically involve passage, privacy, or dummy operations. Based on the 7800, 8200, and 9200 series catalogs, the following functions do not require a cylinder to operate:</p>
                 <ul>
-                    <li><strong>Passage/Exit Latch:</strong> 8213, 7813</li>
+                    <li><strong>Passage/Exit Latch:</strong> 8212, 7812, 8213, 7813</li>
                     <li><strong>Passage/Closet:</strong> 8215, 7815, 9215</li>
                     <li><strong>Privacy:</strong> 8265, 7865, 8266, 7866, 8268, 7868, 9265, 9266</li>
                     <li><strong>Dummy:</strong> 8293, 7893, 8294, 7894, 8295, 7895, 8296, 7896, 8297, 7897</li>

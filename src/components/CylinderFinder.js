@@ -219,14 +219,25 @@ function CylinderFinder() {
       excludedPrefixes: combinedExcludedPrefixes,
     };
   }, [selectedModel, selectedCategory, selectedSeriesName]);
+  
   const deviceTiedPrefixes = useMemo(() => {
     if (!activeModelData) return [];
 
-    return (
+    let availablePrefixes =
       activeModelData.prefixes?.filter(
         (p) => p.isDeviceSpecific && p.id !== "Inside Cyl"
-      ) || []
-    );
+      ) || [];
+
+    if (
+      activeModelData.modelNumber !== "8816" &&
+      activeModelData.modelNumber !== "PE8816"
+    ) {
+      availablePrefixes = availablePrefixes.filter(
+        (p) => !p.id.startsWith("127")
+      );
+    }
+
+    return availablePrefixes;
   }, [activeModelData]);
 
   const getCylinderLengthDescription = (partNumber) => {
@@ -284,6 +295,7 @@ function CylinderFinder() {
 
   const finalCylinders = useMemo(() => {
     if (!activeModelData) return [];
+    const has127Prefix = selectedDevicePrefixes.some(p => p.startsWith("127"));
     const lficPrefixes = [
       "60-",
       "63-",
@@ -335,7 +347,8 @@ function CylinderFinder() {
     const insideCylData = activeModelData.prefixes?.find(
       (p) => p.id === "Inside Cyl" && p.addsCylinder
     );
-    if (insideCylData) {
+    
+    if (insideCylData && !has127Prefix) {
       rawCylinderList.push({
         ...insideCylData.addsCylinder,
         role: "Inside Cylinder",
@@ -350,7 +363,7 @@ function CylinderFinder() {
       if (prefixData?.addsCylinder) {
         rawCylinderList.push({
           ...prefixData.addsCylinder,
-          role: prefixData.id,
+          role: prefixId.startsWith("127") ? "Inside Cylinder" : prefixData.id,
           notes: prefixData.description,
         });
       }
@@ -359,6 +372,10 @@ function CylinderFinder() {
     const transformedCylinderList = rawCylinderList.map((cyl) => {
       const newCyl = { ...cyl };
       const partNumberBase = newCyl.partNumber.replace("#", "");
+
+      if (has127Prefix && partNumberBase === "44") {
+        return newCyl; // Don't transform the #44 cylinder if 127 is present
+      }
 
       if (hasKesoPrefix) {
         if (partNumberBase === "41") newCyl.partNumber = "F1-71";
@@ -384,70 +401,60 @@ function CylinderFinder() {
     });
 
     let finalCylindersArray = Array.from(consolidatedMap.values());
+    
+    finalCylindersArray = finalCylindersArray.map((cyl) => {
+      const basePartNumber = cyl.partNumber.replace("#", "");
+      const kesoLengths = {
+        "F1-71": '1-1/8"',
+        "F1-72": '1-1/4"',
+        "F1-73": '1-3/8"',
+        "F1-74": '1-1/2"',
+        "F1-76": '1-3/4"',
+        "F1-64": '1-3/4" to 3-1/8"',
+      };
+      const lengthDesc = hasKesoPrefix
+        ? kesoLengths[basePartNumber] || ""
+        : getCylinderLengthDescription(basePartNumber);
+      
+      let finalPartNumber;
+      if (has127Prefix && basePartNumber === "44") {
+        finalPartNumber = `127-44 x Keying Details x Finish`;
+      } else if (hasKesoPrefix) {
+        finalPartNumber = `${basePartNumber} x Keying Details x Finish`;
+      } else if (selectedCylinderPrefix) {
+        finalPartNumber = `${selectedCylinderPrefix}${basePartNumber} x Keying Details x Finish`;
+      } else {
+        finalPartNumber = `${basePartNumber} x Keying Details x Finish`;
+      }
+      
+      const prefixData = cylinderPrefixCategories
+        .flatMap((c) => c.prefixes)
+        .find((p) => p.id === selectedCylinderPrefix);
+      const prefixDesc = prefixData
+        ? prefixData.description.replace("Device", "Housing")
+        : "";
+      
+      let newNotes = cyl.notes;
+      if (cyl.role === "Outside Cylinder") {
+        newNotes = "For the outside of the door.";
+      } else if (cyl.role === "Inside Cylinder") {
+        newNotes = "For the inside of the door.";
+      } else {
+        newNotes = `For ${cyl.role} which is: ${cyl.notes}`;
+      }
 
-    if (selectedCylinderPrefix) {
-      finalCylindersArray = finalCylindersArray.map((cyl) => {
-        const basePartNumber = cyl.partNumber.replace("#", "");
-        const kesoLengths = {
-          "F1-71": '1-1/8"',
-          "F1-72": '1-1/4"',
-          "F1-73": '1-3/8"',
-          "F1-74": '1-1/2"',
-          "F1-76": '1-3/4"',
-          "F1-64": '1-3/4" to 3-1/8"',
-        };
-        const lengthDesc = hasKesoPrefix
-          ? kesoLengths[basePartNumber] || ""
-          : getCylinderLengthDescription(basePartNumber);
-        const finalPartNumber = hasKesoPrefix
-          ? `${basePartNumber} x Keying Details x Finish`
-          : `${selectedCylinderPrefix}${basePartNumber} x Keying Details x Finish`;
-        const prefixData = cylinderPrefixCategories
-          .flatMap((c) => c.prefixes)
-          .find((p) => p.id === selectedCylinderPrefix);
-        const prefixDesc = prefixData
-          ? prefixData.description.replace("Device", "Housing")
-          : "";
-        let newNotes = cyl.notes;
+      let newDescription = `${lengthDesc} ${cyl.type}`;
+      if (selectedCylinderPrefix && !(has127Prefix && basePartNumber === "44")) {
+        newDescription += ` ${prefixDesc}`;
+      }
 
-        if (cyl.role === "Outside Cylinder" || cyl.role === "Inside Cylinder") {
-          newNotes = `For the ${
-            cyl.role.toLowerCase().split(" ")[0]
-          } of the door.`;
-        } else {
-          newNotes = `For ${cyl.role} which is: ${cyl.notes}`;
-        }
-
-        const newDescription = `${lengthDesc} ${cyl.type} ${prefixDesc}`;
-
-        return {
-          ...cyl,
-          partNumber: finalPartNumber,
-          description: newDescription.trim(),
-          notes: newNotes,
-        };
-      });
-    } else {
-      finalCylindersArray = finalCylindersArray.map((cyl) => {
-        let newNotes = cyl.notes;
-        if (cyl.role === "Outside Cylinder") {
-          newNotes = "For the outside of the door.";
-        } else if (cyl.role === "Inside Cylinder") {
-          newNotes = "For the inside of the door.";
-        } else {
-          newNotes = `For ${cyl.role} which is: ${cyl.notes}`;
-        }
-        const newDescription = `${getCylinderLengthDescription(
-          cyl.partNumber
-        )} ${cyl.type}`;
-        return {
-          ...cyl,
-          partNumber: `${cyl.partNumber} x Keying Details x Finish`,
-          description: newDescription.trim(),
-          notes: newNotes,
-        };
-      });
-    }
+      return {
+        ...cyl,
+        partNumber: finalPartNumber,
+        description: newDescription.trim(),
+        notes: newNotes,
+      };
+    });
 
     return finalCylindersArray;
   }, [activeModelData, selectedDevicePrefixes, selectedCylinderPrefix]);
@@ -459,6 +466,8 @@ function CylinderFinder() {
     setGlobalSearchTerm("");
     setSearchResults([]);
     setShowMultipleMatchesWarning(false);
+    setSelectedDevicePrefixes([]);
+    setSelectedCylinderPrefix(null);
 
     const fullModelData = sargentData.hardware
       .find((h) => h.category === result.category)
@@ -567,6 +576,8 @@ function CylinderFinder() {
   };
 
   const handleBack = useCallback(() => {
+    setSelectedDevicePrefixes([]);
+    setSelectedCylinderPrefix(null);
     if (currentStep === "results") {
       const hasCylinderOptions =
         activeModelData?.baseCylinder ||

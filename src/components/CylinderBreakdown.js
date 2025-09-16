@@ -79,9 +79,10 @@ const CylinderBreakdown = React.memo(({ imageUrl, parts, searchTerm }) => {
                                             <span className="component-part-number">
                                                 <Highlight text={component.partNumber} highlight={searchTerm} />
                                             </span>
-                                            <span className="component-description">
-                                                <Highlight text={component.description} highlight={searchTerm} />
-                                            </span>
+                                            <span 
+                                                className="component-description" 
+                                                dangerouslySetInnerHTML={{ __html: component.description }}
+                                            />
                                         </li>
                                     );
                                 }
