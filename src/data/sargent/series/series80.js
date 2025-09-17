@@ -1,11 +1,16 @@
 // src/data/sargent/series/series80.js
-import { devicePrefixes80Series, auxControl106Prefix, auxControl306Prefix } from "../devicePrefixes";
+import {
+  devicePrefixes80Series,
+  auxControl106Prefix,
+  auxControl306Prefix,
+} from "../devicePrefixes";
 import { cylinderPrefixCategories } from "../cylinderPrefixes"; // Import cylinder prefixes
 import { images } from "../../../images/images";
 
 // Create a flat array of all cylinder prefixes
-const allCylinderPrefixes = cylinderPrefixCategories.flatMap(category => category.prefixes);
-
+const allCylinderPrefixes = cylinderPrefixCategories.flatMap(
+  (category) => category.prefixes
+);
 
 export const series8300 = {
   name: "8300 Series Narrow Mortise",
@@ -246,64 +251,104 @@ export const series8600 = {
       description:
         "Key unlocks Trim, Trim retracts latch/Trim relocks when key is removed",
       baseCylinder: { partNumber: "#41", type: "Mortise Cylinder" },
-      prefixes: [...devicePrefixes80Series, auxControl106Prefix, ...allCylinderPrefixes],
+      prefixes: [
+        ...devicePrefixes80Series,
+        auxControl106Prefix,
+        ...allCylinderPrefixes,
+      ],
     },
     {
       modelNumber: "8610",
       description: "No outside operation Dummy Trim",
       baseCylinder: null,
-      prefixes: [...devicePrefixes80Series, auxControl106Prefix, ...allCylinderPrefixes],
+      prefixes: [
+        ...devicePrefixes80Series,
+        auxControl106Prefix,
+        ...allCylinderPrefixes,
+      ],
     },
     {
       modelNumber: "8613",
       description: "Key Outside Unlocks/locks Trim",
       baseCylinder: { partNumber: "#41", type: "Mortise Cylinder" },
-      prefixes: [...devicePrefixes80Series, auxControl106Prefix, ...allCylinderPrefixes],
+      prefixes: [
+        ...devicePrefixes80Series,
+        auxControl106Prefix,
+        ...allCylinderPrefixes,
+      ],
     },
     {
       modelNumber: "8615",
       description: "Passage Only",
       baseCylinder: null,
-      prefixes: [...devicePrefixes80Series, auxControl106Prefix, ...allCylinderPrefixes],
+      prefixes: [
+        ...devicePrefixes80Series,
+        auxControl106Prefix,
+        ...allCylinderPrefixes,
+      ],
     },
     {
       modelNumber: "8628",
       description: "Thumbpiece - Passage Only",
       baseCylinder: null,
-      prefixes: [...devicePrefixes80Series, auxControl106Prefix, ...allCylinderPrefixes],
+      prefixes: [
+        ...devicePrefixes80Series,
+        auxControl106Prefix,
+        ...allCylinderPrefixes,
+      ],
     },
     {
       modelNumber: "8640",
       description: "Freewheeling Trim - No outside Operation Dummy Trim",
       baseCylinder: null,
-      prefixes: [...devicePrefixes80Series, auxControl106Prefix, ...allCylinderPrefixes],
+      prefixes: [
+        ...devicePrefixes80Series,
+        auxControl106Prefix,
+        ...allCylinderPrefixes,
+      ],
     },
     {
       modelNumber: "8643",
       description: "Freewheeling Trim - Key Outside Unlocks/locks Trim",
       baseCylinder: { partNumber: "#41", type: "Mortise Cylinder" },
-      prefixes: [...devicePrefixes80Series, auxControl106Prefix, ...allCylinderPrefixes],
+      prefixes: [
+        ...devicePrefixes80Series,
+        auxControl106Prefix,
+        ...allCylinderPrefixes,
+      ],
     },
     {
       modelNumber: "8646",
       description:
         "Freewheeling Trim - Key unlocks Trim, Trim retracts latch/Trim relocks when key is removed",
       baseCylinder: { partNumber: "#41", type: "Mortise Cylinder" },
-      prefixes: [...devicePrefixes80Series, auxControl106Prefix, ...allCylinderPrefixes],
+      prefixes: [
+        ...devicePrefixes80Series,
+        auxControl106Prefix,
+        ...allCylinderPrefixes,
+      ],
     },
     {
       modelNumber: "8673",
       description:
         "Electrified Lever Trim - Fail Safe Power Off, Unlocks Lever",
       baseCylinder: null,
-      prefixes: [...devicePrefixes80Series, auxControl106Prefix, ...allCylinderPrefixes],
+      prefixes: [
+        ...devicePrefixes80Series,
+        auxControl106Prefix,
+        ...allCylinderPrefixes,
+      ],
     },
     {
       modelNumber: "8674",
       description:
         "Electrified Lever Trim - Fail Secure Power Off, Locks Lever",
       baseCylinder: null,
-      prefixes: [...devicePrefixes80Series, auxControl106Prefix, ...allCylinderPrefixes],
+      prefixes: [
+        ...devicePrefixes80Series,
+        auxControl106Prefix,
+        ...allCylinderPrefixes,
+      ],
     },
   ].sort((a, b) => a.modelNumber.localeCompare(b.modelNumber)),
 };
@@ -317,74 +362,122 @@ export const series8700 = {
       description:
         "Key unlocks Trim, Trim retracts latch/Trim relocks when key is removed",
       baseCylinder: { partNumber: "#41", type: "Mortise Cylinder" },
-      prefixes: [...devicePrefixes80Series, auxControl306Prefix, ...allCylinderPrefixes],
+      prefixes: [
+        ...devicePrefixes80Series,
+        auxControl306Prefix,
+        ...allCylinderPrefixes,
+      ],
     },
     {
       modelNumber: "8710",
       description: "No Outside Operation (Dummy)",
       baseCylinder: null,
-      prefixes: [...devicePrefixes80Series, auxControl306Prefix, ...allCylinderPrefixes],
+      prefixes: [
+        ...devicePrefixes80Series,
+        auxControl306Prefix,
+        ...allCylinderPrefixes,
+      ],
     },
     {
       modelNumber: "8713",
       description: "Key Outside Unlocks/Locks Trim",
       baseCylinder: { partNumber: "#41", type: "Mortise Cylinder" },
-      prefixes: [...devicePrefixes80Series, auxControl306Prefix, ...allCylinderPrefixes],
+      prefixes: [
+        ...devicePrefixes80Series,
+        auxControl306Prefix,
+        ...allCylinderPrefixes,
+      ],
     },
     {
       modelNumber: "8715",
       description: "Passage Only",
       baseCylinder: null,
-      prefixes: [...devicePrefixes80Series, auxControl306Prefix, ...allCylinderPrefixes],
+      prefixes: [
+        ...devicePrefixes80Series,
+        auxControl306Prefix,
+        ...allCylinderPrefixes,
+      ],
     },
     {
       modelNumber: "8728",
       description: "Thumbpiece - Passage Only",
       baseCylinder: null,
-      prefixes: [...devicePrefixes80Series, auxControl306Prefix, ...allCylinderPrefixes],
+      prefixes: [
+        ...devicePrefixes80Series,
+        auxControl306Prefix,
+        ...allCylinderPrefixes,
+      ],
     },
     {
       modelNumber: "8740",
       description: "Freewheeling Trim - No outside operation Dummy Trim",
       baseCylinder: null,
-      prefixes: [...devicePrefixes80Series, auxControl306Prefix, ...allCylinderPrefixes],
+      prefixes: [
+        ...devicePrefixes80Series,
+        auxControl306Prefix,
+        ...allCylinderPrefixes,
+      ],
     },
     {
       modelNumber: "8743",
       description: "Freewheeling Trim - Key Outside Unlocks/locks Trim",
       baseCylinder: { partNumber: "#41", type: "Mortise Cylinder" },
-      prefixes: [...devicePrefixes80Series, auxControl306Prefix, ...allCylinderPrefixes],
+      prefixes: [
+        ...devicePrefixes80Series,
+        auxControl306Prefix,
+        ...allCylinderPrefixes,
+      ],
     },
     {
       modelNumber: "8746",
       description:
         "Freewheeling Trim - Key unlocks Trim, Trim retracts latch/trim relocks when key is removed",
       baseCylinder: { partNumber: "#41", type: "Mortise Cylinder" },
-      prefixes: [...devicePrefixes80Series, auxControl306Prefix, ...allCylinderPrefixes],
+      prefixes: [
+        ...devicePrefixes80Series,
+        auxControl306Prefix,
+        ...allCylinderPrefixes,
+      ],
     },
     {
       modelNumber: "8762",
       description: "Thumbpiece - Key Unlocks/Locks, Retracts Latch",
       baseCylinder: { partNumber: "#34", type: "Rim Cylinder" },
-      prefixes: [...devicePrefixes80Series, auxControl306Prefix, ...allCylinderPrefixes],
+      prefixes: [
+        ...devicePrefixes80Series,
+        auxControl306Prefix,
+        ...allCylinderPrefixes,
+      ],
     },
     {
       modelNumber: "8763",
       description: "Thumbpiece - Key Unlocks/Locks",
       baseCylinder: { partNumber: "#34", type: "Rim Cylinder" },
-      prefixes: [...devicePrefixes80Series, auxControl306Prefix, ...allCylinderPrefixes],
+      prefixes: [
+        ...devicePrefixes80Series,
+        auxControl306Prefix,
+        ...allCylinderPrefixes,
+      ],
     },
     {
       modelNumber: "8773",
       description: "Electrified ET Trim - Fail Safe Power Off, Unlocks Lever",
       baseCylinder: null,
-      prefixes: [...devicePrefixes80Series, auxControl306Prefix, ...allCylinderPrefixes],
+      prefixes: [
+        ...devicePrefixes80Series,
+        auxControl306Prefix,
+        ...allCylinderPrefixes,
+      ],
     },
     {
       modelNumber: "8774",
       description: "Electrified ET Trim - Fail Secure Power Off, Locks Lever",
       baseCylinder: null,
-      prefixes: [...devicePrefixes80Series, auxControl306Prefix, ...allCylinderPrefixes],
+      prefixes: [
+        ...devicePrefixes80Series,
+        auxControl306Prefix,
+        ...allCylinderPrefixes,
+      ],
     },
   ].sort((a, b) => a.modelNumber.localeCompare(b.modelNumber)),
 };
@@ -417,6 +510,14 @@ export const series8800 = {
       description: "Key Outside Unlocks/Locks Trim",
       baseCylinder: { partNumber: "#41", type: "Mortise Cylinder" },
       prefixes: [...devicePrefixes80Series, ...allCylinderPrefixes],
+      // CORRECTED COLLAR DATA STRUCTURE
+      collars: {
+        default: { partNumber: "97-0350", description: "Standard Collar for 8813 Rim Exit Device" },
+        conditional: [
+          { prefix: "60-", partNumber: "97-0351", description: "Collar for 8813 Rim Exit Device with 60- LFIC Prefix" },
+          { prefix: "70-", partNumber: "97-0352", description: "Collar for 8813 Rim Exit Device with 70- SFIC Prefix" },
+        ],
+      },
     },
     {
       modelNumber: "8815",
@@ -437,13 +538,20 @@ export const series8800 = {
           isDeviceSpecific: true,
           keywords: [],
         },
-        ...devicePrefixes80Series.filter(p => p.id !== "127 - Mortise Cylinder Thumbturn"), // Exclude 127 from here
-        { 
-          "id": "127 - Mortise Cylinder Thumbturn", 
-          "description": "Turns your inside Keyed Cylinder into a detachable mortise thumbturn", 
-          "addsCylinder": { "partNumber": "#44", "type": "Mortise Cylinder", "notes": "For alarm kit control." }, 
-          "isDeviceSpecific": true, 
-          "keywords": ["127", "thumbturn", "TT"] 
+        ...devicePrefixes80Series.filter(
+          (p) => p.id !== "127 - Mortise Cylinder Thumbturn"
+        ), // Exclude 127 from here
+        {
+          id: "127 - Mortise Cylinder Thumbturn",
+          description:
+            "Turns your inside Keyed Cylinder into a detachable mortise thumbturn",
+          addsCylinder: {
+            partNumber: "#44",
+            type: "Mortise Cylinder",
+            notes: "For alarm kit control.",
+          },
+          isDeviceSpecific: true,
+          keywords: ["127", "thumbturn", "TT"],
         },
         ...allCylinderPrefixes,
       ],

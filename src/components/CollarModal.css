@@ -1,0 +1,149 @@
+/* src/components/CollarModal.css */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background-color: var(--card-background);
+    padding: 2.5rem;
+    border-radius: 0.75rem;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    width: 90%;
+    max-width: 600px;
+    position: relative;
+    border: 1px solid var(--border-color);
+}
+
+.modal-close-button {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    font-size: 1.75rem;
+    color: var(--subtle-text);
+    cursor: pointer;
+    line-height: 1;
+}
+
+.modal-title {
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    color: var(--text-color);
+    border-bottom: 2px solid var(--primary-color);
+    padding-bottom: 1rem;
+}
+
+.single-collar-result {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.collar-image {
+    max-width: 200px;
+    height: auto;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    padding: 8px;
+    background-color: #2a2a2a;
+}
+
+.collar-info {
+    text-align: center;
+}
+
+.collar-part-number {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin: 0;
+}
+
+.collar-description {
+    font-size: 1rem;
+    color: var(--subtle-text);
+    margin: 0.5rem 0 0;
+}
+
+.collar-table-container {
+    overflow-x: auto;
+}
+
+.collar-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+}
+
+.collar-table th, .collar-table td {
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--border-color);
+    text-align: left;
+}
+
+.collar-table th {
+    background-color: var(--background-color);
+    font-weight: 700;
+}
+
+.collar-table tbody tr:hover {
+    background-color: #333333;
+}
+
+@media (max-width: 600px) {
+    .collar-table thead {
+        display: none;
+    }
+    .collar-table, .collar-table tbody, .collar-table tr, .collar-table td {
+        display: block;
+        width: 100%;
+    }
+    .collar-table tr {
+        margin-bottom: 1rem;
+    }
+    .collar-table td {
+        text-align: right;
+        padding-left: 50%;
+        position: relative;
+    }
+    .collar-table td::before {
+        content: attr(data-label);
+        position: absolute;
+        left: 1rem;
+        font-weight: bold;
+    }
+}
+
+.collar-button-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
+}
+
+.collar-button {
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    color: white;
+    background-color: var(--primary-color);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.collar-button:hover {
+    background-color: var(--primary-dark);
+}
