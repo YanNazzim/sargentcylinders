@@ -8,7 +8,6 @@ import CategorizedPrefixSelector from "./CategorizedPrefixSelector";
 import "./CylinderFinder.css";
 import { images } from "../images/images";
 import { SearchIcon, ClearIcon } from "./Icons";
-import CollarModal from "./CollarModal";
 
 function CylinderFinder() {
   const [selectedCategory, setSelectedCategory] = useState("");
@@ -16,12 +15,11 @@ function CylinderFinder() {
   const [selectedModel, setSelectedModel] = useState("");
   const [selectedDevicePrefixes, setSelectedDevicePrefixes] = useState([]);
   const [selectedCylinderPrefix, setSelectedCylinderPrefix] = useState(null);
-  const [isCollarModalOpen, setIsCollarModalOpen] = useState(false);
   const [currentStep, setCurrentStep] = useState("deviceSelection");
   const [globalSearchTerm, setGlobalSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
-  const [showMultipleMatchesWarning, setShowMultipleMatchesWarning] = useState(false);
-  const [selectedCollar, setSelectedCollar] = useState(null);
+  const [showMultipleMatchesWarning, setShowMultipleMatchesWarning] =
+    useState(false);
 
   const deviceOptionsRef = useRef(null);
   const cylinderOptionsRef = useRef(null);
@@ -91,36 +89,27 @@ function CylinderFinder() {
     return availablePrefixes;
   }, [activeModelData]);
 
-  const findCollar = useCallback(() => {
-    if (!activeModelData || !activeModelData.collars) {
-      return null;
-    }
-    const { default: defaultCollar, conditional } = activeModelData.collars;
-    const matchingCollar = conditional?.find((c) =>
-      selectedCylinderPrefix?.startsWith(c.prefix)
-    );
-    if (matchingCollar) {
-      return matchingCollar;
-    }
-    return defaultCollar;
-  }, [activeModelData, selectedCylinderPrefix]);
-  
-  useEffect(() => {
-    setSelectedCollar(findCollar());
-  }, [findCollar]);
-
   useEffect(() => {
     if (currentStep === "deviceOptions" && deviceOptionsRef.current) {
-      deviceOptionsRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+      deviceOptionsRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
     }
     if (currentStep === "cylinderOptions" && cylinderOptionsRef.current) {
-      cylinderOptionsRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+      cylinderOptionsRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
     }
     if (currentStep === "results" && resultsRef.current) {
       resultsRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
     }
     if (globalSearchTerm.length > 0 && searchResultsRef.current) {
-      searchResultsRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+      searchResultsRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
     }
   }, [currentStep, globalSearchTerm]);
 
@@ -167,7 +156,8 @@ function CylinderFinder() {
   const groupedSeriesOptions = useMemo(() => {
     if (!selectedCategory) return [];
     const exitDeviceSeries =
-      sargentData.hardware.find((h) => h.category === "Exit Devices")?.series || [];
+      sargentData.hardware.find((h) => h.category === "Exit Devices")
+        ?.series || [];
     const groupedExitSeries = {
       "80 Series": [],
       "PE80 Series": [],
@@ -186,7 +176,8 @@ function CylinderFinder() {
         groupedExitSeries["20/30 Series"].push(series);
     });
     const categories =
-      sargentData.hardware.find((h) => h.category === selectedCategory)?.series || [];
+      sargentData.hardware.find((h) => h.category === selectedCategory)
+        ?.series || [];
     const allOptions = [];
     if (selectedCategory === "Exit Devices") {
       for (const groupName in groupedExitSeries) {
@@ -234,58 +225,70 @@ function CylinderFinder() {
 
   const getCylinderLengthDescription = (partNumber) => {
     const lengths = {
-      41: '1-1/8"', 42: '1-1/4"', 43: '1-3/8"', 44: '1-1/2"', 46: '1-3/4"',
-      48: '2"', 50: '2-1/4"', 52: '2-1/2"', 54: '2-3/4"', 56: '3"',
+      41: '1-1/8"',
+      42: '1-1/4"',
+      43: '1-3/8"',
+      44: '1-1/2"',
+      46: '1-3/4"',
+      48: '2"',
+      50: '2-1/4"',
+      52: '2-1/2"',
+      54: '2-3/4"',
+      56: '3"',
     };
     return lengths[partNumber.replace("#", "")] || "";
   };
 
-  const allPrefixes = useMemo(() => {
-    const modelPrefixes = activeModelData?.prefixes?.filter((p) => !p.isDeviceSpecific) || [];
-    const devicePrefixes = activeModelData?.prefixes?.filter((p) => p.isDeviceSpecific && p.id !== "Inside Cyl") || [];
-    const cylinderPrefixes = cylinderPrefixCategories.flatMap((category) => category.prefixes);
-    return [...modelPrefixes, ...devicePrefixes, ...cylinderPrefixes];
-  }, [activeModelData]);
-
-  const getChosenPrefixes = () => {
-    const chosenPrefixes = [];
-    if (selectedCylinderPrefix) {
-      const prefix = allPrefixes.find((p) => p.id === selectedCylinderPrefix);
-      if (prefix) {
-        chosenPrefixes.push({ id: prefix.id, description: prefix.description });
-      }
-    }
-    selectedDevicePrefixes.forEach((id) => {
-      const prefix = allPrefixes.find((p) => p.id === id);
-      if (prefix) {
-        chosenPrefixes.push({ id: prefix.id, description: prefix.description });
-      }
-    });
-    return chosenPrefixes;
-  };
-
   const finalCylinders = useMemo(() => {
     if (!activeModelData) return [];
-    const has127Prefix = selectedDevicePrefixes.some((p) => p.startsWith("127"));
-    const lficPrefixes = ["60-", "63-", "64-", "DG1-60-", "DG1-63-", "DG1-64-", "DG2-60-", "DG2-63-", "DG2-64-", "DG3-60-", "DG3-63-", "DG3-64-", "10-63-", "11-60-", "11-63-", "11-64-"];
-    const sficPrefixes = ["70-", "72-", "73-", "65-73-", "65-73-7P-", "73-7P-", "11-70-7P-", "11-72-7P-", "11-73-7P-", "11-65-73-7P-"];
+    const has127Prefix = selectedDevicePrefixes.some((p) =>
+      p.startsWith("127")
+    );
+    const lficPrefixes = [
+      "60-", "63-", "64-", "DG1-60-", "DG1-63-", "DG1-64-", "DG2-60-",
+      "DG2-63-", "DG2-64-", "DG3-60-", "DG3-63-", "DG3-64-", "10-63-",
+      "11-60-", "11-63-", "11-64-",
+    ];
+    const sficPrefixes = [
+      "70-", "72-", "73-", "65-73-", "65-73-7P-", "73-7P-", "11-70-7P-",
+      "11-72-7P-", "11-73-7P-", "11-65-73-7P-",
+    ];
     const kesoPrefixes = ["F1-82-", "F1-83-", "82-", "83-"];
-    const hasLficPrefix = selectedCylinderPrefix && lficPrefixes.includes(selectedCylinderPrefix);
-    const hasSficPrefix = selectedCylinderPrefix && sficPrefixes.includes(selectedCylinderPrefix);
-    const hasKesoPrefix = selectedCylinderPrefix && kesoPrefixes.includes(selectedCylinderPrefix);
+    const hasLficPrefix =
+      selectedCylinderPrefix && lficPrefixes.includes(selectedCylinderPrefix);
+    const hasSficPrefix =
+      selectedCylinderPrefix && sficPrefixes.includes(selectedCylinderPrefix);
+    const hasKesoPrefix =
+      selectedCylinderPrefix && kesoPrefixes.includes(selectedCylinderPrefix);
 
     const rawCylinderList = [];
     if (activeModelData.baseCylinder) {
-      rawCylinderList.push({ ...activeModelData.baseCylinder, role: "Outside Cylinder", notes: activeModelData.baseCylinder.notes || null });
+      rawCylinderList.push({
+        ...activeModelData.baseCylinder,
+        role: "Outside Cylinder",
+        notes: activeModelData.baseCylinder.notes || null,
+      });
     }
-    const insideCylData = activeModelData.prefixes?.find((p) => p.id === "Inside Cyl" && p.addsCylinder);
+    const insideCylData = activeModelData.prefixes?.find(
+      (p) => p.id === "Inside Cyl" && p.addsCylinder
+    );
     if (insideCylData && !has127Prefix) {
-      rawCylinderList.push({ ...insideCylData.addsCylinder, role: "Inside Cylinder", notes: insideCylData.addsCylinder.notes || insideCylData.description });
+      rawCylinderList.push({
+        ...insideCylData.addsCylinder,
+        role: "Inside Cylinder",
+        notes: insideCylData.addsCylinder.notes || insideCylData.description,
+      });
     }
     selectedDevicePrefixes.forEach((prefixId) => {
-      const prefixData = activeModelData.prefixes?.find((p) => p.id === prefixId);
+      const prefixData = activeModelData.prefixes?.find(
+        (p) => p.id === prefixId
+      );
       if (prefixData?.addsCylinder) {
-        rawCylinderList.push({ ...prefixData.addsCylinder, role: prefixId.startsWith("127") ? "Inside Cylinder" : prefixData.id, notes: prefixData.description });
+        rawCylinderList.push({
+          ...prefixData.addsCylinder,
+          role: prefixId.startsWith("127") ? "Inside Cylinder" : prefixData.id,
+          notes: prefixData.description,
+        });
       }
     });
 
@@ -319,10 +322,16 @@ function CylinderFinder() {
     });
 
     let finalCylindersArray = Array.from(consolidatedMap.values());
+    
     finalCylindersArray = finalCylindersArray.map((cyl) => {
       const basePartNumber = cyl.partNumber.replace("#", "");
-      const kesoLengths = { "F1-71": '1-1/8"', "F1-72": '1-1/4"', "F1-73": '1-3/8"', "F1-74": '1-1/2"', "F1-76": '1-3/4"', "F1-64": '1-3/4" to 3-1/8"', };
-      const lengthDesc = hasKesoPrefix ? kesoLengths[basePartNumber] || "" : getCylinderLengthDescription(basePartNumber);
+      const kesoLengths = {
+        "F1-71": '1-1/8"', "F1-72": '1-1/4"', "F1-73": '1-3/8"',
+        "F1-74": '1-1/2"', "F1-76": '1-3/4"', "F1-64": '1-3/4" to 3-1/8"',
+      };
+      const lengthDesc = hasKesoPrefix
+        ? kesoLengths[basePartNumber] || ""
+        : getCylinderLengthDescription(basePartNumber);
       let finalPartNumber;
       if (has127Prefix && basePartNumber === "44") {
         finalPartNumber = `127-44 x Keying Details x Finish`;
@@ -333,8 +342,12 @@ function CylinderFinder() {
       } else {
         finalPartNumber = `${basePartNumber} x Keying Details x Finish`;
       }
-      const prefixData = cylinderPrefixCategories.flatMap((c) => c.prefixes).find((p) => p.id === selectedCylinderPrefix);
-      const prefixDesc = prefixData ? prefixData.description.replace("Device", "Housing") : "";
+      const prefixData = cylinderPrefixCategories
+        .flatMap((c) => c.prefixes)
+        .find((p) => p.id === selectedCylinderPrefix);
+      const prefixDesc = prefixData
+        ? prefixData.description.replace("Device", "Housing")
+        : "";
       let newNotes = cyl.notes;
       if (cyl.role === "Outside Cylinder") {
         newNotes = "For the outside of the door.";
@@ -344,10 +357,45 @@ function CylinderFinder() {
         newNotes = `For ${cyl.role} which is: ${cyl.notes}`;
       }
       let newDescription = `${lengthDesc} ${cyl.type}`;
-      if (selectedCylinderPrefix && !(has127Prefix && basePartNumber === "44")) {
+      if (
+        selectedCylinderPrefix &&
+        !(has127Prefix && basePartNumber === "44")
+      ) {
         newDescription += ` ${prefixDesc}`;
       }
-      return { ...cyl, partNumber: finalPartNumber, description: newDescription.trim(), notes: newNotes, };
+      
+      const cylinderCollars = [];
+      const { default: defaultCollar, conditional: conditionalCollars } = activeModelData.collars || {};
+
+      if (cyl.role === "Outside Cylinder" && defaultCollar) {
+        cylinderCollars.push({...defaultCollar, imageUrl: images.sargentlogo});
+      }
+
+      const devicePrefixData = activeModelData.prefixes?.find(p => p.id === cyl.role);
+      if (devicePrefixData && devicePrefixData.addsCollar) {
+         if (!cylinderCollars.some(c => c.partNumber === devicePrefixData.addsCollar.partNumber)) {
+            cylinderCollars.push({...devicePrefixData.addsCollar, imageUrl: images.sargentlogo});
+         }
+      }
+
+      if (cyl.role === "Outside Cylinder" && conditionalCollars) {
+          conditionalCollars.forEach(collar => {
+              if (selectedCylinderPrefix && selectedCylinderPrefix.startsWith(collar.prefix)) {
+                  if (!cylinderCollars.some(c => c.partNumber === collar.partNumber)) {
+                      cylinderCollars.push({...collar, imageUrl: images.sargentlogo});
+                  }
+              }
+          });
+      }
+
+      return {
+        ...cyl,
+        partNumber: finalPartNumber,
+        description: newDescription.trim(),
+        notes: newNotes,
+        collars: cylinderCollars,
+        imageUrl: images.sargentlogo
+      };
     });
     return finalCylindersArray;
   }, [activeModelData, selectedDevicePrefixes, selectedCylinderPrefix]);
@@ -366,8 +414,12 @@ function CylinderFinder() {
       ?.series.find((s) => s.name === result.seriesName)
       ?.models.find((m) => m.modelNumber === result.modelNumber);
     const hasDeviceOptions =
-      fullModelData?.prefixes.filter((p) => p.isDeviceSpecific && p.id !== "Inside Cyl").length > 0;
-    const hasCylinderOptions = fullModelData?.baseCylinder || fullModelData?.prefixes.some((p) => p.addsCylinder);
+      fullModelData?.prefixes.filter(
+        (p) => p.isDeviceSpecific && p.id !== "Inside Cyl"
+      ).length > 0;
+    const hasCylinderOptions =
+      fullModelData?.baseCylinder ||
+      fullModelData?.prefixes.some((p) => p.addsCylinder);
     if (!hasCylinderOptions) {
       setCurrentStep("results");
     } else if (hasDeviceOptions) {
@@ -390,8 +442,11 @@ function CylinderFinder() {
 
   const handleProceedFromDeviceSelection = () => {
     if (!selectedModel) return;
-    const hasDeviceOptions = selectedCategory === "Exit Devices" && deviceTiedPrefixes.length > 0;
-    const hasCylinderOptions = activeModelData?.baseCylinder || activeModelData?.prefixes.some((p) => p.addsCylinder);
+    const hasDeviceOptions =
+      selectedCategory === "Exit Devices" && deviceTiedPrefixes.length > 0;
+    const hasCylinderOptions =
+      activeModelData?.baseCylinder ||
+      activeModelData?.prefixes.some((p) => p.addsCylinder);
     if (!hasCylinderOptions) {
       setCurrentStep("results");
     } else if (hasDeviceOptions) {
@@ -428,7 +483,9 @@ function CylinderFinder() {
 
   const handleDevicePrefixChange = (prefixId) => {
     setSelectedDevicePrefixes((prev) =>
-      prev.includes(prefixId) ? prev.filter((p) => p !== prefixId) : [...prev, prefixId]
+      prev.includes(prefixId)
+        ? prev.filter((p) => p !== prefixId)
+        : [...prev, prefixId]
     );
   };
 
@@ -458,14 +515,17 @@ function CylinderFinder() {
     setSelectedDevicePrefixes([]);
     setSelectedCylinderPrefix(null);
     if (currentStep === "results") {
-      const hasCylinderOptions = activeModelData?.baseCylinder || activeModelData?.prefixes.some((p) => p.addsCylinder);
+      const hasCylinderOptions =
+        activeModelData?.baseCylinder ||
+        activeModelData?.prefixes.some((p) => p.addsCylinder);
       if (hasCylinderOptions) {
         setCurrentStep("cylinderOptions");
       } else {
         handleReset();
       }
     } else if (currentStep === "cylinderOptions") {
-      const hasDeviceOptions = deviceTiedPrefixes.length > 0 && selectedCategory === "Exit Devices";
+      const hasDeviceOptions =
+        deviceTiedPrefixes.length > 0 && selectedCategory === "Exit Devices";
       if (hasDeviceOptions) {
         setCurrentStep("deviceOptions");
       } else {
@@ -481,12 +541,41 @@ function CylinderFinder() {
   };
 
   const isInitialState = !globalSearchTerm;
-  const chosenPrefixes = getChosenPrefixes();
+  const chosenPrefixes = useMemo(() => {
+    const prefixes = [];
+    if (selectedCylinderPrefix) {
+      const prefixData = cylinderPrefixCategories
+        .flatMap((c) => c.prefixes)
+        .find((p) => p.id === selectedCylinderPrefix);
+      if (prefixData) {
+        prefixes.push({
+          id: prefixData.id,
+          description: prefixData.description,
+        });
+      }
+    }
+    selectedDevicePrefixes.forEach((prefixId) => {
+      const prefixData = activeModelData?.prefixes?.find(
+        (p) => p.id === prefixId
+      );
+      if (prefixData) {
+        prefixes.push({
+          id: prefixData.id,
+          description: prefixData.description,
+        });
+      }
+    });
+    return prefixes;
+  }, [selectedCylinderPrefix, selectedDevicePrefixes, activeModelData]);
+
   const availableCylinderPrefixCategories = useMemo(() => {
     return cylinderPrefixCategories.map((category) => ({
       ...category,
       prefixes: category.prefixes.filter(
-        (p) => !activeModelData?.excludedPrefixes?.some((excludedPrefix) => p.id.startsWith(excludedPrefix))
+        (p) =>
+          !activeModelData?.excludedPrefixes?.some((excludedPrefix) =>
+            p.id.startsWith(excludedPrefix)
+          )
       ),
     }));
   }, [activeModelData]);
@@ -588,7 +677,9 @@ function CylinderFinder() {
                   </h3>
                   <CategorizedPrefixSelector
                     categories={availableCylinderPrefixCategories}
-                    selectedPrefixes={selectedCylinderPrefix ? [selectedCylinderPrefix] : []}
+                    selectedPrefixes={
+                      selectedCylinderPrefix ? [selectedCylinderPrefix] : []
+                    }
                     onChange={handleCylinderPrefixChange}
                   />
                 </div>
@@ -601,7 +692,10 @@ function CylinderFinder() {
                 <button onClick={handleBack} className="wizard-back-button">
                   Back
                 </button>
-                <button onClick={handleFindCylinder} className="wizard-find-button">
+                <button
+                  onClick={handleFindCylinder}
+                  className="wizard-find-button"
+                >
                   Find Cylinder
                 </button>
                 <button
@@ -657,7 +751,10 @@ function CylinderFinder() {
               <div className="note-container">
                 <p>
                   <span className="note-text">
-                    **Note:** All listed parts are for a <strong>1-3/4" door</strong>. If your door is thicker or has thermal panels, please contact our technical support team at{" "}
+                    **Note:** All listed parts are for a{" "}
+                    <strong>1-3/4" door</strong>. If your door is thicker or
+                    has thermal panels, please contact our technical support
+                    team at{" "}
                     <a href="mailto:techsupport.sargent@assaabloy.com">
                       techsupport.sargent@assaabloy.com
                     </a>{" "}
@@ -666,18 +763,14 @@ function CylinderFinder() {
                 </p>
               </div>
               <ResultsDisplay cylinders={finalCylinders} />
-              {selectedCollar && (
-                <div className="collar-button-container">
-                  <button onClick={() => setIsCollarModalOpen(true)} className="collar-button">
-                    Did you also need a collar?
-                  </button>
-                </div>
-              )}
               <div className="wizard-controls">
                 <button onClick={handleBack} className="wizard-back-button">
                   Back to Options
                 </button>
-                <button onClick={handleReset} className="wizard-find-button reset-button">
+                <button
+                  onClick={handleReset}
+                  className="wizard-find-button reset-button"
+                >
                   Start Over
                 </button>
               </div>
@@ -690,7 +783,9 @@ function CylinderFinder() {
     return (
       <div ref={searchResultsRef} className="search-results-container">
         {showMultipleMatchesWarning && (
-          <p className="multiple-matches-warning">Multiple matches found. Please select one.</p>
+          <p className="multiple-matches-warning">
+            Multiple matches found. Please select one.
+          </p>
         )}
         {searchResults.map((result) => (
           <div
@@ -698,7 +793,11 @@ function CylinderFinder() {
             className="search-result-item"
             onClick={() => handleSearchClick(result)}
           >
-            <img src={result.imageUrl} alt={result.modelNumber} className="search-result-image" />
+            <img
+              src={result.imageUrl}
+              alt={result.modelNumber}
+              className="search-result-image"
+            />
             <div className="search-result-info">
               <p className="search-result-model">
                 <strong>{result.modelNumber}</strong>
@@ -723,17 +822,15 @@ function CylinderFinder() {
           className="global-search-input"
         />
         {globalSearchTerm && (
-          <button onClick={() => setGlobalSearchTerm("")} className="clear-search-button">
+          <button
+            onClick={() => setGlobalSearchTerm("")}
+            className="clear-search-button"
+          >
             <ClearIcon />
           </button>
         )}
       </div>
       {renderStep()}
-      <CollarModal
-        isOpen={isCollarModalOpen}
-        onClose={() => setIsCollarModalOpen(false)}
-        collars={selectedCollar ? [selectedCollar] : []}
-      />
     </div>
   );
 }

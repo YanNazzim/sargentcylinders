@@ -510,12 +510,24 @@ export const series8800 = {
       description: "Key Outside Unlocks/Locks Trim",
       baseCylinder: { partNumber: "#41", type: "Mortise Cylinder" },
       prefixes: [...devicePrefixes80Series, ...allCylinderPrefixes],
-      // CORRECTED COLLAR DATA STRUCTURE
       collars: {
-        default: { partNumber: "97-0350", description: "Standard Collar for 8813 Rim Exit Device" },
+        default: {
+          partNumber: "97-0350",
+          description: "Standard Collar for 8813 Rim Exit Device",
+        },
         conditional: [
-          { prefix: "60-", partNumber: "97-0351", description: "Collar for 8813 Rim Exit Device with 60- LFIC Prefix" },
-          { prefix: "70-", partNumber: "97-0352", description: "Collar for 8813 Rim Exit Device with 70- SFIC Prefix" },
+          {
+            prefix: "60-",
+            partNumber: "97-0351",
+            description:
+              "Collar for 8813 Rim Exit Device with 60- LFIC Prefix",
+          },
+          {
+            prefix: "70-",
+            partNumber: "97-0352",
+            description:
+              "Collar for 8813 Rim Exit Device with 70- SFIC Prefix",
+          },
         ],
       },
     },
