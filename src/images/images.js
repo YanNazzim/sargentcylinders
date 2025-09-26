@@ -7,6 +7,9 @@ export const images = {
   DegreeCyls: require("./DegreeCylinders.png"),
   XCcyls: require("./XCCylinders.png"),
   KESOcyls: require("./KESOCylinders.png"),
+  ETCollar: require("./ETCollar.png"), // <-- ADDED
+  Rosette97: require("./97Rosette.png"), // <-- ADDED (Renamed for code clarity)
+
 
   RimExit80: require("./8800 Rim Exit.png"),
   RimExitPE80: require("./PE8800 Rim Exit.png"),

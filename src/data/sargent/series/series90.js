@@ -6,10 +6,12 @@ import { auxControl306Prefix } from "../devicePrefixes";
 
 const allCylinderPrefixes = cylinderPrefixCategories.flatMap(category => category.prefixes);
 
-const rimCollarInfo = {
+// Renamed from rimCollarInfo to CollarInfo
+const CollarInfo = {
   default: {
     partNumber: "97-0350",
     description: "Standard Collar for ET Trim",
+    imageUrl: images.ETCollar, // <-- ADDED
   },
   conditional: [
     {
@@ -17,15 +19,40 @@ const rimCollarInfo = {
       partNumber: "97-0351",
       description:
         "Collar for ET Trim with LFIC Prefix (60-, 63-, 64-)",
+      imageUrl: images.ETCollar, // <-- ADDED
     },
     {
       prefix: "70-",
       partNumber: "97-0352",
       description:
         "Collar for ET Trim with SFIC Prefix (70-, 72-, 73-)",
+      imageUrl: images.ETCollar, // <-- ADDED
     },
   ],
 };
+
+const CollarInfo04 = {
+  default: {
+    partNumber: "97 x Finish",
+    description: "Standard Rosette (Only used on cylinder only application - when NOT being used with ET)",
+    imageUrl: images.Rosette97, // <-- ADDED
+  },
+  conditional: [
+    {
+      prefix: "60-",
+      partNumber: "97-0351 x Finish",
+      description: "Rosette for LFIC Prefix (60-, 63-, 64-) (Only used on cylinder only application - when NOT being used with ET)",
+      imageUrl: images.Rosette97, // <-- ADDED
+    },
+    {
+      prefix: "70-",
+      partNumber: "97-0352 x Finish",
+      description: "Rosette for SFIC Prefix (70-, 72-, 73-) (Only used on cylinder only application - when NOT being used with ET)",
+      imageUrl: images.Rosette97, // <-- ADDED
+    },
+  ],
+};
+
 
 export const series9400 = {
   "name": "9400 Series",
@@ -36,7 +63,7 @@ export const series9400 = {
         "description": "Key Retracts Latch", 
         "baseCylinder": { "partNumber": "#41", "type": "Mortise Cylinder" }, 
         "prefixes": [...allCylinderPrefixes],
-        collars: rimCollarInfo, // Added collar logic
+        collars: CollarInfo04, // <-- UPDATED
     },
     { "modelNumber": "9410", "description": "No outside operation", "baseCylinder": null, "prefixes": [...allCylinderPrefixes] },
   ].sort((a, b) => a.modelNumber.localeCompare(b.modelNumber))
@@ -50,7 +77,7 @@ export const series9700 = {
         "description": "Key unlocks Trim, Trim retracts latch/Trim relocks when key is removed", 
         "baseCylinder": { "partNumber": "#41", "type": "Mortise Cylinder" }, 
         "prefixes": [...allCylinderPrefixes, auxControl306Prefix],
-        collars: rimCollarInfo, // Added collar logic
+        collars: CollarInfo,
     },
     { "modelNumber": "9710", "description": "No outside Operation ET Control is used as Pull Only", "baseCylinder": null, "prefixes": [...allCylinderPrefixes, auxControl306Prefix] },
     { 
@@ -58,7 +85,7 @@ export const series9700 = {
         "description": "Key Outside Unlocks/locks Trim", 
         "baseCylinder": { "partNumber": "#41", "type": "Mortise Cylinder" }, 
         "prefixes": [...allCylinderPrefixes, auxControl306Prefix],
-        collars: rimCollarInfo, // Added collar logic
+        collars: CollarInfo,
     },
     { "modelNumber": "9715", "description": "Passage Only", "baseCylinder": null, "prefixes": [...allCylinderPrefixes, auxControl306Prefix] },
     { "modelNumber": "9728", "description": "Thumbpiece - Passage Only", "baseCylinder": null, "prefixes": [...allCylinderPrefixes, auxControl306Prefix] },
@@ -67,14 +94,14 @@ export const series9700 = {
         "description": "Thumbpiece - Key Unlocks/Locks, Retracts Latch", 
         "baseCylinder": { "partNumber": "#34", "type": "Rim Cylinder" }, 
         "prefixes": [...allCylinderPrefixes, auxControl306Prefix],
-        collars: rimCollarInfo, // Added collar logic
+        collars: CollarInfo,
     },
     { 
         "modelNumber": "9763", 
         "description": "Thumbpiece - Key Unlocks/Locks", 
         "baseCylinder": { "partNumber": "#34", "type": "Rim Cylinder" }, 
         "prefixes": [...allCylinderPrefixes, auxControl306Prefix],
-        collars: rimCollarInfo, // Added collar logic
+        collars: CollarInfo,
     },
     { "modelNumber": "9773", "description": "Electrified ET Trim - Fail Safe Power Off, Unlocks Lever", "baseCylinder": null, "prefixes": [...allCylinderPrefixes, auxControl306Prefix] },
     { "modelNumber": "9774", "description": "Electrified ET Trim Fail Secure Power Off, Locks Lever", "baseCylinder": null, "prefixes": [...allCylinderPrefixes, auxControl306Prefix] },
@@ -83,14 +110,14 @@ export const series9700 = {
         "description": "Electrified ET Trim - Fail Safe Power Off, Unlocks Lever, Key Retracts Latch", 
         "baseCylinder": { "partNumber": "#34", "type": "Rim Cylinder" }, 
         "prefixes": [...allCylinderPrefixes, auxControl306Prefix],
-        collars: rimCollarInfo, // Added collar logic
+        collars: CollarInfo,
     },
     { 
         "modelNumber": "9776", 
         "description": "Electrified ET Trim-Fail Secure Power Off, Locks Lever, Key Retracts Latch", 
         "baseCylinder": { "partNumber": "#34", "type": "Rim Cylinder" }, 
         "prefixes": [...allCylinderPrefixes, auxControl306Prefix],
-        collars: rimCollarInfo, // Added collar logic
+        collars: CollarInfo,
     }
   ].sort((a, b) => a.modelNumber.localeCompare(b.modelNumber))
 };
@@ -103,7 +130,7 @@ export const series9800 = {
         "description": "Key Retracts Latch", 
         "baseCylinder": { "partNumber": "#34", "type": "Rim Cylinder" }, 
         "prefixes": [...allCylinderPrefixes],
-        collars: rimCollarInfo, // Added collar logic
+        collars: CollarInfo04, // <-- UPDATED
     },
     { "modelNumber": "9810", "description": "No outside Operation ET Control is used as Pull Only", "baseCylinder": null, "prefixes": [...allCylinderPrefixes] },
     { 
@@ -111,7 +138,7 @@ export const series9800 = {
         "description": "Key Outside Unlocks/locks Trim", 
         "baseCylinder": { "partNumber": "#41", "type": "Mortise Cylinder" }, 
         "prefixes": [...allCylinderPrefixes],
-        collars: rimCollarInfo, // Added collar logic
+        collars: CollarInfo,
     },
     { "modelNumber": "9815", "description": "Passage Only", "baseCylinder": null, "prefixes": [...allCylinderPrefixes] },
     { "modelNumber": "9828", "description": "Thumbpiece - Passage Only", "baseCylinder": null, "prefixes": [...allCylinderPrefixes] },
@@ -120,7 +147,7 @@ export const series9800 = {
         "description": "Key Outside Unlocks/Locks Trim", 
         "baseCylinder": { "partNumber": "#34", "type": "Rim Cylinder" }, 
         "prefixes": [...allCylinderPrefixes],
-        collars: rimCollarInfo, // Added collar logic
+        collars: CollarInfo,
     },
     { "modelNumber": "9873", "description": "Electrified ET Trim Fail Safe Power Off, Unlocks Lever", "baseCylinder": null, "prefixes": [...allCylinderPrefixes] },
     { "modelNumber": "9874", "description": "Electrified ET Trim - Fail Secure Power Off, Locks Lever", "baseCylinder": null, "prefixes": [...allCylinderPrefixes] },
@@ -129,14 +156,14 @@ export const series9800 = {
         "description": "Electrified ET Trim - Fail Safe Power Off, Unlocks Lever, Key Retracts Latch", 
         "baseCylinder": { "partNumber": "#34", "type": "Rim Cylinder" }, 
         "prefixes": [...allCylinderPrefixes],
-        collars: rimCollarInfo, // Added collar logic
+        collars: CollarInfo,
     },
     { 
         "modelNumber": "9876", 
         "description": "Electrified ET Trim-Fail Secure Power Off, Locks Lever, Key Retracts Latch", 
         "baseCylinder": { "partNumber": "#34", "type": "Rim Cylinder" }, 
         "prefixes": [...allCylinderPrefixes],
-        collars: rimCollarInfo, // Added collar logic
+        collars: CollarInfo,
     }
   ].sort((a, b) => a.modelNumber.localeCompare(b.modelNumber))
 };
@@ -149,7 +176,7 @@ export const series9900 = {
         "description": "Key Retracts Latch", 
         "baseCylinder": { "partNumber": "#46", "type": "Mortise Cylinder" }, 
         "prefixes": [...allCylinderPrefixes],
-        collars: rimCollarInfo, // Added collar logic
+        collars: CollarInfo04, // <-- UPDATED
     },
     { "modelNumber": "9910", "description": "No outside Operation ET Control is used as Pull Only", "baseCylinder": null, "prefixes": [...allCylinderPrefixes] },
     { 
@@ -157,7 +184,7 @@ export const series9900 = {
         "description": "Key Outside Unlocks/locks Trim", 
         "baseCylinder": { "partNumber": "#41", "type": "Mortise Cylinder" }, 
         "prefixes": [...allCylinderPrefixes],
-        collars: rimCollarInfo, // Added collar logic
+        collars: CollarInfo,
     },
     { "modelNumber": "9915", "description": "Passage Only", "baseCylinder": null, "prefixes": [...allCylinderPrefixes] },
     { "modelNumber": "9928", "description": "Thumbpiece - Passage Only", "baseCylinder": null, "prefixes": [...allCylinderPrefixes] },
@@ -166,7 +193,7 @@ export const series9900 = {
         "description": "Key Outside Unlocks/locks Trim", 
         "baseCylinder": { "partNumber": "#41", "type": "Mortise Cylinder" }, 
         "prefixes": [...allCylinderPrefixes],
-        collars: rimCollarInfo, // Added collar logic
+        collars: CollarInfo,
     },
     { "modelNumber": "9973", "description": "Electrified ET Trim - Fail Safe, Power Off, Unlocks Lever", "baseCylinder": null, "prefixes": [...allCylinderPrefixes] },
     { "modelNumber": "9974", "description": "Electrified ET Trim - Fail Secure, Power Off, Locks Lever", "baseCylinder": null, "prefixes": [...allCylinderPrefixes] },
@@ -175,14 +202,14 @@ export const series9900 = {
         "description": "Electrified ET Trim-Fail Safe, Power Off, Unlocks Lever, Key Retracts Latch", 
         "baseCylinder": { "partNumber": "#46", "type": "Mortise Cylinder" }, 
         "prefixes": [...allCylinderPrefixes],
-        collars: rimCollarInfo, // Added collar logic
+        collars: CollarInfo,
     },
     { 
         "modelNumber": "9976", 
         "description": "Electrified ET Trim - Fail Secure, Power Off, Locks Lever, Key Retracts Latch", 
         "baseCylinder": { "partNumber": "#46", "type": "Mortise Cylinder" }, 
         "prefixes": [...allCylinderPrefixes],
-        collars: rimCollarInfo, // Added collar logic
+        collars: CollarInfo,
     }
   ].sort((a, b) => a.modelNumber.localeCompare(b.modelNumber))
 };

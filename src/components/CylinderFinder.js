@@ -314,26 +314,29 @@ function CylinderFinder() {
       }
     });
 
+    // 1. Transform rawCylinderList to apply key system changes to part numbers
     const transformedCylinderList = rawCylinderList.map((cyl) => {
       const newCyl = { ...cyl };
-      const partNumberBase = newCyl.partNumber.replace("#", "");
-      if (has127Prefix && partNumberBase === "44") {
+      const basePartNumber = newCyl.partNumber.replace("#", "");
+
+      if (has127Prefix && basePartNumber === "44") {
         return newCyl;
       }
       if (hasKesoPrefix) {
-        if (partNumberBase === "41") newCyl.partNumber = "F1-71";
-        else if (partNumberBase === "46") newCyl.partNumber = "F1-76";
-        else if (partNumberBase === "34") newCyl.partNumber = "F1-64";
+        if (basePartNumber === "41") newCyl.partNumber = "F1-71";
+        else if (basePartNumber === "46") newCyl.partNumber = "F1-76";
+        else if (basePartNumber === "34") newCyl.partNumber = "F1-64";
       }
       if (hasLficPrefix) {
-        if (partNumberBase === "41") newCyl.partNumber = "#42";
+        if (basePartNumber === "41") newCyl.partNumber = "#42";
       } else if (hasSficPrefix) {
-        if (partNumberBase === "41") newCyl.partNumber = "#43";
-        else if (partNumberBase === "44") newCyl.partNumber = "#46";
+        if (basePartNumber === "41") newCyl.partNumber = "#43";
+        else if (basePartNumber === "44") newCyl.partNumber = "#46";
       }
       return newCyl;
     });
 
+    // 2. Consolidate duplicates after transformation
     const consolidatedMap = new Map();
     transformedCylinderList.forEach((cyl) => {
       const key = `${cyl.partNumber}-${cyl.role}`;
@@ -345,8 +348,9 @@ function CylinderFinder() {
 
     let finalCylindersArray = Array.from(consolidatedMap.values());
     
+    // 3. Apply final formatting and collar logic
     finalCylindersArray = finalCylindersArray.map((cyl) => {
-      const basePartNumber = cyl.partNumber.replace("#", "");
+      const basePartNumber = cyl.partNumber.replace("#", ""); // Correctly defined here
       const kesoLengths = {
         "F1-71": '1-1/8"', "F1-72": '1-1/4"', "F1-73": '1-3/8"',
         "F1-74": '1-1/2"', "F1-76": '1-3/4"', "F1-64": '1-3/4" to 3-1/8"',
@@ -401,10 +405,10 @@ function CylinderFinder() {
 
       // 2. Add the selected collar (conditional takes precedence over default)
       if (selectedConditionalCollar) {
-          cylinderCollars.push({...selectedConditionalCollar, imageUrl: images.sargentlogo});
+          cylinderCollars.push({...selectedConditionalCollar, imageUrl: selectedConditionalCollar.imageUrl || images.sargentlogo});
       } else if (cyl.role === "Outside Cylinder" && defaultCollar) {
           // 3. If no conditional collar, add the default collar
-          cylinderCollars.push({...defaultCollar, imageUrl: images.sargentlogo});
+          cylinderCollars.push({...defaultCollar, imageUrl: defaultCollar.imageUrl || images.sargentlogo});
       }
 
       // 4. Add device-specific collars (like the 16- dogging rosette)
@@ -412,7 +416,7 @@ function CylinderFinder() {
       if (devicePrefixData && devicePrefixData.addsCollar) {
           // Ensure the device collar is not a duplicate of what was just added (unlikely, but safe check)
           if (!cylinderCollars.some(c => c.partNumber === devicePrefixData.addsCollar.partNumber)) {
-              cylinderCollars.push({...devicePrefixData.addsCollar, imageUrl: images.sargentlogo});
+              cylinderCollars.push({...devicePrefixData.addsCollar, imageUrl: devicePrefixData.addsCollar.imageUrl || images.sargentlogo});
           }
       }
 
