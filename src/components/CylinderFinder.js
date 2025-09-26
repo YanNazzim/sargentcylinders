@@ -9,6 +9,28 @@ import "./CylinderFinder.css";
 import { images } from "../images/images";
 import { SearchIcon, ClearIcon } from "./Icons";
 
+const isLficForCollar = (prefix) => {
+  if (!prefix) return false;
+  const lficPrefixesForCollar = [
+    "60-", "63-", "64-",
+    "DG1-60-", "DG1-63-", "DG1-64-",
+    "DG2-60-", "DG2-63-", "DG2-64-",
+    "DG3-60-", "DG3-63-", "DG3-64-",
+    "10-63-",
+    "11-60-", "11-63-", "11-64-",
+  ];
+  return lficPrefixesForCollar.includes(prefix);
+};
+
+const isSficForCollar = (prefix) => {
+  if (!prefix) return false;
+  const sficPrefixesForCollar = [
+    "70-", "72-", "73-", "65-73-", "65-73-7P-", "73-7P-",
+    "11-70-7P-", "11-72-7P-", "11-73-7P-", "11-65-73-7P-",
+  ];
+  return sficPrefixesForCollar.includes(prefix);
+};
+
 function CylinderFinder() {
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedSeriesName, setSelectedSeriesName] = useState("");
@@ -367,25 +389,31 @@ function CylinderFinder() {
       const cylinderCollars = [];
       const { default: defaultCollar, conditional: conditionalCollars } = activeModelData.collars || {};
 
-      if (cyl.role === "Outside Cylinder" && defaultCollar) {
-        cylinderCollars.push({...defaultCollar, imageUrl: images.sargentlogo});
+      // 1. Check for a matching conditional collar first
+      let selectedConditionalCollar = null;
+      if (cyl.role === "Outside Cylinder" && conditionalCollars) {
+          selectedConditionalCollar = conditionalCollars.find(collar => {
+              const isLficMatch = collar.prefix === "60-" && isLficForCollar(selectedCylinderPrefix);
+              const isSficMatch = collar.prefix === "70-" && isSficForCollar(selectedCylinderPrefix);
+              return isLficMatch || isSficMatch || (selectedCylinderPrefix && selectedCylinderPrefix.startsWith(collar.prefix));
+          });
       }
 
+      // 2. Add the selected collar (conditional takes precedence over default)
+      if (selectedConditionalCollar) {
+          cylinderCollars.push({...selectedConditionalCollar, imageUrl: images.sargentlogo});
+      } else if (cyl.role === "Outside Cylinder" && defaultCollar) {
+          // 3. If no conditional collar, add the default collar
+          cylinderCollars.push({...defaultCollar, imageUrl: images.sargentlogo});
+      }
+
+      // 4. Add device-specific collars (like the 16- dogging rosette)
       const devicePrefixData = activeModelData.prefixes?.find(p => p.id === cyl.role);
       if (devicePrefixData && devicePrefixData.addsCollar) {
-         if (!cylinderCollars.some(c => c.partNumber === devicePrefixData.addsCollar.partNumber)) {
-            cylinderCollars.push({...devicePrefixData.addsCollar, imageUrl: images.sargentlogo});
-         }
-      }
-
-      if (cyl.role === "Outside Cylinder" && conditionalCollars) {
-          conditionalCollars.forEach(collar => {
-              if (selectedCylinderPrefix && selectedCylinderPrefix.startsWith(collar.prefix)) {
-                  if (!cylinderCollars.some(c => c.partNumber === collar.partNumber)) {
-                      cylinderCollars.push({...collar, imageUrl: images.sargentlogo});
-                  }
-              }
-          });
+          // Ensure the device collar is not a duplicate of what was just added (unlikely, but safe check)
+          if (!cylinderCollars.some(c => c.partNumber === devicePrefixData.addsCollar.partNumber)) {
+              cylinderCollars.push({...devicePrefixData.addsCollar, imageUrl: images.sargentlogo});
+          }
       }
 
       return {
