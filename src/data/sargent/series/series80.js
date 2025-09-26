@@ -13,25 +13,32 @@ const allCylinderPrefixes = cylinderPrefixCategories.flatMap(
 );
 
 // Define the collars object once for re-use across all keyed Rim Exit functions
-const rimCollarInfo = {
+const CollarInfo = {
   default: {
-    partNumber: "97-0350",
+    partNumber: "97-0350 x Finish",
     description: "Standard Collar for ET Trim",
   },
   conditional: [
     {
       prefix: "60-",
-      partNumber: "97-0351",
+      partNumber: "97-0351 x Finish",
       description:
         "Collar for ET Trim with LFIC Prefix (60-, 63-, 64-)",
     },
     {
       prefix: "70-",
-      partNumber: "97-0352",
+      partNumber: "97-0352 x Finish",
       description:
         "Collar for ET Trim with SFIC Prefix (70-, 72-, 73-)",
     },
   ],
+};
+
+const CollarInfo04 = {
+  default: {
+    partNumber: "97 x Finish",
+    description: "Standard Rosette (Only used on cylinder only application - when NOT being used with ET)",
+  },
 };
 
 
@@ -43,7 +50,7 @@ export const series8300 = {
     {
       modelNumber: "8304",
       description: "Key Retracts Latch",
-      collars: rimCollarInfo,
+      collars: CollarInfo04,
       baseCylinder: { partNumber: "#46", type: "Mortise Cylinder" },
       prefixes: [...devicePrefixes80Series, ...allCylinderPrefixes],
     },
@@ -56,7 +63,7 @@ export const series8300 = {
     {
       modelNumber: "8313",
       description: "Key Outside Unlocks/locks Trim",
-      collars: rimCollarInfo,
+      collars: CollarInfo,
       baseCylinder: { partNumber: "#41", type: "Mortise Cylinder" },
       prefixes: [...devicePrefixes80Series, ...allCylinderPrefixes],
     },
@@ -81,12 +88,13 @@ export const series8300 = {
     {
       modelNumber: "8343",
       description: "Freewheeling Trim - Key Outside Unlocks/locks Trim",
-      collars: rimCollarInfo,
+      collars: CollarInfo,
       baseCylinder: { partNumber: "#41", type: "Mortise Cylinder" },
       prefixes: [...devicePrefixes80Series, ...allCylinderPrefixes],
     },
     {
       modelNumber: "8344",
+      collars: CollarInfo04,
       description: "Freewheeling Trim - Key Retracts Latch",
       baseCylinder: { partNumber: "#46", type: "Mortise Cylinder" },
       prefixes: [...devicePrefixes80Series, ...allCylinderPrefixes],
@@ -101,7 +109,7 @@ export const series8300 = {
       modelNumber: "8375",
       description:
         "Electrified ET Trim Fail Safe Power Off, Unlocks Lever, Key Retracts Latch",
-      collars: rimCollarInfo,
+      collars: CollarInfo,
       baseCylinder: { partNumber: "#46", type: "Mortise Cylinder" },
       prefixes: [...devicePrefixes80Series, ...allCylinderPrefixes],
     },
@@ -109,7 +117,7 @@ export const series8300 = {
       modelNumber: "8376",
       description:
         "Electrified ET Trim Fail Secure Power Off, Locks Lever, Key Retracts Latch",
-      collars: rimCollarInfo,
+      collars: CollarInfo,
       baseCylinder: { partNumber: "#46", type: "Mortise Cylinder" },
       prefixes: [...devicePrefixes80Series, ...allCylinderPrefixes],
     },
@@ -125,7 +133,7 @@ export const series8400 = {
       modelNumber: "8406",
       description:
         "Key unlocks Trim, Trim retracts latch/Trim relocks when key is removed",
-      collars: rimCollarInfo,
+      collars: CollarInfo,
       baseCylinder: { partNumber: "#41", type: "Mortise Cylinder" },
       prefixes: [...devicePrefixes80Series, ...allCylinderPrefixes],
     },
@@ -139,7 +147,7 @@ export const series8400 = {
       modelNumber: "8413",
       description: "Key Outside Unlocks/locks Trim",
       baseCylinder: { partNumber: "#41", type: "Mortise Cylinder" },
-      collars: rimCollarInfo,
+      collars: CollarInfo,
       prefixes: [...devicePrefixes80Series, ...allCylinderPrefixes],
     },
     {
@@ -157,7 +165,7 @@ export const series8400 = {
     {
       modelNumber: "8443",
       description: "Freewheeling Trim - Key Outside Unlocks/locks Trim",
-      collars: rimCollarInfo,
+      collars: CollarInfo,
       baseCylinder: { partNumber: "#41", type: "Mortise Cylinder" },
       prefixes: [...devicePrefixes80Series, ...allCylinderPrefixes],
     },
@@ -165,7 +173,7 @@ export const series8400 = {
       modelNumber: "8446",
       description:
         "Freewheeling Trim - Key unlocks Trim, Trim retracts latch/Trim relocks when key is removed",
-      collars: rimCollarInfo,
+      collars: CollarInfo,
       baseCylinder: { partNumber: "#41", type: "Mortise Cylinder" },
       prefixes: [...devicePrefixes80Series, ...allCylinderPrefixes],
     },
@@ -193,6 +201,7 @@ export const series8500 = {
   models: [
     {
       modelNumber: "8504",
+      collars: CollarInfo04,
       description: "Key Retracts Latch",
       baseCylinder: { partNumber: "#34", type: "Rim Cylinder" },
       prefixes: [...devicePrefixes80Series, ...allCylinderPrefixes],
@@ -203,7 +212,7 @@ export const series8500 = {
         "Key unlocks Trim, Trim retracts latch/Trim relocks when key is removed",
       baseCylinder: { partNumber: "#41", type: "Mortise Cylinder" },
       prefixes: [...devicePrefixes80Series, ...allCylinderPrefixes],
-      collars: rimCollarInfo,
+      collars: CollarInfo,
     },
     {
       modelNumber: "8510",
@@ -240,14 +249,14 @@ export const series8500 = {
       description: "Freewheeling Trim - Key Outside Unlocks/locks Trim",
       baseCylinder: { partNumber: "#41", type: "Mortise Cylinder" },
       prefixes: [...devicePrefixes80Series, ...allCylinderPrefixes],
-      collars: rimCollarInfo,
+      collars: CollarInfo,
     },
     {
       modelNumber: "8544",
+      collars: CollarInfo04,
       description: "Freewheeling Trim - Key Retracts Latch",
       baseCylinder: { partNumber: "#34", type: "Rim Cylinder" },
       prefixes: [...devicePrefixes80Series, ...allCylinderPrefixes],
-      collars: rimCollarInfo,
     },
     {
       modelNumber: "8546",
@@ -255,14 +264,14 @@ export const series8500 = {
         "Freewheeling Trim - Key unlocks Trim, Trim retracts latch/Trim relocks when key is removed",
       baseCylinder: { partNumber: "#41", type: "Mortise Cylinder" },
       prefixes: [...devicePrefixes80Series, ...allCylinderPrefixes],
-      collars: rimCollarInfo,
+      collars: CollarInfo,
     },
     {
       modelNumber: "8563",
       description: "Thumbpiece - Key Unlocks/Locks",
       baseCylinder: { partNumber: "#34", type: "Rim Cylinder" },
       prefixes: [...devicePrefixes80Series, ...allCylinderPrefixes],
-      collars: rimCollarInfo,
+      collars: CollarInfo,
     },
     {
       modelNumber: "8573",
@@ -288,7 +297,7 @@ export const series8600 = {
       description:
         "Key unlocks Trim, Trim retracts latch/Trim relocks when key is removed",
       baseCylinder: { partNumber: "#41", type: "Mortise Cylinder" },
-      collars: rimCollarInfo,
+      collars: CollarInfo,
       prefixes: [
         ...devicePrefixes80Series,
         auxControl106Prefix,
@@ -309,7 +318,7 @@ export const series8600 = {
       modelNumber: "8613",
       description: "Key Outside Unlocks/locks Trim",
       baseCylinder: { partNumber: "#41", type: "Mortise Cylinder" },
-      collars: rimCollarInfo,
+      collars: CollarInfo,
       prefixes: [
         ...devicePrefixes80Series,
         auxControl106Prefix,
@@ -350,7 +359,7 @@ export const series8600 = {
       modelNumber: "8643",
       description: "Freewheeling Trim - Key Outside Unlocks/locks Trim",
       baseCylinder: { partNumber: "#41", type: "Mortise Cylinder" },
-      collars: rimCollarInfo,
+      collars: CollarInfo,
       prefixes: [
         ...devicePrefixes80Series,
         auxControl106Prefix,
@@ -362,7 +371,7 @@ export const series8600 = {
       description:
         "Freewheeling Trim - Key unlocks Trim, Trim retracts latch/Trim relocks when key is removed",
       baseCylinder: { partNumber: "#41", type: "Mortise Cylinder" },
-      collars: rimCollarInfo,
+      collars: CollarInfo,
       prefixes: [
         ...devicePrefixes80Series,
         auxControl106Prefix,
@@ -403,7 +412,7 @@ export const series8700 = {
       description:
         "Key unlocks Trim, Trim retracts latch/Trim relocks when key is removed",
       baseCylinder: { partNumber: "#41", type: "Mortise Cylinder" },
-      collars: rimCollarInfo,
+      collars: CollarInfo,
       prefixes: [
         ...devicePrefixes80Series,
         auxControl306Prefix,
@@ -424,7 +433,7 @@ export const series8700 = {
       modelNumber: "8713",
       description: "Key Outside Unlocks/Locks Trim",
       baseCylinder: { partNumber: "#41", type: "Mortise Cylinder" },
-      collars: rimCollarInfo,
+      collars: CollarInfo,
       prefixes: [
         ...devicePrefixes80Series,
         auxControl306Prefix,
@@ -465,7 +474,7 @@ export const series8700 = {
       modelNumber: "8743",
       description: "Freewheeling Trim - Key Outside Unlocks/locks Trim",
       baseCylinder: { partNumber: "#41", type: "Mortise Cylinder" },
-      collars: rimCollarInfo,
+      collars: CollarInfo,
       prefixes: [
         ...devicePrefixes80Series,
         auxControl306Prefix,
@@ -477,7 +486,7 @@ export const series8700 = {
       description:
         "Freewheeling Trim - Key unlocks Trim, Trim retracts latch/Trim relocks when key is removed",
       baseCylinder: { partNumber: "#41", type: "Mortise Cylinder" },
-      collars: rimCollarInfo,
+      collars: CollarInfo,
       prefixes: [
         ...devicePrefixes80Series,
         auxControl306Prefix,
@@ -536,7 +545,7 @@ export const series8800 = {
       description: "Key Retracts Latch",
       baseCylinder: { partNumber: "#34", type: "Rim Cylinder" },
       prefixes: [...devicePrefixes80Series, ...allCylinderPrefixes],
-      collars: rimCollarInfo,
+      collars: CollarInfo04,
     },
     {
       modelNumber: "8806",
@@ -544,7 +553,7 @@ export const series8800 = {
         "Key unlocks Trim, Trim retracts latch/Trim relocks when key is removed",
       baseCylinder: { partNumber: "#41", type: "Mortise Cylinder" },
       prefixes: [...devicePrefixes80Series, ...allCylinderPrefixes],
-      collars: rimCollarInfo,
+      collars: CollarInfo,
     },
     {
       modelNumber: "8810",
@@ -557,7 +566,7 @@ export const series8800 = {
       description: "Key Outside Unlocks/Locks Trim",
       baseCylinder: { partNumber: "#41", type: "Mortise Cylinder" },
       prefixes: [...devicePrefixes80Series, ...allCylinderPrefixes],
-      collars: rimCollarInfo,
+      collars: CollarInfo,
     },
     {
       modelNumber: "8815",
@@ -595,7 +604,7 @@ export const series8800 = {
         },
         ...allCylinderPrefixes,
       ],
-      collars: rimCollarInfo,
+      collars: CollarInfo,
     },
     {
       modelNumber: "8828",
@@ -614,10 +623,11 @@ export const series8800 = {
       description: "Freewheeling Trim- Key Outside Unlocks/locks Trim",
       baseCylinder: { partNumber: "#41", type: "Mortise Cylinder" },
       prefixes: [...devicePrefixes80Series, ...allCylinderPrefixes],
-      collars: rimCollarInfo,
+      collars: CollarInfo,
     },
     {
       modelNumber: "8844",
+      collars: CollarInfo04,
       description: "Freewheeling Trim - Key Retracts Latch",
       baseCylinder: { partNumber: "#34", type: "Rim Cylinder" },
       prefixes: [...devicePrefixes80Series, ...allCylinderPrefixes],
@@ -628,14 +638,14 @@ export const series8800 = {
         "Freewheeling Trim - Key unlocks Trim, Trim retracts latch/Trim relocks when key is removed",
       baseCylinder: { partNumber: "#41", type: "Mortise Cylinder" },
       prefixes: [...devicePrefixes80Series, ...allCylinderPrefixes],
-      collars: rimCollarInfo,
+      collars: CollarInfo,
     },
     {
       modelNumber: "8863",
       description: "Thumbpiece - Key Unlocks/Locks",
       baseCylinder: { partNumber: "#34", type: "Rim Cylinder" },
       prefixes: [...devicePrefixes80Series, ...allCylinderPrefixes],
-      collars: rimCollarInfo,
+      collars: CollarInfo,
     },
     {
       modelNumber: "8866",
@@ -653,7 +663,7 @@ export const series8800 = {
         ...devicePrefixes80Series,
         ...allCylinderPrefixes,
       ],
-      collars: rimCollarInfo,
+      collars: CollarInfo,
     },
     {
       modelNumber: "8873",
@@ -690,6 +700,7 @@ export const series8900 = {
   models: [
     {
       modelNumber: "8904",
+      collars: CollarInfo04,
       description: "Key Retracts Latch",
       baseCylinder: { partNumber: "#41", type: "Mortise Cylinder" },
       prefixes: [...devicePrefixes80Series, ...allCylinderPrefixes],
@@ -699,7 +710,7 @@ export const series8900 = {
       description:
         "Key unlocks Trim, Trim retracts Latch/Trim relocks when key is removed",
       baseCylinder: { partNumber: "#41", type: "Mortise Cylinder" },
-      collars: rimCollarInfo,
+      collars: CollarInfo,
       prefixes: [...devicePrefixes80Series, ...allCylinderPrefixes],
     },
     {
@@ -712,7 +723,7 @@ export const series8900 = {
       modelNumber: "8913",
       description: "Key Outside Unlocks/Locks Trim",
       baseCylinder: { partNumber: "#41", type: "Mortise Cylinder" },
-      collars: rimCollarInfo,
+      collars: CollarInfo,
       prefixes: [...devicePrefixes80Series, ...allCylinderPrefixes],
     },
     {
@@ -754,11 +765,12 @@ export const series8900 = {
       modelNumber: "8943",
       description: "Freewheeling Trim- Key Outside Unlocks/locks Trim",
       baseCylinder: { partNumber: "#41", type: "Mortise Cylinder" },
-      collars: rimCollarInfo,
+      collars: CollarInfo,
       prefixes: [...devicePrefixes80Series, ...allCylinderPrefixes],
     },
     {
       modelNumber: "8944",
+      collars: CollarInfo04,
       description: "Freewheeling Trim- Key Retracts Latch",
       baseCylinder: { partNumber: "#46", type: "Mortise Cylinder" },
       prefixes: [...devicePrefixes80Series, ...allCylinderPrefixes],
@@ -791,7 +803,7 @@ export const series8900 = {
       description:
         "Electrified ET Trim-Fail Safe Power Off, Unlocks Lever, Key Retracts Latch",
       baseCylinder: { partNumber: "#46", type: "Mortise Cylinder" },
-      collars: rimCollarInfo,
+      collars: CollarInfo,
       prefixes: [...devicePrefixes80Series, ...allCylinderPrefixes],
     },
     {
@@ -799,7 +811,7 @@ export const series8900 = {
       description:
         "Electrified ET Trim Fail Secure Power Off, Locks Lever, Key Retracts Latch",
       baseCylinder: { partNumber: "#46", type: "Mortise Cylinder" },
-      collars: rimCollarInfo,
+      collars: CollarInfo,
       prefixes: [...devicePrefixes80Series, ...allCylinderPrefixes],
     },
   ].sort((a, b) => a.modelNumber.localeCompare(b.modelNumber)),

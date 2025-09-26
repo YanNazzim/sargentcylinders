@@ -3,25 +3,32 @@ import { devicePrefixesPE80Series, auxControl106Prefix, auxControl306Prefix } fr
 import {images} from '../../../images/images';
 
 // Define the collars object once for re-use across all keyed Rim Exit functions
-const rimCollarInfo = {
+const CollarInfo = {
   default: {
-    partNumber: "97-0350",
-    description: "Standard Collar for NE/WE Trim",
+    partNumber: "97-0350 x Finish",
+    description: "Standard Collar for ET Trim",
   },
   conditional: [
     {
       prefix: "60-",
-      partNumber: "97-0351",
+      partNumber: "97-0351 x Finish",
       description:
-        "Collar for NE/WE Trim with LFIC Prefix (60-, 63-, 64-)",
+        "Collar for ET Trim with LFIC Prefix (60-, 63-, 64-)",
     },
     {
       prefix: "70-",
-      partNumber: "97-0352",
+      partNumber: "97-0352 x Finish",
       description:
-        "Collar for NE/WE Trim with SFIC Prefix (70-, 72-, 73-)",
+        "Collar for ET Trim with SFIC Prefix (70-, 72-, 73-)",
     },
   ],
+};
+
+const CollarInfo04 = {
+  default: {
+    partNumber: "97 x Finish",
+    description: "Standard Rosette (Only used on cylinder only application - when NOT being used with ET)",
+  },
 };
 
 
@@ -72,14 +79,14 @@ export const seriesPE8500 = {
         "description": "Key retracts latch", 
         "baseCylinder": { "partNumber": "#34", "type": "Rim Cylinder" }, 
         "prefixes": [...devicePrefixesPE80Series],
-        collars: rimCollarInfo,
+        collars: CollarInfo04,
     },
     { 
         "modelNumber": "PE8506", 
         "description": "Key unlocks trim, trim retracts latch/trim relocks when key is removed", 
         "baseCylinder": { "partNumber": "#41", "type": "Mortise Cylinder" }, 
         "prefixes": [...devicePrefixesPE80Series],
-        collars: rimCollarInfo,
+        collars: CollarInfo,
     },
     { "modelNumber": "PE8510", "description": "No outside operation Trim is used as Pull Only", "baseCylinder": null, "prefixes": [...devicePrefixesPE80Series] },
     { 
@@ -87,7 +94,7 @@ export const seriesPE8500 = {
         "description": "Key outside unlocks/locks trim", 
         "baseCylinder": { "partNumber": "#41", "type": "Mortise Cylinder" }, 
         "prefixes": [...devicePrefixesPE80Series],
-        collars: rimCollarInfo,
+        collars: CollarInfo,
     },
     { "modelNumber": "PE8515", "description": "Passage only", "baseCylinder": null, "prefixes": [...devicePrefixesPE80Series] },
     { "modelNumber": "PE8528", "description": "Thumbpiece - Passage Only", "baseCylinder": null, "prefixes": [...devicePrefixesPE80Series] },
@@ -97,28 +104,28 @@ export const seriesPE8500 = {
         "description": "Key outside unlocks/locks trim", 
         "baseCylinder": { "partNumber": "#41", "type": "Mortise Cylinder" }, 
         "prefixes": [...devicePrefixesPE80Series],
-        collars: rimCollarInfo,
+        collars: CollarInfo,
     },
     { 
         "modelNumber": "PE8544", 
         "description": "Key retracts latch", 
         "baseCylinder": { "partNumber": "#34", "type": "Rim Cylinder" }, 
         "prefixes": [...devicePrefixesPE80Series],
-        collars: rimCollarInfo,
+        collars: CollarInfo04,
     },
     { 
         "modelNumber": "PE8546", 
         "description": "Key unlocks trim, trim retracts latch/trim relocks when key is removed", 
         "baseCylinder": { "partNumber": "#41", "type": "Mortise Cylinder" }, 
         "prefixes": [...devicePrefixesPE80Series],
-        collars: rimCollarInfo,
+        collars: CollarInfo,
     },
     { 
         "modelNumber": "PE8563", 
         "description": "Thumbpiece - Key Unlocks/Locks", 
         "baseCylinder": { "partNumber": "#34", "type": "Rim Cylinder" }, 
         "prefixes": [...devicePrefixesPE80Series],
-        collars: rimCollarInfo,
+        collars: CollarInfo,
     },
     { "modelNumber": "PE8573", "description": "Electrified lever trim - fail safe power off, unlocks lever", "baseCylinder": null, "prefixes": [...devicePrefixesPE80Series] },
     { "modelNumber": "PE8574", "description": "Electrified lever trim - fail secure power off, locks lever", "baseCylinder": null, "prefixes": [...devicePrefixesPE80Series] }
@@ -170,14 +177,14 @@ export const seriesPE8800 = {
         "description": "Key retracts latch", 
         "baseCylinder": { "partNumber": "#34", "type": "Rim Cylinder" }, 
         "prefixes": [...devicePrefixesPE80Series],
-        collars: rimCollarInfo,
+        collars: CollarInfo04,
     },
     { 
         "modelNumber": "PE8806", 
         "description": "Key unlocks trim, trim retracts latch/trim relocks when key is removed", 
         "baseCylinder": { "partNumber": "#41", "type": "Mortise Cylinder" }, 
         "prefixes": [...devicePrefixesPE80Series],
-        collars: rimCollarInfo,
+        collars: CollarInfo,
     },
     { "modelNumber": "PE8810", "description": "No outside operation Trim is used as Pull Only", "baseCylinder": null, "prefixes": [...devicePrefixesPE80Series] },
     { 
@@ -185,7 +192,7 @@ export const seriesPE8800 = {
         "description": "Key outside unlocks/locks trim", 
         "baseCylinder": { "partNumber": "#41", "type": "Mortise Cylinder" }, 
         "prefixes": [...devicePrefixesPE80Series],
-        collars: rimCollarInfo,
+        collars: CollarInfo,
     },
     { "modelNumber": "PE8815", "description": "Passage only", "baseCylinder": null, "prefixes": [...devicePrefixesPE80Series] },
     { 
@@ -193,7 +200,7 @@ export const seriesPE8800 = {
         "description": "Key Outside Retracts Latch; Key Inside Unlocks/Locks O/S Trim", 
         "baseCylinder": { "partNumber": "#34", "type": "Rim Cylinder" }, 
         "prefixes": [{ "id": "Inside Cyl", "description": "Inside Cylinder for 8816 Function", "addsCylinder": { "partNumber": "#44", "type": "Mortise Cylinder" }, "isDeviceSpecific": true, "keywords": [] }, ...devicePrefixesPE80Series.filter(p => p.id !== "127 - Mortise Cylinder Thumbturn"), { "id": "127 - Mortise Cylinder Thumbturn", "description": "Turns your inside Keyed Cylinder into a detachable mortise thumbturn", "addsCylinder": { "partNumber": "#44", "type": "Mortise Cylinder", "notes": "For alarm kit control." }, "isDeviceSpecific": true, "keywords": ["127", "thumbturn"] }],
-        collars: rimCollarInfo,
+        collars: CollarInfo,
     },
     { "modelNumber": "PE8828", "description": "Thumbpiece - Passage Only", "baseCylinder": null, "prefixes": [...devicePrefixesPE80Series] },
     { "modelNumber": "PE8840", "description": "No outside operation; Freewheeling trim.", "baseCylinder": null, "prefixes": [...devicePrefixesPE80Series] },
@@ -202,35 +209,35 @@ export const seriesPE8800 = {
         "description": "Key outside unlocks/locks trim. Freewheeling trim.", 
         "baseCylinder": { "partNumber": "#41", "type": "Mortise Cylinder" }, 
         "prefixes": [...devicePrefixesPE80Series],
-        collars: rimCollarInfo,
+        collars: CollarInfo,
     },
     { 
         "modelNumber": "PE8844", 
         "description": "Key retracts latch. Freewheeling trim.", 
         "baseCylinder": { "partNumber": "#34", "type": "Rim Cylinder" }, 
         "prefixes": [...devicePrefixesPE80Series],
-        collars: rimCollarInfo,
+        collars: CollarInfo04,
     },
     { 
         "modelNumber": "PE8846", 
         "description": "Key unlocks trim, trim retracts latch/trim relocks when key is removed", 
         "baseCylinder": { "partNumber": "#41", "type": "Mortise Cylinder" }, 
         "prefixes": [...devicePrefixesPE80Series],
-        collars: rimCollarInfo,
+        collars: CollarInfo,
     },
     { 
         "modelNumber": "PE8863", 
         "description": "Thumbpiece - Key Unlocks/Locks", 
         "baseCylinder": { "partNumber": "#34", "type": "Rim Cylinder" }, 
         "prefixes": [...devicePrefixesPE80Series],
-        collars: rimCollarInfo,
+        collars: CollarInfo,
     },
     { 
         "modelNumber": "PE8866", 
         "description": "Thumbpiece - Key Outside Retracts, Inside Unlocks/Locks Trim", 
         "baseCylinder": { "partNumber": "#34", "type": "Rim Cylinder" }, 
         "prefixes": [{ "id": "Inside Cyl", "description": "Inside Cylinder for 8866 Function", "addsCylinder": { "partNumber": "#44", "type": "Mortise Cylinder" }, "isDeviceSpecific": true, "keywords": [] }, ...devicePrefixesPE80Series],
-        collars: rimCollarInfo,
+        collars: CollarInfo,
     },
     { "modelNumber": "PE8867", "description": "Push Button locks latchbolt/key releases button and latchbolt", "baseCylinder": null, "prefixes": [...devicePrefixesPE80Series] },
     { "modelNumber": "PE8873", "description": "Electrified trim - fail safe power off, unlocks lever", "baseCylinder": null, "prefixes": [...devicePrefixesPE80Series] },
@@ -240,14 +247,14 @@ export const seriesPE8800 = {
         "description": "Electrified lever trim - fail safe power off, unlocks lever, key retracts latch", 
         "baseCylinder": { "partNumber": "#34", "type": "Rim Cylinder" }, 
         "prefixes": [...devicePrefixesPE80Series],
-        collars: rimCollarInfo,
+        collars: CollarInfo,
     },
     { 
         "modelNumber": "PE8876", 
         "description": "Electrified lever trim - fail secure power off, locks lever, key retracts latch", 
         "baseCylinder": { "partNumber": "#34", "type": "Rim Cylinder" }, 
         "prefixes": [...devicePrefixesPE80Series],
-        collars: rimCollarInfo,
+        collars: CollarInfo,
     },
   ].sort((a, b) => a.modelNumber.localeCompare(b.modelNumber))
 };
