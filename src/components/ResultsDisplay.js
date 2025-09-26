@@ -3,6 +3,9 @@ import React from 'react';
 import './ResultsDisplay.css'; 
 import { images } from '../images/images';
 
+// New constant note to be applied to all collars
+const COLLAR_SEPARATE_NOTE = "If you need this collar its always ordered separately (does NOT come with cylinder by default)";
+
 function ResultsDisplay({ cylinders }) {
   return (
     <div className="results-display-container">
@@ -27,8 +30,12 @@ function ResultsDisplay({ cylinders }) {
                   {cyl.collars.map((collar, collarIndex) => (
                     <div key={`collar-${index}-${collarIndex}`} className="collar-item">
                         <img src={collar.imageUrl || images.sargentlogo} alt={collar.partNumber} className="item-image" />
-                        <p className="results-display-item-part-number">{collar.partNumber}</p>
+                        <p className="results-display-item-part-number">
+                          {collar.partNumber}
+                          {collar.projection && <span className="results-display-item-quantity"> ({collar.projection} Projection)</span>} {/* <-- UPDATED: Added projection */}
+                        </p>
                         <p className="results-display-item-description">{collar.description}</p>
+                        <p className="results-display-item-notes">{COLLAR_SEPARATE_NOTE}</p>
                     </div>
                   ))}
                 </div>

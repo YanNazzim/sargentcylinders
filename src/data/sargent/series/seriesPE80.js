@@ -7,7 +7,8 @@ const CollarInfo = {
   default: {
     partNumber: "97-0350 x Finish",
     description: "Standard Collar for ET Trim",
-    imageUrl: images.ETCollar, // <-- ADDED
+    imageUrl: images.ETCollar,
+    projection: '5/8"', // <-- ADDED
   },
   conditional: [
     {
@@ -15,14 +16,16 @@ const CollarInfo = {
       partNumber: "97-0351 x Finish",
       description:
         "Collar for ET Trim with LFIC Prefix (60-, 63-, 64-)",
-      imageUrl: images.ETCollar, // <-- ADDED
+      imageUrl: images.ETCollar,
+      projection: '3/4"', // <-- ADDED
     },
     {
       prefix: "70-",
       partNumber: "97-0352 x Finish",
       description:
         "Collar for ET Trim with SFIC Prefix (70-, 72-, 73-)",
-      imageUrl: images.ETCollar, // <-- ADDED
+      imageUrl: images.ETCollar,
+      projection: '7/8"', // <-- ADDED
     },
   ],
 };
@@ -32,21 +35,8 @@ const CollarInfo04 = {
     partNumber: "97 x Finish",
     description: "Standard Rosette (Only used on cylinder only application - when NOT being used with ET)",
     imageUrl: images.Rosette97, // <-- ADDED
+        projection: '9/32"', // <-- ADDED
   },
-  conditional: [
-    {
-      prefix: "60-",
-      partNumber: "97-0351 x Finish",
-      description: "Rosette for LFIC Prefix (60-, 63-, 64-) (Only used on cylinder only application - when NOT being used with ET)",
-      imageUrl: images.Rosette97, // <-- ADDED
-    },
-    {
-      prefix: "70-",
-      partNumber: "97-0352 x Finish",
-      description: "Rosette for SFIC Prefix (70-, 72-, 73-) (Only used on cylinder only application - when NOT being used with ET)",
-      imageUrl: images.Rosette97, // <-- ADDED
-    },
-  ],
 };
 
 

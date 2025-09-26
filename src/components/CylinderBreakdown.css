@@ -177,3 +177,10 @@
         color: var(--primary-color);
     }
 }
+
+/* Force single column stack on mobile screens */
+@media screen and (max-width: 500px) {
+    .parts-list {
+        grid-template-columns: 1fr;
+    }
+}
