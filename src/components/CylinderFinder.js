@@ -1,4 +1,5 @@
 // src/components/CylinderFinder.js
+
 import { useState, useMemo, useEffect, useRef, useCallback } from "react";
 import { sargentData, cylinderPrefixCategories } from "../data/sargentData";
 import HardwareSelector from "./HardwareSelector";
@@ -8,28 +9,27 @@ import CategorizedPrefixSelector from "./CategorizedPrefixSelector";
 import "./CylinderFinder.css";
 import { images } from "../images/images";
 import { SearchIcon, ClearIcon } from "./Icons";
+// --- Import utility functions to reduce LOC and fix hoisting errors ---
+import { isLficForCollar, isSficForCollar, getMortiseCollarPartNumber } from "../utils/collarLogic";
 
-const isLficForCollar = (prefix) => {
-  if (!prefix) return false;
-  const lficPrefixesForCollar = [
-    "60-", "63-", "64-",
-    "DG1-60-", "DG1-63-", "DG1-64-",
-    "DG2-60-", "DG2-63-", "DG2-64-",
-    "DG3-60-", "DG3-63-", "DG3-64-",
-    "10-63-",
-    "11-60-", "11-63-", "11-64-",
-  ];
-  return lficPrefixesForCollar.includes(prefix);
+
+// Utility function to get cylinder length description
+const getCylinderLengthDescription = (partNumber) => {
+    const lengths = {
+      41: '1-1/8"',
+      42: '1-1/4"',
+      43: '1-3/8"',
+      44: '1-1/2"',
+      46: '1-3/4"',
+      48: '2"',
+      50: '2-1/4"',
+      52: '2-1/2"',
+      54: '2-3/4"',
+      56: '3"',
+    };
+    return lengths[partNumber.replace("#", "")] || "";
 };
 
-const isSficForCollar = (prefix) => {
-  if (!prefix) return false;
-  const sficPrefixesForCollar = [
-    "70-", "72-", "73-", "65-73-", "65-73-7P-", "73-7P-",
-    "11-70-7P-", "11-72-7P-", "11-73-7P-", "11-65-73-7P-",
-  ];
-  return sficPrefixesForCollar.includes(prefix);
-};
 
 function CylinderFinder() {
   const [selectedCategory, setSelectedCategory] = useState("");
@@ -40,14 +40,38 @@ function CylinderFinder() {
   const [currentStep, setCurrentStep] = useState("deviceSelection");
   const [globalSearchTerm, setGlobalSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
-  const [showMultipleMatchesWarning, setShowMultipleMatchesWarning] =
-    useState(false);
+  const [showMultipleMatchesWarning, setShowMultipleMatchesWarning] = useState(false);
 
+  // --- MORTISE COLLAR LOOKUP STATES ---
+  const [selectedTrimType, setSelectedTrimType] = useState("SECTIONAL");
+  const [selectedDoorThickness, setSelectedDoorThickness] = useState("1-3/4\"");
+  
+  const doorThicknessOptions = useMemo(() => [
+    { label: "1-3/8\"", value: "1-3/8\"" },
+    { label: "1-3/4\"", value: "1-3/4\"" },
+    { label: "2\"", value: "2\"" },
+    { label: "2-1/4\"", value: "2-1/4\"" },
+  ], []); 
+  
+  const trimTypeOptions = useMemo(() => [
+      {label: "Sectional Trim", value: "SECTIONAL"},
+      {label: "Escutcheon Trim", value: "ESCUTCHEON"},
+      {label: "Specialty Hardware", value: "SPECIALTY"},
+  ], []);
+  
+  // --- NEW: Helper to get the descriptive label for the selected trim type ---
+  const selectedTrimLabel = useMemo(() => {
+    return trimTypeOptions.find(opt => opt.value === selectedTrimType)?.label || selectedTrimType;
+  }, [trimTypeOptions, selectedTrimType]);
+
+
+  // --- REFERENCES ---
   const deviceOptionsRef = useRef(null);
   const cylinderOptionsRef = useRef(null);
   const resultsRef = useRef(null);
   const searchResultsRef = useRef(null);
 
+  // --- DATA ACCESSORS (Moved into function scope to fix 'no-undef' errors) ---
   const allModels = useMemo(() => {
     const models = [];
     sargentData.hardware.forEach((category) => {
@@ -110,48 +134,7 @@ function CylinderFinder() {
     }
     return availablePrefixes;
   }, [activeModelData]);
-
-  useEffect(() => {
-    if (currentStep === "deviceOptions" && deviceOptionsRef.current) {
-      deviceOptionsRef.current.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      });
-    }
-    if (currentStep === "cylinderOptions" && cylinderOptionsRef.current) {
-      cylinderOptionsRef.current.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      });
-    }
-    if (currentStep === "results" && resultsRef.current) {
-      resultsRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
-    if (globalSearchTerm.length > 0 && searchResultsRef.current) {
-      searchResultsRef.current.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      });
-    }
-  }, [currentStep, globalSearchTerm]);
-
-  useEffect(() => {
-    if (globalSearchTerm.trim().length < 2) {
-      setSearchResults([]);
-      setShowMultipleMatchesWarning(false);
-      return;
-    }
-    const lowercasedTerm = globalSearchTerm.toLowerCase();
-    const results = allModels.filter(
-      (model) =>
-        model.modelNumber.toLowerCase().includes(lowercasedTerm) ||
-        model.description.toLowerCase().includes(lowercasedTerm) ||
-        model.seriesName.toLowerCase().includes(lowercasedTerm)
-    );
-    setSearchResults(results);
-    setShowMultipleMatchesWarning(false);
-  }, [globalSearchTerm, allModels]);
-
+  
   const groupedCategoryOptions = useMemo(() => {
     return sargentData.hardware.map((h) => {
       let imageUrl;
@@ -174,59 +157,39 @@ function CylinderFinder() {
       };
     });
   }, []);
-
+  
   const groupedSeriesOptions = useMemo(() => {
-    if (!selectedCategory) return [];
-    const exitDeviceSeries =
-      sargentData.hardware.find((h) => h.category === "Exit Devices")
-        ?.series || [];
-    const groupedExitSeries = {
-      "80 Series": [],
-      "PE80 Series": [],
-      "90 Series": [],
-      "20/30 Series": [],
-    };
-    exitDeviceSeries.forEach((series) => {
-      const seriesName = series.name;
-      if (seriesName.startsWith("PE8"))
-        groupedExitSeries["PE80 Series"].push(series);
-      else if (seriesName.startsWith("8") && !seriesName.startsWith("82"))
-        groupedExitSeries["80 Series"].push(series);
-      else if (seriesName.startsWith("9"))
-        groupedExitSeries["90 Series"].push(series);
-      else if (seriesName.startsWith("2") || seriesName.startsWith("3"))
-        groupedExitSeries["20/30 Series"].push(series);
-    });
-    const categories =
-      sargentData.hardware.find((h) => h.category === selectedCategory)
-        ?.series || [];
-    const allOptions = [];
-    if (selectedCategory === "Exit Devices") {
-      for (const groupName in groupedExitSeries) {
-        if (groupedExitSeries[groupName].length > 0) {
-          allOptions.push({
-            label: groupName,
-            options: groupedExitSeries[groupName].map((series) => ({
+      if (!selectedCategory) return [];
+      const data = sargentData.hardware.find(h => h.category === selectedCategory)?.series || [];
+      const grouped = {};
+
+      data.forEach(series => {
+          const name = series.name;
+          let groupKey = 'Other';
+
+          if (selectedCategory === "Exit Devices") {
+              if (name.startsWith("PE8")) groupKey = "PE80 Series";
+              else if (name.startsWith("8") && !name.startsWith("82")) groupKey = "80 Series";
+              else if (name.startsWith("9")) groupKey = "90 Series";
+              else if (name.startsWith("2") || name.startsWith("3")) groupKey = "20/30 Series";
+          } else {
+              groupKey = selectedCategory;
+          }
+
+          if (!grouped[groupKey]) grouped[groupKey] = [];
+          grouped[groupKey].push(series);
+      });
+
+      return Object.keys(grouped).map(groupName => ({
+          label: groupName,
+          options: grouped[groupName].map(series => ({
               label: series.name,
               value: series.name,
               imageUrl: series.imageUrl || images.sargentlogo,
-            })),
-          });
-        }
-      }
-    } else {
-      allOptions.push({
-        label: selectedCategory,
-        options: categories.map((series) => ({
-          label: series.name,
-          value: series.name,
-          imageUrl: series.imageUrl || images.sargentlogo,
-        })),
-      });
-    }
-    return allOptions;
+          }))
+      }));
   }, [selectedCategory]);
-
+  
   const groupedModelOptions = useMemo(() => {
     if (!selectedSeriesName) return [];
     const seriesData = sargentData.hardware
@@ -244,51 +207,28 @@ function CylinderFinder() {
       },
     ];
   }, [selectedCategory, selectedSeriesName]);
+  // --- END DATA ACCESSORS ---
 
-  const getCylinderLengthDescription = (partNumber) => {
-    const lengths = {
-      41: '1-1/8"',
-      42: '1-1/4"',
-      43: '1-3/8"',
-      44: '1-1/2"',
-      46: '1-3/4"',
-      48: '2"',
-      50: '2-1/4"',
-      52: '2-1/2"',
-      54: '2-3/4"',
-      56: '3"',
-    };
-    return lengths[partNumber.replace("#", "")] || "";
-  };
 
   const finalCylinders = useMemo(() => {
     if (!activeModelData) return [];
-    const has127Prefix = selectedDevicePrefixes.some((p) =>
-      p.startsWith("127")
-    );
-    const lficPrefixes = [
-      "60-", "63-", "64-", "DG1-60-", "DG1-63-", "DG1-64-", "DG2-60-",
-      "DG2-63-", "DG2-64-", "DG3-60-", "DG3-63-", "DG3-64-", "10-63-",
-      "11-60-", "11-63-", "11-64-",
-    ];
-    const sficPrefixes = [
-      "70-", "72-", "73-", "65-73-", "65-73-7P-", "73-7P-", "11-70-7P-",
-      "11-72-7P-", "11-73-7P-", "11-65-73-7P-",
-    ];
-    const kesoPrefixes = ["F1-82-", "F1-83-", "82-", "83-"];
-    const hasLficPrefix =
-      selectedCylinderPrefix && lficPrefixes.includes(selectedCylinderPrefix);
-    const hasSficPrefix =
-      selectedCylinderPrefix && sficPrefixes.includes(selectedCylinderPrefix);
-    const hasKesoPrefix =
-      selectedCylinderPrefix && kesoPrefixes.includes(selectedCylinderPrefix);
+    const isMortiseLock = activeModelData.category === "Mortise Locks";
+    
+    // Prefix check flags
+    const has127Prefix = selectedDevicePrefixes.some((p) => p.startsWith("127"));
+    const hasLficPrefix = selectedCylinderPrefix && (isLficForCollar(selectedCylinderPrefix));
+    const hasSficPrefix = selectedCylinderPrefix && (isSficForCollar(selectedCylinderPrefix));
+    const hasKesoPrefix = selectedCylinderPrefix && ["F1-82-", "F1-83-", "82-", "83-"].includes(selectedCylinderPrefix);
 
+
+    // --- Build Raw Cylinder List (Step 1) ---
     const rawCylinderList = [];
     if (activeModelData.baseCylinder) {
       rawCylinderList.push({
         ...activeModelData.baseCylinder,
         role: "Outside Cylinder",
         notes: activeModelData.baseCylinder.notes || null,
+        sourcePrefix: null,
       });
     }
     const insideCylData = activeModelData.prefixes?.find(
@@ -299,6 +239,7 @@ function CylinderFinder() {
         ...insideCylData.addsCylinder,
         role: "Inside Cylinder",
         notes: insideCylData.addsCylinder.notes || insideCylData.description,
+        sourcePrefix: activeModelData.prefixes.find(p => p.id === "Inside Cyl"),
       });
     }
     selectedDevicePrefixes.forEach((prefixId) => {
@@ -310,24 +251,26 @@ function CylinderFinder() {
           ...prefixData.addsCylinder,
           role: prefixId.startsWith("127") ? "Inside Cylinder" : prefixData.id,
           notes: prefixData.description,
+          sourcePrefix: prefixData, 
         });
       }
     });
 
-    // 1. Transform rawCylinderList to apply key system changes to part numbers
+    // 2. Transform rawCylinderList to apply key system changes to part numbers
     const transformedCylinderList = rawCylinderList.map((cyl) => {
       const newCyl = { ...cyl };
       const basePartNumber = newCyl.partNumber.replace("#", "");
 
-      if (has127Prefix && basePartNumber === "44") {
-        return newCyl;
-      }
+      if (has127Prefix && basePartNumber === "44") return newCyl;
+
+      // KESO logic
       if (hasKesoPrefix) {
         if (basePartNumber === "41") newCyl.partNumber = "F1-71";
         else if (basePartNumber === "46") newCyl.partNumber = "F1-76";
         else if (basePartNumber === "34") newCyl.partNumber = "F1-64";
       }
-      if (hasLficPrefix) {
+      // LFIC/SFIC conversion for Mortise/Rim sizes
+      else if (hasLficPrefix) {
         if (basePartNumber === "41") newCyl.partNumber = "#42";
       } else if (hasSficPrefix) {
         if (basePartNumber === "41") newCyl.partNumber = "#43";
@@ -336,28 +279,35 @@ function CylinderFinder() {
       return newCyl;
     });
 
-    // 2. Consolidate duplicates after transformation
+    // 3. Consolidate duplicates
     const consolidatedMap = new Map();
     transformedCylinderList.forEach((cyl) => {
       const key = `${cyl.partNumber}-${cyl.role}`;
+      const existing = consolidatedMap.get(key);
       consolidatedMap.set(key, {
         ...cyl,
-        quantity: (consolidatedMap.get(key)?.quantity || 0) + 1,
+        quantity: (existing?.quantity || 0) + 1,
+        sourcePrefix: existing?.sourcePrefix || cyl.sourcePrefix, 
       });
     });
 
     let finalCylindersArray = Array.from(consolidatedMap.values());
     
-    // 3. Apply final formatting and collar logic
+    // Determine cylinder count for Mortise Lock lookup (used for table selection)
+    const isDoubleCylinderMortise = isMortiseLock && activeModelData?.prefixes?.some(p => p.id === "Inside Cyl");
+    const cylCount = isDoubleCylinderMortise ? "DOUBLE_CYLINDER" : "SINGLE_CYLINDER";
+
+
+    // 4. Apply final formatting and collar logic (Step 3)
     finalCylindersArray = finalCylindersArray.map((cyl) => {
-      const basePartNumber = cyl.partNumber.replace("#", ""); // Correctly defined here
+      const basePartNumber = cyl.partNumber.replace("#", ""); 
       const kesoLengths = {
         "F1-71": '1-1/8"', "F1-72": '1-1/4"', "F1-73": '1-3/8"',
         "F1-74": '1-1/2"', "F1-76": '1-3/4"', "F1-64": '1-3/4" to 3-1/8"',
       };
-      const lengthDesc = hasKesoPrefix
-        ? kesoLengths[basePartNumber] || ""
-        : getCylinderLengthDescription(basePartNumber);
+      
+      const lengthDesc = hasKesoPrefix ? kesoLengths[basePartNumber] || "" : getCylinderLengthDescription(basePartNumber);
+      
       let finalPartNumber;
       if (has127Prefix && basePartNumber === "44") {
         finalPartNumber = `127-44 x Keying Details x Finish`;
@@ -368,58 +318,48 @@ function CylinderFinder() {
       } else {
         finalPartNumber = `${basePartNumber} x Keying Details x Finish`;
       }
-      const prefixData = cylinderPrefixCategories
-        .flatMap((c) => c.prefixes)
-        .find((p) => p.id === selectedCylinderPrefix);
-      const prefixDesc = prefixData
-        ? prefixData.description.replace("Device", "Housing")
-        : "";
+      
+      const prefixData = cylinderPrefixCategories.flatMap(c => c.prefixes).find(p => p.id === selectedCylinderPrefix);
+      const prefixDesc = prefixData ? prefixData.description.replace("Device", "Housing") : "";
+      
       let newNotes = cyl.notes;
-      if (cyl.role === "Outside Cylinder") {
-        newNotes = "For the outside of the door.";
-      } else if (cyl.role === "Inside Cylinder") {
-        newNotes = "For the inside of the door.";
-      } else {
-        newNotes = `For ${cyl.role} which is: ${cyl.notes}`;
-      }
+      if (cyl.role === "Outside Cylinder") newNotes = "For the outside of the door.";
+      else if (cyl.role === "Inside Cylinder") newNotes = "For the inside of the door.";
+      else newNotes = `For ${cyl.role} which is: ${cyl.notes}`;
+      
       let newDescription = `${lengthDesc} ${cyl.type}`;
-      if (
-        selectedCylinderPrefix &&
-        !(has127Prefix && basePartNumber === "44")
-      ) {
-        newDescription += ` ${prefixDesc}`;
-      }
+      if (selectedCylinderPrefix && !(has127Prefix && basePartNumber === "44")) newDescription += ` ${prefixDesc}`;
       
       const cylinderCollars = [];
-      const { default: defaultCollar, conditional: conditionalCollars } = activeModelData.collars || {};
+      const collarSource = cyl.sourcePrefix?.collars || activeModelData.collars;
+      
+      if (isMortiseLock) {
+          // --- MORTISE LOCK COLLAR LOGIC ---
+          const mortiseCollar = getMortiseCollarPartNumber(basePartNumber, selectedCylinderPrefix, selectedDoorThickness, selectedTrimType, cylCount);
 
-      // 1. Check for a matching conditional collar first
-      let selectedConditionalCollar = null;
-      if (cyl.role === "Outside Cylinder" && conditionalCollars) {
-          selectedConditionalCollar = conditionalCollars.find(collar => {
-              const isLficMatch = collar.prefix === "60-" && isLficForCollar(selectedCylinderPrefix);
-              const isSficMatch = collar.prefix === "70-" && isSficForCollar(selectedCylinderPrefix);
-              return isLficMatch || isSficMatch || (selectedCylinderPrefix && selectedCylinderPrefix.startsWith(collar.prefix));
-          });
-      }
+          if (mortiseCollar) {
+              cylinderCollars.push({...mortiseCollar, imageUrl: images.Collar1KB});
+          }
+      } else if (collarSource) {
+          // --- EXIT DEVICE / TRIM COLLAR LOGIC ---
+          const { default: defaultCollar, conditional: conditionalCollars } = collarSource;
 
-      // 2. Add the selected collar (conditional takes precedence over default)
-      if (selectedConditionalCollar) {
-          cylinderCollars.push({...selectedConditionalCollar, imageUrl: selectedConditionalCollar.imageUrl || images.sargentlogo});
-      } else if (cyl.role === "Outside Cylinder" && defaultCollar) {
-          // 3. If no conditional collar, add the default collar
-          cylinderCollars.push({...defaultCollar, imageUrl: defaultCollar.imageUrl || images.sargentlogo});
-      }
+          let selectedConditionalCollar = null;
+          if (conditionalCollars) {
+              selectedConditionalCollar = conditionalCollars.find(collar => {
+                  const isLficMatch = collar.prefix === "60-" && isLficForCollar(selectedCylinderPrefix);
+                  const isSficMatch = collar.prefix === "70-" && isSficForCollar(selectedCylinderPrefix);
+                  return isLficMatch || isSficMatch;
+              });
+          }
 
-      // 4. Add device-specific collars (like the 16- dogging rosette)
-      const devicePrefixData = activeModelData.prefixes?.find(p => p.id === cyl.role);
-      if (devicePrefixData && devicePrefixData.addsCollar) {
-          // Ensure the device collar is not a duplicate of what was just added (unlikely, but safe check)
-          if (!cylinderCollars.some(c => c.partNumber === devicePrefixData.addsCollar.partNumber)) {
-              cylinderCollars.push({...devicePrefixData.addsCollar, imageUrl: devicePrefixData.addsCollar.imageUrl || images.sargentlogo});
+          if (selectedConditionalCollar) {
+              cylinderCollars.push({...selectedConditionalCollar, imageUrl: selectedConditionalCollar.imageUrl || images.sargentlogo});
+          } else if (defaultCollar) {
+              cylinderCollars.push({...defaultCollar, imageUrl: defaultCollar.imageUrl || images.sargentlogo});
           }
       }
-
+      
       return {
         ...cyl,
         partNumber: finalPartNumber,
@@ -430,8 +370,44 @@ function CylinderFinder() {
       };
     });
     return finalCylindersArray;
-  }, [activeModelData, selectedDevicePrefixes, selectedCylinderPrefix]);
+  }, [activeModelData, selectedDevicePrefixes, selectedCylinderPrefix, selectedDoorThickness, selectedTrimType]);
 
+  // --- EFFECT HOOKS (SCROLLING) ---
+  useEffect(() => {
+    if (currentStep === "deviceOptions" && deviceOptionsRef.current) {
+      deviceOptionsRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+    if (currentStep === "cylinderOptions" && cylinderOptionsRef.current) {
+      cylinderOptionsRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+    if (currentStep === "results" && resultsRef.current) {
+      resultsRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+    if (globalSearchTerm.length > 0 && searchResultsRef.current) {
+      searchResultsRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, [currentStep, globalSearchTerm]);
+
+  // --- EFFECT HOOKS (SEARCH) ---
+  useEffect(() => {
+    if (globalSearchTerm.trim().length < 2) {
+      setSearchResults([]);
+      setShowMultipleMatchesWarning(false);
+      return;
+    }
+    const lowercasedTerm = globalSearchTerm.toLowerCase();
+    const results = allModels.filter(
+      (model) =>
+        model.modelNumber.toLowerCase().includes(lowercasedTerm) ||
+        model.description.toLowerCase().includes(lowercasedTerm) ||
+        model.seriesName.toLowerCase().includes(lowercasedTerm)
+    );
+    setSearchResults(results);
+    setShowMultipleMatchesWarning(false);
+  }, [globalSearchTerm, allModels]);
+
+
+  // --- HANDLERS ---
   const handleSearchClick = (result) => {
     setSelectedCategory(result.category);
     setSelectedSeriesName(result.seriesName);
@@ -441,51 +417,34 @@ function CylinderFinder() {
     setShowMultipleMatchesWarning(false);
     setSelectedDevicePrefixes([]);
     setSelectedCylinderPrefix(null);
-    const fullModelData = sargentData.hardware
-      .find((h) => h.category === result.category)
-      ?.series.find((s) => s.name === result.seriesName)
-      ?.models.find((m) => m.modelNumber === result.modelNumber);
-    const hasDeviceOptions =
-      fullModelData?.prefixes.filter(
-        (p) => p.isDeviceSpecific && p.id !== "Inside Cyl"
-      ).length > 0;
-    const hasCylinderOptions =
-      fullModelData?.baseCylinder ||
-      fullModelData?.prefixes.some((p) => p.addsCylinder);
-    if (!hasCylinderOptions) {
-      setCurrentStep("results");
-    } else if (hasDeviceOptions) {
-      setCurrentStep("deviceOptions");
-    } else {
-      setCurrentStep("cylinderOptions");
-    }
+    setSelectedDoorThickness("1-3/4\""); 
+    setSelectedTrimType("SECTIONAL");
+    
+    const fullModelData = sargentData.hardware.find(h => h.category === result.category)?.series.find(s => s.name === result.seriesName)?.models.find(m => m.modelNumber === result.modelNumber);
+    const hasDeviceOptions = fullModelData?.prefixes.filter(p => p.isDeviceSpecific && p.id !== "Inside Cyl").length > 0;
+    const hasCylinderOptions = fullModelData?.baseCylinder || fullModelData?.prefixes.some(p => p.addsCylinder);
+    
+    if (!hasCylinderOptions) setCurrentStep("results");
+    else if (hasDeviceOptions) setCurrentStep("deviceOptions");
+    else setCurrentStep("cylinderOptions");
   };
 
   const handleSearchKeyDown = (e) => {
     if (e.key === "Enter") {
       e.preventDefault();
-      if (searchResults.length === 1) {
-        handleSearchClick(searchResults[0]);
-      } else if (searchResults.length > 1) {
-        setShowMultipleMatchesWarning(true);
-      }
+      if (searchResults.length === 1) handleSearchClick(searchResults[0]);
+      else if (searchResults.length > 1) setShowMultipleMatchesWarning(true);
     }
   };
 
   const handleProceedFromDeviceSelection = () => {
     if (!selectedModel) return;
-    const hasDeviceOptions =
-      selectedCategory === "Exit Devices" && deviceTiedPrefixes.length > 0;
-    const hasCylinderOptions =
-      activeModelData?.baseCylinder ||
-      activeModelData?.prefixes.some((p) => p.addsCylinder);
-    if (!hasCylinderOptions) {
-      setCurrentStep("results");
-    } else if (hasDeviceOptions) {
-      setCurrentStep("deviceOptions");
-    } else {
-      setCurrentStep("cylinderOptions");
-    }
+    const hasDeviceOptions = selectedCategory === "Exit Devices" && deviceTiedPrefixes.length > 0;
+    const hasCylinderOptions = activeModelData?.baseCylinder || activeModelData?.prefixes.some(p => p.addsCylinder);
+    
+    if (!hasCylinderOptions) setCurrentStep("results");
+    else if (hasDeviceOptions) setCurrentStep("deviceOptions");
+    else setCurrentStep("cylinderOptions");
   };
 
   const handleCategoryChange = (categoryId) => {
@@ -494,6 +453,8 @@ function CylinderFinder() {
     setSelectedModel("");
     setSelectedDevicePrefixes([]);
     setSelectedCylinderPrefix(null);
+    setSelectedDoorThickness("1-3/4\""); 
+    setSelectedTrimType("SECTIONAL"); 
     setGlobalSearchTerm("");
     setSearchResults([]);
     setCurrentStep("deviceSelection");
@@ -504,6 +465,8 @@ function CylinderFinder() {
     setSelectedModel("");
     setSelectedDevicePrefixes([]);
     setSelectedCylinderPrefix(null);
+    setSelectedDoorThickness("1-3/4\""); 
+    setSelectedTrimType("SECTIONAL"); 
     setGlobalSearchTerm("");
     setSearchResults([]);
   };
@@ -511,13 +474,13 @@ function CylinderFinder() {
   const handleModelChange = (modelId) => {
     setSelectedModel(modelId);
     setSelectedDevicePrefixes([]);
+    setSelectedDoorThickness("1-3/4\""); 
+    setSelectedTrimType("SECTIONAL"); 
   };
 
   const handleDevicePrefixChange = (prefixId) => {
     setSelectedDevicePrefixes((prev) =>
-      prev.includes(prefixId)
-        ? prev.filter((p) => p !== prefixId)
-        : [...prev, prefixId]
+      prev.includes(prefixId) ? prev.filter((p) => p !== prefixId) : [...prev, prefixId]
     );
   };
 
@@ -526,9 +489,7 @@ function CylinderFinder() {
   };
 
   const handleNext = () => {
-    if (currentStep === "deviceOptions") {
-      setCurrentStep("cylinderOptions");
-    }
+    if (currentStep === "deviceOptions") setCurrentStep("cylinderOptions");
   };
 
   const handleReset = () => {
@@ -537,6 +498,8 @@ function CylinderFinder() {
     setSelectedModel("");
     setSelectedDevicePrefixes([]);
     setSelectedCylinderPrefix(null);
+    setSelectedDoorThickness("1-3/4\"");
+    setSelectedTrimType("SECTIONAL");
     setGlobalSearchTerm("");
     setSearchResults([]);
     setShowMultipleMatchesWarning(false);
@@ -547,76 +510,51 @@ function CylinderFinder() {
     setSelectedDevicePrefixes([]);
     setSelectedCylinderPrefix(null);
     if (currentStep === "results") {
-      const hasCylinderOptions =
-        activeModelData?.baseCylinder ||
-        activeModelData?.prefixes.some((p) => p.addsCylinder);
-      if (hasCylinderOptions) {
-        setCurrentStep("cylinderOptions");
-      } else {
-        handleReset();
-      }
+      const hasCylinderOptions = activeModelData?.baseCylinder || activeModelData?.prefixes.some(p => p.addsCylinder);
+      if (hasCylinderOptions) setCurrentStep("cylinderOptions");
+      else handleReset();
     } else if (currentStep === "cylinderOptions") {
-      const hasDeviceOptions =
-        deviceTiedPrefixes.length > 0 && selectedCategory === "Exit Devices";
-      if (hasDeviceOptions) {
-        setCurrentStep("deviceOptions");
-      } else {
-        handleReset();
-      }
+      const hasDeviceOptions = deviceTiedPrefixes.length > 0 && selectedCategory === "Exit Devices";
+      if (hasDeviceOptions) setCurrentStep("deviceOptions");
+      else handleReset();
     } else if (currentStep === "deviceOptions") {
       handleReset();
     }
   }, [currentStep, deviceTiedPrefixes, selectedCategory, activeModelData]);
 
-  const handleFindCylinder = () => {
-    setCurrentStep("results");
-  };
+  const handleFindCylinder = () => setCurrentStep("results");
 
-  const isInitialState = !globalSearchTerm;
+
+  // --- MEMOIZED OPTIONS ---
   const chosenPrefixes = useMemo(() => {
     const prefixes = [];
     if (selectedCylinderPrefix) {
-      const prefixData = cylinderPrefixCategories
-        .flatMap((c) => c.prefixes)
-        .find((p) => p.id === selectedCylinderPrefix);
-      if (prefixData) {
-        prefixes.push({
-          id: prefixData.id,
-          description: prefixData.description,
-        });
-      }
+      const prefixData = cylinderPrefixCategories.flatMap(c => c.prefixes).find(p => p.id === selectedCylinderPrefix);
+      if (prefixData) prefixes.push({ id: prefixData.id, description: prefixData.description });
     }
-    selectedDevicePrefixes.forEach((prefixId) => {
-      const prefixData = activeModelData?.prefixes?.find(
-        (p) => p.id === prefixId
-      );
-      if (prefixData) {
-        prefixes.push({
-          id: prefixData.id,
-          description: prefixData.description,
-        });
-      }
+    selectedDevicePrefixes.forEach(prefixId => {
+      const prefixData = activeModelData?.prefixes?.find(p => p.id === prefixId);
+      if (prefixData) prefixes.push({ id: prefixData.id, description: prefixData.description });
     });
     return prefixes;
   }, [selectedCylinderPrefix, selectedDevicePrefixes, activeModelData]);
 
   const availableCylinderPrefixCategories = useMemo(() => {
-    return cylinderPrefixCategories.map((category) => ({
+    return cylinderPrefixCategories.map(category => ({
       ...category,
-      prefixes: category.prefixes.filter(
-        (p) =>
-          !activeModelData?.excludedPrefixes?.some((excludedPrefix) =>
-            p.id.startsWith(excludedPrefix)
-          )
-      ),
+      prefixes: category.prefixes.filter(p => !activeModelData?.excludedPrefixes?.some(excludedPrefix => p.id.startsWith(excludedPrefix)))
     }));
   }, [activeModelData]);
 
-  const hasAvailableCylinderPrefixes = useMemo(() => {
-    return availableCylinderPrefixCategories.some((c) => c.prefixes.length > 0);
-  }, [availableCylinderPrefixCategories]);
+  const hasAvailableCylinderPrefixes = useMemo(() => availableCylinderPrefixCategories.some(c => c.prefixes.length > 0), [availableCylinderPrefixCategories]);
+  
+  // --- RENDER LOGIC ---
+  const isInitialState = !globalSearchTerm;
 
   const renderStep = () => {
+    // FIX: Define isMortiseLockSelected outside of the switch block
+    const isMortiseLockSelected = selectedCategory === "Mortise Locks";
+
     if (isInitialState) {
       switch (currentStep) {
         case "deviceSelection":
@@ -702,11 +640,57 @@ function CylinderFinder() {
         case "cylinderOptions":
           return (
             <div ref={cylinderOptionsRef} className="wizard-step active">
+              <h3 className="prefix-section-title">
+                  Step 3 of 3: Select Cylinder Options
+              </h3>
+              
+              {/* --- MORTISE SPECIFIC THICKNESS & TRIM SELECTION (NEW BUTTON SELECTOR) --- */}
+              {isMortiseLockSelected && (
+                  <div className="prefix-section mortise-options-section" style={{marginBottom: '1.5rem'}}>
+                      <h4 className="prefix-section-title mortise-collar-title">
+                          Mortise Collar Options
+                      </h4>
+                      
+                      <div className="mortise-options-group">
+                          <label className="mortise-option-label">Door Thickness</label>
+                          <div className="mortise-option-selector thickness-selector">
+                              {doorThicknessOptions.map(option => (
+                                  <button
+                                      key={option.value}
+                                      className={`mortise-option-button ${selectedDoorThickness === option.value ? 'active' : ''}`}
+                                      onClick={() => setSelectedDoorThickness(option.value)}
+                                  >
+                                      {option.label}
+                                  </button>
+                              ))}
+                          </div>
+                      </div>
+
+                      <div className="mortise-options-group">
+                          <label className="mortise-option-label">Trim Type</label>
+                          <div className="mortise-option-selector trim-selector">
+                              {trimTypeOptions.map(option => (
+                                  <button
+                                      key={option.value}
+                                      className={`mortise-option-button ${selectedTrimType === option.value ? 'active' : ''}`}
+                                      onClick={() => setSelectedTrimType(option.value)}
+                                  >
+                                      {option.label}
+                                  </button>
+                              ))}
+                          </div>
+                      </div>
+
+                  </div>
+              )}
+              {/* --- END MORTISE SPECIFIC THICKNESS SELECTION --- */}
+
+
               {hasAvailableCylinderPrefixes ? (
                 <div className="prefix-section">
-                  <h3 className="prefix-section-title">
-                    Step 3 of 3: Select Cylinder Options
-                  </h3>
+                  <h4 className="prefix-section-title" style={isMortiseLockSelected ? {border: 'none', marginBottom: '1rem'} : {}}>
+                    Select Key System
+                  </h4>
                   <CategorizedPrefixSelector
                     categories={availableCylinderPrefixCategories}
                     selectedPrefixes={
@@ -740,6 +724,8 @@ function CylinderFinder() {
             </div>
           );
         case "results":
+          // isMortiseLockSelected is now correctly defined at the top of renderStep
+
           return (
             <div ref={resultsRef} className="wizard-step active">
               <div className="selected-hardware-note">
@@ -763,6 +749,18 @@ function CylinderFinder() {
                   <span className="selected-hardware-desc">
                     {activeModelData?.description}
                   </span>
+                  {/* --- MORTISE SPECIFIC DETAILS (NEW) --- */}
+                  {isMortiseLockSelected && (
+                      <>
+                        <p className="selected-hardware-mortise-details">
+                            Door Thickness: <strong>{selectedDoorThickness}</strong>
+                        </p>
+                        <p className="selected-hardware-mortise-details">
+                            Trim Style: <strong>{selectedTrimLabel}</strong>
+                        </p>
+                      </>
+                  )}
+                  {/* --- END MORTISE SPECIFIC DETAILS --- */}
                 </div>
               </div>
               {chosenPrefixes.length > 0 && (
@@ -780,20 +778,32 @@ function CylinderFinder() {
                   </ul>
                 </div>
               )}
-              <div className="note-container">
-                <p>
-                  <span className="note-text">
-                    **Note:** All listed parts are for a{" "}
-                    <strong>1-3/4" door</strong>. If your door is thicker or
-                    has thermal panels, please contact our technical support
-                    team at{" "}
-                    <a href="mailto:techsupport.sargent@assaabloy.com">
-                      techsupport.sargent@assaabloy.com
-                    </a>{" "}
-                    for assistance.
-                  </span>
-                </p>
-              </div>
+              {/* --- CONDITIONAL NOTE CONTAINER UPDATE --- */}
+              {isMortiseLockSelected ? (
+                  <div className="note-container">
+                    <p>
+                      <span className="note-text">
+                        **Note:** Door thickness is assumed to be{" "}
+                        <strong>{selectedDoorThickness}</strong> and trim style is <strong>{selectedTrimLabel}</strong> for Mortise Collar determination. If your door is thicker or
+                        has thermal panels, please contact our technical support
+                        team at{" "}
+                        <a href="mailto:techsupport.sargent@assaabloy.com">
+                          techsupport.sargent@assaabloy.com
+                        </a>{" "}
+                        for assistance.
+                      </span>
+                    </p>
+                  </div>
+              ) : (
+                  <div className="note-container">
+                    <p>
+                      <span className="note-text">
+                        **Note:** All cylinder and collar part numbers should be completed with **Keying Details** and **Finish** upon ordering.
+                      </span>
+                    </p>
+                  </div>
+              )}
+              {/* --- END CONDITIONAL NOTE CONTAINER UPDATE --- */}
               <ResultsDisplay cylinders={finalCylinders} />
               <div className="wizard-controls">
                 <button onClick={handleBack} className="wizard-back-button">

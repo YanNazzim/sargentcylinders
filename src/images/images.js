@@ -9,6 +9,8 @@ export const images = {
   KESOcyls: require("./KESOCylinders.png"),
   ETCollar: require("./ETCollar.png"), // <-- ADDED
   Rosette97: require("./97Rosette.png"), // <-- ADDED (Renamed for code clarity)
+  Collar1KB: require("./1KBCOllar.png"), // <-- ADDED
+
 
 
   RimExit80: require("./8800 Rim Exit.png"),
