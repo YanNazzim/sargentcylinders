@@ -29,6 +29,9 @@ const getCylinderLengthDescription = (partNumber) => {
     return lengths[partNumber.replace("#", "")] || "";
 };
 
+// Utility function to determine if a prefix is an Auxiliary (stackable/checkbox) control
+const isAuxPrefix = (id) => id.startsWith("106") || id.startsWith("306") || id.startsWith("127");
+
 function CylinderFinder() {
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedSeriesName, setSelectedSeriesName] = useState("");
@@ -64,11 +67,14 @@ function CylinderFinder() {
     return trimTypeOptions.find(opt => opt.value === selectedTrimType)?.label || selectedTrimType;
   }, [trimTypeOptions, selectedTrimType]);
 
-  // --- REFERENCES ---
+  // --- REFERENCES FOR AUTOSCROLL ---
   const deviceOptionsRef = useRef(null);
   const cylinderOptionsRef = useRef(null);
   const resultsRef = useRef(null);
   const searchResultsRef = useRef(null);
+  const categoryRef = useRef(null);
+  const seriesRef = useRef(null);
+  const modelRef = useRef(null);
 
   // --- DATA ACCESSORS ---
   const allModels = useMemo(() => {
@@ -131,7 +137,7 @@ function CylinderFinder() {
     });
   }, []);
 
-  // NEW: Grouped options for the intermediate Series selection step (uses button selector)
+  // Grouped options for the intermediate Series selection step (uses button selector)
   const seriesGroupedOptions = useMemo(() => {
     if (!selectedCategory || selectedCategory === "Mullions") return [];
 
@@ -507,12 +513,36 @@ function CylinderFinder() {
     });
   }, [activeModelData, selectedDevicePrefixes, selectedCylinderPrefix, selectedDoorThickness, selectedTrimType]);
 
+  // --- AUTOSCROLL EFFECT ---
+  const isModelSelectReady = useMemo(() => {
+    const isMullion = selectedCategory === "Mullions";
+    return isMullion || !!selectedSeriesName;
+  }, [selectedCategory, selectedSeriesName]);
+
   useEffect(() => {
-    if (currentStep === "deviceOptions" && deviceOptionsRef.current) deviceOptionsRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
-    if (currentStep === "cylinderOptions" && cylinderOptionsRef.current) cylinderOptionsRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
-    if (currentStep === "results" && resultsRef.current) resultsRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
-    if (globalSearchTerm.length > 0 && searchResultsRef.current) searchResultsRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
-  }, [currentStep, globalSearchTerm]);
+    // Determine the target ref to scroll to
+    let targetRef = null;
+
+    if (currentStep === "deviceSelection") {
+        if (!selectedCategory) {
+            targetRef = categoryRef;
+        } else if (selectedCategory !== "Mullions" && !selectedSeriesName) {
+            targetRef = seriesRef;
+        } else if (isModelSelectReady && !selectedModel) { 
+            targetRef = modelRef;
+        }
+    } else if (currentStep === "deviceOptions") {
+        targetRef = deviceOptionsRef;
+    } else if (currentStep === "cylinderOptions") {
+        targetRef = cylinderOptionsRef;
+    }
+
+    if (targetRef && targetRef.current) {
+        targetRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, [currentStep, selectedCategory, selectedSeriesName, selectedModel, isModelSelectReady]);
+  // --- END AUTOSCROLL EFFECT ---
+
 
   useEffect(() => {
     if (globalSearchTerm.trim().length < 2) {
@@ -587,7 +617,7 @@ function CylinderFinder() {
     }
   };
 
-  // NEW: Handler for the intermediate Series selection using buttons
+  // Handler for the intermediate Series selection using buttons
   const handleSeriesButtonChange = (seriesName) => {
       setSelectedSeriesName(seriesName);
       setSelectedModel(""); // Reset model when series changes
@@ -612,15 +642,35 @@ function CylinderFinder() {
     }
   };
 
-  // --- FIX: Use useCallback for handlers passed to child components ---
-  const handleDevicePrefixChange = useCallback((prefixId) => {
-    setSelectedDevicePrefixes((prev) => prev.includes(prefixId) ? prev.filter((p) => p !== prefixId) : [...prev, prefixId]);
+  // --- FIX: Updated handleDevicePrefixChange to handle Radio (Main) vs Checkbox (Aux) groups ---
+  const handleDevicePrefixChange = useCallback((id, isRadio) => {
+    setSelectedDevicePrefixes(prev => {
+        if (isRadio) {
+            // Logic for Main/Radio Group: only one can be selected (toggle off if already selected).
+            const newMainId = id; 
+            const currentAuxPrefixes = prev.filter(p => isAuxPrefix(p));
+            
+            // If the incoming ID is a main prefix and it's already selected in prev, newMainPrefixes is empty (toggle off).
+            // Otherwise, it's just the new ID.
+            const newMainPrefixes = prev.includes(newMainId) ? [] : [newMainId];
+
+            return [...currentAuxPrefixes, ...newMainPrefixes];
+
+        } else {
+            // Logic for Aux/Checkbox Group: toggle existence.
+            if (prev.includes(id)) {
+                return prev.filter(p => p !== id);
+            } else {
+                return [...prev, id];
+            }
+        }
+    });
   }, [setSelectedDevicePrefixes]);
+  // --- END FIX ---
 
   const handleCylinderPrefixChange = useCallback((prefixId) => {
     setSelectedCylinderPrefix((prev) => (prev === prefixId ? null : prefixId));
   }, [setSelectedCylinderPrefix]);
-  // --- END FIX ---
   
   const handleNext = () => { if (currentStep === "deviceOptions") setCurrentStep("cylinderOptions"); };
 
@@ -704,19 +754,22 @@ function CylinderFinder() {
               <p className="finder-intro">Select a hardware **Category**, then select the **Model** to find the correct cylinder.</p>
               <div className="hardware-selectors">
                 
-                {/* STEP 1: CATEGORY SELECTION (Always visible and shows chosen selection) */}
-                <ButtonSelector title="1. Select Hardware Category" options={categoryButtonOptions} selected={selectedCategory} onSelect={handleCategoryChange} />
+                {/* STEP 1: CATEGORY SELECTION */}
+                <div ref={categoryRef} className="selection-stage-container">
+                    <ButtonSelector title="1. Select Hardware Category" options={categoryButtonOptions} selected={selectedCategory} onSelect={handleCategoryChange} />
+                </div>
                 
+                {/* PERSISTENT SUMMARY CARDS */}
                 {selectedCategory && (
-                    <div className="selection-summary-card">
-                        <p className="selection-summary-item">Category Chosen: <strong>{selectedCategory}</strong></p>
+                    <div className="selection-summary-card category-summary-card">
+                        <p className="selection-summary-item">Category: <strong>{selectedCategory}</strong></p>
                     </div>
                 )}
 
 
                 {/* STEP 2A: SERIES SELECTION (Only for Exit/Mortise/Bored after Category is picked) */}
                 {needsSeriesSelection && (
-                    <div className="series-selection-group">
+                    <div ref={seriesRef} className="selection-stage-container series-selection-group">
                         <h3 className="button-selector-title">2. Select Device Series</h3>
                         {seriesGroupedOptions.map(group => (
                             <div key={group.title}>
@@ -725,7 +778,7 @@ function CylinderFinder() {
                                     options={group.options}
                                     selected={selectedSeriesName} 
                                     onSelect={handleSeriesButtonChange}
-                                    hasImages={false} // <-- No images for series buttons
+                                    hasImages={true}
                                     title=""
                                 />
                             </div>
@@ -735,14 +788,15 @@ function CylinderFinder() {
                 
                 {/* STEP 2B / STEP 3: MODEL SELECTION (Visible when ready) */}
                 {isModelSelectReady && (
-                    <div className="model-selection-group">
-                        <div className="selection-summary-card">
-                            <p className="selection-summary-item">Series Chosen: <strong>{selectedSeriesName}</strong></p>
-                        </div>
-
+                    <div ref={modelRef} className="selection-stage-container model-selection-group">
+                        {selectedSeriesName && !isMullion && (
+                            <div className="selection-summary-card series-summary-card">
+                                <p className="selection-summary-item">Series: <strong>{selectedSeriesName.replace(" Series", "")}</strong></p>
+                            </div>
+                        )}
                         <HardwareSelector 
                             label="3. Select Model / Function" 
-                            options={finalModelOptions} // This is the final dropdown with grouped models
+                            options={finalModelOptions} 
                             value={selectedModel} 
                             onChange={handleModelChange}
                         />
@@ -751,7 +805,7 @@ function CylinderFinder() {
               </div>
               <div className="wizard-controls">
                 {/* Button is only enabled when a model is selected */}
-                <button onClick={handleProceedFromDeviceSelection} className="wizard-find-button" disabled={!selectedModel}>Next</button>
+                <button onClick={handleProceedFromDeviceSelection} className="wizard-find-button" disabled={!selectedModel}>Find Cylinder</button>
                 <button onClick={handleReset} className="wizard-find-button reset-button">Reset</button>
               </div>
             </>
@@ -760,8 +814,7 @@ function CylinderFinder() {
             <div ref={deviceOptionsRef} className="wizard-step active">
               {/* Add summary of Category and Model here for context */}
               <div className="selection-summary-card">
-                  <p className="selection-summary-item">Category: <strong>{selectedCategory}</strong></p>
-                  <p className="selection-summary-item">Model: <strong>{selectedModel}</strong></p>
+                  <p className="selection-summary-item">Device: <strong>{selectedModel}</strong> ({selectedCategory} - {selectedSeriesName.replace(" Series", "")})</p>
               </div>
               <div className="prefix-section">
                 <h3 className="prefix-section-title">Select Keyed Device Options</h3>
@@ -778,8 +831,7 @@ function CylinderFinder() {
             <div ref={cylinderOptionsRef} className="wizard-step active">
               {/* Add summary of Category and Model here for context */}
               <div className="selection-summary-card">
-                  <p className="selection-summary-item">Category: <strong>{selectedCategory}</strong></p>
-                  <p className="selection-summary-item">Model: <strong>{selectedModel}</strong></p>
+                  <p className="selection-summary-item">Device: <strong>{selectedModel}</strong> ({selectedCategory} - {selectedSeriesName.replace(" Series", "")})</p>
               </div>
               <h3 className="prefix-section-title">Select Cylinder Options</h3>
               {isMortiseLockSelected && (
