@@ -17,6 +17,9 @@ export const images = {
   Collar1KA: require("./1KACollar.png"), // <-- ADDED
   Collar1SB: require("./1SBCollar.png"), // <-- ADDED
   Ring90: require("./90Ring.png"), // <-- ADDED (Renamed for code clarity)
+  TT127: require("./127TT.png"),
+  BR8816: require("./BlockingRing8816.png"),
+
   // --- Mullion Placeholders (NEW) ---
   MullionL980A: require("./L980.png"), // L980/L980A Aluminum Mullion
   MullionL980S: require("./L980S.png"), // L980S Steel Mullion

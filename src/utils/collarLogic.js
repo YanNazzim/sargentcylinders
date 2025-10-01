@@ -11,8 +11,8 @@ export const isSficForCollar = (prefix) => {
     return prefix.includes("70-") || prefix.includes("72-") || prefix.includes("73-");
 };
 
-// --- Projection Helper Function (New) ---
-export const getProjection = (partNumber) => { // <-- FIXED: Added export
+// --- Projection Helper Function ---
+export const getProjection = (partNumber) => {
     switch (partNumber) {
         case '1KB-1':
         case '1KA-1':
@@ -35,6 +35,8 @@ export const getProjection = (partNumber) => { // <-- FIXED: Added export
         case '97':
         case '97-0352':
             return 'Variable (Collar/Rosette)'; // Default rosette/misc collar
+        case '98-0021': // Blocking Ring does not show projection
+            return ''; 
         case 'N/A':
         case 'CYLINDER ONLY':
             return 'N/A';
@@ -172,7 +174,6 @@ export function getMortiseCollarPartNumber(cylinderPartNumber, keyPrefix, doorTh
     let baseSize = cylinderPartNumber.replace(/[^0-9]/g, '');
 
     // 1. Determine the effective cylinder size for the lookup table (41/42/43).
-    // The previous conditional fix is removed as the data tables were manually corrected.
     if (baseSize === '42' && isLficForCollar(keyPrefix)) {
         baseSize = '42';
     } else if (baseSize === '43' && isSficForCollar(keyPrefix)) {

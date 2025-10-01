@@ -49,6 +49,16 @@ const CollarInfo04 = {
   },
 };
 
+// Inside cylinder definition for 8816. Note: Size is fixed at #44 and 
+// will be conditionally overridden to #46 in CylinderFinder.js if SFIC is selected.
+const insideCyl8816 = {
+    id: "Inside Cyl",
+    description: "Inside Cylinder for 8816 Function",
+    addsCylinder: { partNumber: "#44", type: "Mortise Cylinder" },
+    isDeviceSpecific: true,
+    keywords: [],
+};
+
 
 export const series8300 = {
   name: "8300 Series Narrow Mortise",
@@ -588,16 +598,13 @@ export const series8800 = {
         "Key Outside Retracts Latch; Key Inside Unlocks/Locks O/S Trim",
       baseCylinder: { partNumber: "#34", type: "Rim Cylinder" },
       prefixes: [
-        {
-          id: "Inside Cyl",
-          description: "Inside Cylinder for 8816 Function",
-          addsCylinder: { partNumber: "#44", type: "Mortise Cylinder" },
-          isDeviceSpecific: true,
-          keywords: [],
-        },
+        // Inside Cyl prefix will be size-adjusted in CylinderFinder.js based on selectedCylinderPrefix
+        insideCyl8816, 
+        // Device Prefixes
         ...devicePrefixes80Series.filter(
           (p) => p.id !== "127 - Mortise Cylinder Thumbturn"
-        ), // Exclude 127 from here
+        ), 
+        // Aux Prefixes (127)
         {
           id: "127 - Mortise Cylinder Thumbturn",
           description:
@@ -610,7 +617,8 @@ export const series8800 = {
           isDeviceSpecific: true,
           keywords: ["127", "thumbturn", "TT"],
         },
-        ...allCylinderPrefixes,
+        // All non-keyed cylinder prefixes (for the outside rim cyl)
+        ...allCylinderPrefixes
       ],
       collars: CollarInfo,
     },
@@ -662,11 +670,11 @@ export const series8800 = {
       baseCylinder: { partNumber: "#34", type: "Rim Cylinder" },
       prefixes: [
         {
-          id: "Inside Cyl",
-          description: "Inside Cylinder for 8866 Function",
-          addsCylinder: { partNumber: "#44", type: "Mortise Cylinder" },
-          isDeviceSpecific: true,
-          keywords: [],
+            id: "Inside Cyl",
+            description: `Inside Cylinder (Conventional/LFIC) - Default Size #44 (1-1/2")`,
+            addsCylinder: { partNumber: "#44", type: "Mortise Cylinder" },
+            isDeviceSpecific: true,
+            keywords: [],
         },
         ...devicePrefixes80Series,
         ...allCylinderPrefixes,

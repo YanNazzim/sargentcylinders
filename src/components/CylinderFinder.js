@@ -46,14 +46,14 @@ function CylinderFinder() {
   // --- MORTISE COLLAR LOOKUP STATES ---
   const [selectedTrimType, setSelectedTrimType] = useState("SECTIONAL");
   const [selectedDoorThickness, setSelectedDoorThickness] = useState("1-3/4\"");
-  
+
   const doorThicknessOptions = useMemo(() => [
     { label: "1-3/8\"", value: "1-3/8\"" },
-    { label: "1-3/4\"", value: "1-3-4\"" },
+    { label: "1-3/4\"", value: "1-3/4\"" },
     { label: "2\"", value: "2\"" },
     { label: "2-1/4\"", value: "2-1/4\"" },
-  ], []); 
-  
+  ], []);
+
   const trimTypeOptions = useMemo(() => [
       {label: "Sectional Trim (CO, L, O, etc.)", value: "SECTIONAL"},
       {label: "Sectional Trim (E, E2, E3, E4)", value: "SECTIONAL_E_TRIM"},
@@ -62,7 +62,7 @@ function CylinderFinder() {
       {label: "Specialty Hardware (BHW, ALP, etc.)", value: "SPECIALTY"},
       {label: "V-Series Indicator Trim", value: "V_SERIES_TRIM"},
   ], []);
-  
+
   const selectedTrimLabel = useMemo(() => {
     return trimTypeOptions.find(opt => opt.value === selectedTrimType)?.label || selectedTrimType;
   }, [trimTypeOptions, selectedTrimType]);
@@ -103,7 +103,7 @@ function CylinderFinder() {
 
     if (!modelData) return null;
 
-    const combinedExcludedPrefixes = [...(seriesData.excludedPrefixes || []), ...(modelData.excludedPrefixes || [])];
+    const combinedExcludedPrefixes = [...(seriesData?.excludedPrefixes || []), ...(modelData.excludedPrefixes || [])];
 
     return {
       ...modelData,
@@ -122,7 +122,7 @@ function CylinderFinder() {
     }
     return availablePrefixes;
   }, [activeModelData]);
-  
+
   const categoryButtonOptions = useMemo(() => {
     return sargentData.hardware.map((h) => {
       let imageUrl;
@@ -130,7 +130,7 @@ function CylinderFinder() {
         case "Exit Devices": imageUrl = images.RimExit80; break;
         case "Mortise Locks": imageUrl = images.Mortise8200; break;
         case "Bored Locks": imageUrl = images.Bored10XLine; break;
-        case "Mullions": imageUrl = images.MullionL980S; break; 
+        case "Mullions": imageUrl = images.MullionL980S; break;
         default: imageUrl = images.sargentlogo;
       }
       return { id: h.category, name: h.category, imageUrl };
@@ -161,11 +161,11 @@ function CylinderFinder() {
             .replace("Narrow Rim", "N. Rim");
 
         const option = {
-            id: series.name, 
-            name: nameCleaned, 
+            id: series.name,
+            name: nameCleaned,
             imageUrl: series.imageUrl || images.sargentlogo,
         };
-        
+
         if (selectedCategory === "Exit Devices") {
             if (series.name.startsWith("PE8")) {
                 groups.PE80.options.push(option);
@@ -225,7 +225,7 @@ function CylinderFinder() {
             label: `${model.modelNumber} - ${model.description}`,
             value: model.modelNumber,
             // Use model-specific image if available, otherwise series image
-            imageUrl: model.imageUrl || model.seriesImageUrl || images.sargentlogo, 
+            imageUrl: model.imageUrl || model.seriesImageUrl || images.sargentlogo,
         })),
     }];
   }, [selectedCategory, selectedSeriesName]);
@@ -241,19 +241,19 @@ function CylinderFinder() {
     const hasLficPrefix = selectedCylinderPrefix && isLficForCollar(selectedCylinderPrefix);
     const hasSficPrefix = selectedCylinderPrefix && isSficForCollar(selectedCylinderPrefix);
     const hasKesoPrefix = selectedCylinderPrefix && ["F1-82-", "F1-83-", "82-", "83-"].includes(selectedCylinderPrefix);
-    
+
     // Core prefixes for displaying core part numbers and descriptions
     const isLficCore = selectedCylinderPrefix && (selectedCylinderPrefix.includes("60-") || selectedCylinderPrefix.includes("63-") || selectedCylinderPrefix.includes("64-"));
     const isSficCore = selectedCylinderPrefix && (selectedCylinderPrefix.includes("70-") || selectedCylinderPrefix.includes("72-") || selectedCylinderPrefix.includes("73-"));
 
-    // --- START DG LOGIC FLAGS ---
+    // --- DG LOGIC FLAGS ---
     const isDgPrefix = selectedCylinderPrefix && selectedCylinderPrefix.startsWith("DG");
     const isDgLfic = isDgPrefix && isLficCore;
-    // --- END DG LOGIC FLAGS ---
 
 
     const rawCylinderList = [];
-    
+
+    // --- Collect Cylinder Data from Model/Prefixes ---
     if (isMullion980C1) {
         const kitPrefix = activeModelData.prefixes?.find(p => p.id === '980C1');
         if (kitPrefix?.addsCylinder) {
@@ -281,10 +281,10 @@ function CylinderFinder() {
     selectedDevicePrefixes.forEach((prefixId) => {
       const prefixData = activeModelData.prefixes?.find((p) => p.id === prefixId);
       if (prefixData?.addsCylinder) {
-        rawCylinderList.push({ ...prefixData.addsCylinder, role: prefixId.startsWith("127") ? "Inside Cylinder" : prefixData.id, notes: prefixData.description, sourcePrefix: prefixData });
+        rawCylinderList.push({ ...prefixData.addsCylinder, role: prefixId.startsWith("127") ? "127 - Mortise Cylinder Thumbturn" : prefixData.id, notes: prefixData.description, sourcePrefix: prefixData });
       }
     });
-    
+
     // Add 980C2 kit for description purposes if it's not a general keying prefix
     if (isMullion980C2 && !selectedCylinderPrefix) {
         const kitPrefix = activeModelData.prefixes?.find(p => p.id === '980C2');
@@ -311,41 +311,55 @@ function CylinderFinder() {
     const cylCount = isDoubleCylinderMortise ? "DOUBLE_CYLINDER" : "SINGLE_CYLINDER";
 
     return finalCylindersArray.map((cyl) => {
-      let basePartNumber = cyl.partNumber.replace("#", ""); 
+      let basePartNumber = cyl.partNumber.replace("#", "");
       
-      // --- START NEW BASE SIZE ADJUSTMENT LOGIC (For LFIC/SFIC Housings) ---
-      // Ensures that if a conventional cylinder part number (#41, #44) is used, 
-      // the base size is correctly adjusted to the corresponding LFIC (#42) or SFIC (#43) housing size for part number and collar logic.
+      const is127Thumbturn = cyl.role === "127 - Mortise Cylinder Thumbturn";
+
+
+      // --- CUSTOM INSIDE CYLINDER SIZE ADJUSTMENT FOR 8816/PE8816 ---
+      // This logic must run BEFORE the general housing adjustment to ensure the correct default size is set.
+      const is8816InsideCylinder = (activeModelData.modelNumber === "8816" || activeModelData.modelNumber === "PE8816")
+                                    && (cyl.role === "Inside Cylinder" || cyl.role.startsWith("Inside Cyl ("));
+
+      // Exclude 127 from this specific rule (127-44 remains 127-44)
+      if (is8816InsideCylinder && isSficCore && basePartNumber === '44' && !is127Thumbturn) {
+          // Rule: If SFIC is chosen, the inside cylinder of the 8816/PE8816 function must be a #46
+          basePartNumber = '46';
+          // eslint-disable-next-line
+          cyl.notes = cyl.notes ? `${cyl.notes} / SFIC prefix detected: Inside cylinder size adjusted to #46 (1-3/4\") for correct trim fit.` : "SFIC prefix detected: Inside cylinder size adjusted to #46 (1-3/4\") for correct trim fit.";
+      }
+
+
+      // --- GENERAL BASE SIZE ADJUSTMENT LOGIC (For ALL LFIC/SFIC Housings) ---
       const isBaseMortiseOrRimCylinder = cyl.type.includes("Mortise Cylinder") || cyl.type.includes("Rim Cylinder");
-      
-      if (selectedCylinderPrefix && isBaseMortiseOrRimCylinder) {
+
+      if (selectedCylinderPrefix && isBaseMortiseOrRimCylinder && !is127Thumbturn) {
+
           if (isLficCore) {
               if (basePartNumber === '41' || basePartNumber === '44') {
                   basePartNumber = '42'; // LFIC housing size for #41 and #44 is #42
               }
           } else if (isSficCore) {
-              if (basePartNumber === '41' || basePartNumber === '44') {
-                  basePartNumber = '43'; // SFIC housing size for #41 and #44 is #43
+              if (basePartNumber === '41' || (basePartNumber === '44' && !is8816InsideCylinder)) {
+                  basePartNumber = '43'; // SFIC housing size for #41 and #44 is #43 (General rule, exempt 8816/PE8816's inside cylinder here)
               }
           }
-          // Rim cylinder size #34 should remain #34 (e.g., 63-34 or 73-34)
       }
-      // --- END NEW BASE SIZE ADJUSTMENT LOGIC ---
 
       const kesoLengths = { "F1-71":'1-1/8"', "F1-72":'1-1/4"', "F1-73":'1-3/8"', "F1-74":'1-1/2"', "F1-76":'1-3-4"', "F1-64":'1-3-4" to 3-1-8"' };
       let lengthDesc = hasKesoPrefix ? kesoLengths[basePartNumber] || "" : getCylinderLengthDescription(basePartNumber);
-      
+
       let finalPartNumber = `${basePartNumber} x Keying Details x Finish`; // Default
       const prefixData = cylinderPrefixCategories.flatMap(c => c.prefixes).find(p => p.id === selectedCylinderPrefix);
       const prefixDesc = prefixData ? prefixData.description.replace("Device", "Housing") : "";
-      
+
       // Calculate Notes and Description based on initial values/roles
       let calculatedNotes = cyl.notes;
       let calculatedDescription = `${lengthDesc} ${cyl.type}`;
 
-      // --- START NEW IMAGE LOGIC ---
+      // --- CYLINDER IMAGE LOGIC ---
       let cylinderImageUrl = images.sargentlogo; // Default fallback
-      
+
       // 1. Key System Prefix Overrides (High Priority)
       if (selectedCylinderPrefix) {
           // A. DG Family (Highest Priority)
@@ -360,7 +374,7 @@ function CylinderFinder() {
                       cylinderImageUrl = images.KILCyls;
                   } else {
                       // Default to Mortise style if type is unknown
-                      cylinderImageUrl = isDgLfic ? images.DGLFICMortise : images.DGMortise; 
+                      cylinderImageUrl = isDgLfic ? images.DGLFICMortise : images.DGMortise;
                   }
               }
           // B. XC Family
@@ -377,9 +391,15 @@ function CylinderFinder() {
               if (cyl.type.includes("Mortise")) cylinderImageUrl = images.SFICMortise;
               else if (cyl.type.includes("Rim")) cylinderImageUrl = images.SFICRim;
           }
-      } 
-      
-      // 2. Default Cylinder Type Fallback (If no special prefix was selected)
+      }
+
+      // 127 THUMBTURN IMAGE OVERRIDE
+      if (is127Thumbturn) {
+          cylinderImageUrl = images.TT127; 
+      }
+
+
+      // 2. Default Cylinder Type Fallback
       if (cylinderImageUrl === images.sargentlogo) {
           if (cyl.type.includes("Key-in-Lever") || cyl.type.includes("Key-in-Knob")) {
               cylinderImageUrl = images.KILCyls;
@@ -389,34 +409,32 @@ function CylinderFinder() {
               cylinderImageUrl = images.MortiseCyls;
           }
       }
-      // --- END NEW IMAGE LOGIC ---
-      
-      // --- START MULLION 980C2 FIXED #46 LOGIC (Forces #46) ---
+
+
+      // --- MULLION LOGIC (Part Number Overrides) ---
       if (isMullion980C2 && selectedCylinderPrefix) {
           // All fixed mullion outputs use the prefix followed by the size '46'
           finalPartNumber = `${selectedCylinderPrefix}${basePartNumber} x Keying Details x Finish`;
 
           if (isLficCore) {
-              cyl.type = "LFIC Core (for Housing)"; 
+              cyl.type = "LFIC Core (for Housing)";
               cyl.description = `LFIC Core for #46 Housing: ${prefixDesc}`;
               cyl.notes = "Core for fixed #46 Housing (Housing comes with mullion).";
-              cylinderImageUrl = images.MortiseCyls; // Override if core is selected, still looks like a mortise cylinder
+              cylinderImageUrl = images.MortiseCyls; 
           } else if (isSficCore) {
-              cyl.type = "SFIC Core (for Housing)"; 
-              cyl.description = `SFIC Core for #46 Housing: ${prefixDesc}`; 
+              cyl.type = "SFIC Core (for Housing)";
+              cyl.description = `SFIC Core for #46 Housing: ${prefixDesc}`;
               cyl.notes = "Core for fixed #46 Housing (Housing comes with mullion).";
-              cylinderImageUrl = images.MortiseCyls; // Override if core is selected, still looks like a mortise cylinder
+              cylinderImageUrl = images.MortiseCyls; 
           } else {
               // Conventional/Other prefix selected with 980C2 logic
               cyl.notes = "Cylinder for fixed #46 Housing (Housing comes with mullion).";
           }
-          
+
           calculatedNotes = cyl.notes;
           calculatedDescription = `${lengthDesc} ${cyl.type}`;
-      // --- END MULLION 980C2 FIXED #46 LOGIC ---
-
-      // --- START MULLION 980C1 VARIABLE SIZE LOGIC (Converts #41) ---
-      } else if (isMullion980C1 && selectedCylinderPrefix) {
+      }
+      else if (isMullion980C1 && selectedCylinderPrefix) {
           // Logic for variable size mullions (converts #41 placeholder to #42 or #43)
           if (hasLficPrefix) {
             basePartNumber = '42';
@@ -424,40 +442,54 @@ function CylinderFinder() {
             basePartNumber = '43';
           }
           finalPartNumber = `${selectedCylinderPrefix}${basePartNumber} x Keying Details x Finish`;
-          
+
           // Recalculate description based on new basePartNumber and prefix
           calculatedDescription = `${getCylinderLengthDescription(basePartNumber)} ${cyl.type} ${prefixDesc}`;
+      }
 
-      // --- END MULLION 980C1 VARIABLE SIZE LOGIC ---
-      
-      // --- START STANDARD CYLINDER LOGIC ---
-      } else if (has127Prefix && basePartNumber === "44") {
-          finalPartNumber = `127-44 x Keying Details x Finish`;
-      } else if (hasKesoPrefix) {
+      // --- STANDARD CYLINDER PART NUMBER LOGIC ---
+      if (hasKesoPrefix) {
           if (basePartNumber === "41") finalPartNumber = "F1-71 x Keying Details x Finish";
           else if (basePartNumber === "46") finalPartNumber = "F1-76 x Keying Details x Finish";
           else if (basePartNumber === "34") finalPartNumber = "F1-64 x Keying Details x Finish";
       } else if (selectedCylinderPrefix) {
-          // This line uses the potentially modified basePartNumber (41->42/43 fix)
-          finalPartNumber = `${selectedCylinderPrefix}${basePartNumber} x Keying Details x Finish`;
-          calculatedDescription += ` ${prefixDesc}`;
+          // SPECIAL CASE: If 127 is selected, we want the inside cylinder part number to be 127-44 ONLY
+          if (cyl.role === "127 - Mortise Cylinder Thumbturn") {
+             finalPartNumber = `127-${basePartNumber} x Keying Details x Finish`;
+             calculatedDescription += ` Thumbturn`;
+          } else {
+             finalPartNumber = `${selectedCylinderPrefix}${basePartNumber} x Keying Details x Finish`;
+             calculatedDescription += ` ${prefixDesc}`;
+          }
+
       } else {
           finalPartNumber = `${basePartNumber} x Keying Details x Finish`;
       }
-      // --- END STANDARD CYLINDER LOGIC ---
-      
+
       // Overwrite notes for general Outside/Inside roles (applies to standard locks)
       if (!isMullion980C2 && !isMullion980C1) {
           if (cyl.role === "Outside Cylinder") calculatedNotes = "For the outside of the door.";
           else if (cyl.role === "Inside Cylinder") calculatedNotes = "For the inside of the door.";
       }
-      
 
+
+      // --- COLLAR LOGIC ---
       const cylinderCollars = [];
       const collarSource = cyl.sourcePrefix?.collars || activeModelData.collars;
       
-      if (isMortiseLock) {
-          // basePartNumber is now correctly set to 42 or 43 for LFIC/SFIC here
+      const isRimCylinderOnExitDevice = cyl.partNumber.includes("34") && activeModelData.category === "Exit Devices";
+
+      // 1. CUSTOM COLLAR OVERRIDE FOR 127 THUMBTURN 
+      if (is127Thumbturn) {
+          cylinderCollars.push({
+              partNumber: "98-0021 x Finish",
+              description: "Blocking Ring (Mandatory for 127 Thumbturn on 8816/PE8816)",
+              projection: getProjection("98-0021"), 
+              imageUrl: images.BR8816, 
+          });
+      } 
+      // 2. MORTISE LOCK COLLAR LOGIC
+      else if (isMortiseLock) {
           const mortiseCollar = getMortiseCollarPartNumber(basePartNumber, selectedCylinderPrefix, selectedDoorThickness, selectedTrimType, cylCount);
           if (mortiseCollar) {
               let collarImage = images.Collar1KB;
@@ -465,16 +497,18 @@ function CylinderFinder() {
               if (pnPrefix.startsWith("1KA")) collarImage = images.Collar1KA;
               else if (pnPrefix.startsWith("1SB")) collarImage = images.Collar1SB;
               else if (pnPrefix.startsWith("97")) collarImage = images.Rosette97;
-              else if (pnPrefix.startsWith("90")) collarImage = images.Ring90; 
+              else if (pnPrefix.startsWith("90")) collarImage = images.Ring90;
               cylinderCollars.push({...mortiseCollar, imageUrl: collarImage});
           }
-      } else if (isMullion980C1 || isMullion980C2) {
+      } 
+      // 3. MULLION COLLAR LOGIC
+      else if (isMullion980C1 || isMullion980C2) {
           // Mullion collar logic is mandatory (97 Rosette)
           if (collarSource) {
             const { default: defaultCollar } = collarSource;
             if (defaultCollar) cylinderCollars.push({...defaultCollar, imageUrl: defaultCollar.imageUrl || images.sargentlogo});
           }
-          
+
           // Fallback logic for 980C1 if not already covered by collarSource
           if (isMullion980C1 && cylinderCollars.length === 0) {
                let requiredPart, description;
@@ -492,7 +526,9 @@ function CylinderFinder() {
                   cylinderCollars.push({ partNumber: `${requiredPart} x Finish`, description, projection: getProjection(requiredPart), imageUrl: images.Collar1KB });
               }
           }
-      } else if (collarSource) {
+      } 
+      // 4. GENERIC EXIT DEVICE COLLAR LOGIC (EXCLUDES RIM CYLINDERS)
+      else if (collarSource && !isRimCylinderOnExitDevice) {
           const { default: defaultCollar, conditional: conditionalCollars } = collarSource;
           let selectedConditionalCollar = null;
           if (conditionalCollars) {
@@ -501,14 +537,15 @@ function CylinderFinder() {
           if (selectedConditionalCollar) cylinderCollars.push({...selectedConditionalCollar, imageUrl: selectedConditionalCollar.imageUrl || images.sargentlogo});
           else if (defaultCollar) cylinderCollars.push({...defaultCollar, imageUrl: defaultCollar.imageUrl || images.sargentlogo});
       }
-      
-      return { 
-        ...cyl, 
-        partNumber: finalPartNumber, 
-        description: calculatedDescription.trim(), 
-        notes: calculatedNotes, 
-        collars: cylinderCollars, 
-        imageUrl: cylinderImageUrl // <-- UPDATED to use the determined image
+
+
+      return {
+        ...cyl,
+        partNumber: finalPartNumber,
+        description: calculatedDescription.trim(),
+        notes: calculatedNotes,
+        collars: cylinderCollars,
+        imageUrl: cylinderImageUrl
       };
     });
   }, [activeModelData, selectedDevicePrefixes, selectedCylinderPrefix, selectedDoorThickness, selectedTrimType]);
@@ -528,7 +565,7 @@ function CylinderFinder() {
             targetRef = categoryRef;
         } else if (selectedCategory !== "Mullions" && !selectedSeriesName) {
             targetRef = seriesRef;
-        } else if (isModelSelectReady && !selectedModel) { 
+        } else if (isModelSelectReady && !selectedModel) {
             targetRef = modelRef;
         }
     } else if (currentStep === "deviceOptions") {
@@ -541,9 +578,8 @@ function CylinderFinder() {
         targetRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
     }
   }, [currentStep, selectedCategory, selectedSeriesName, selectedModel, isModelSelectReady]);
-  // --- END AUTOSCROLL EFFECT ---
 
-
+  // --- SEARCH RESULTS FILTERING ---
   useEffect(() => {
     if (globalSearchTerm.trim().length < 2) {
       setSearchResults([]);
@@ -565,14 +601,14 @@ function CylinderFinder() {
     setShowMultipleMatchesWarning(false);
     setSelectedDevicePrefixes([]);
     setSelectedCylinderPrefix(null);
-    setSelectedDoorThickness("1-3/4\""); 
+    setSelectedDoorThickness("1-3/4\"");
     setSelectedTrimType("SECTIONAL");
-    
+
     const fullModelData = sargentData.hardware.find(h => h.category === result.category)?.series.find(s => s.name === result.seriesName)?.models.find(m => m.modelNumber === result.modelNumber);
     const isMullion = result.category === "Mullions";
     const hasDeviceOptions = !isMullion && fullModelData?.prefixes.filter(p => p.isDeviceSpecific && p.id !== "Inside Cyl" && p.id !== "980C2").length > 0;
-    const hasCylinderOptions = fullModelData?.baseCylinder || fullModelData?.prefixes.some(p => p.addsCylinder);
-    
+    const hasCylinderOptions = fullModelData?.baseCylinder || fullModelData?.prefixes.some(p => p.addsCylinder) || isMullion;
+
     if (!hasCylinderOptions) setCurrentStep("results");
     else if (isMullion) setCurrentStep("cylinderOptions");
     else if (hasDeviceOptions) setCurrentStep("deviceOptions");
@@ -592,7 +628,7 @@ function CylinderFinder() {
     const isMullion = selectedCategory === "Mullions";
     const hasDeviceOptions = !isMullion && deviceTiedPrefixes.length > 0;
     const hasCylinderOptions = activeModelData?.baseCylinder || activeModelData?.prefixes.some(p => p.addsCylinder) || isMullion;
-    
+
     if (!hasCylinderOptions) setCurrentStep("results");
     else if (isMullion) setCurrentStep("cylinderOptions");
     else if (hasDeviceOptions) setCurrentStep("deviceOptions");
@@ -605,15 +641,16 @@ function CylinderFinder() {
     setSelectedModel("");
     setSelectedDevicePrefixes([]);
     setSelectedCylinderPrefix(null);
-    setSelectedDoorThickness("1-3-4\""); 
-    setSelectedTrimType("SECTIONAL"); 
+    setSelectedDoorThickness("1-3/4\"");
+    setSelectedTrimType("SECTIONAL");
     setGlobalSearchTerm("");
     setSearchResults([]);
+    setShowMultipleMatchesWarning(false);
     setCurrentStep("deviceSelection");
-    
+
     // Auto-set selectedSeriesName for Mullions to bypass Series selection step and proceed to Model dropdown
     if (categoryId === "Mullions") {
-        setSelectedSeriesName("Mullion Models"); 
+        setSelectedSeriesName("Mullion Models");
     }
   };
 
@@ -628,9 +665,9 @@ function CylinderFinder() {
     setSelectedModel(modelId);
     setSelectedDevicePrefixes([]);
     setSelectedCylinderPrefix(null);
-    setSelectedDoorThickness("1-3-4\""); 
-    setSelectedTrimType("SECTIONAL"); 
-    
+    setSelectedDoorThickness("1-3/4\"");
+    setSelectedTrimType("SECTIONAL");
+
     // Find the correct series name based on the chosen modelId to populate activeModelData
     const categoryData = sargentData.hardware.find(h => h.category === selectedCategory);
     const series = categoryData?.series.find(s => s.models.some(m => m.modelNumber === modelId));
@@ -642,14 +679,15 @@ function CylinderFinder() {
     }
   };
 
-  // --- FIX: Updated handleDevicePrefixChange to handle Radio (Main) vs Checkbox (Aux) groups ---
+  // --- Updated handleDevicePrefixChange to handle Radio (Main) vs Checkbox (Aux) groups ---
   const handleDevicePrefixChange = useCallback((id, isRadio) => {
     setSelectedDevicePrefixes(prev => {
         if (isRadio) {
             // Logic for Main/Radio Group: only one can be selected (toggle off if already selected).
-            const newMainId = id; 
+            const newMainId = id;
+            // Filter out existing Aux Prefixes (which are NOT Main Prefixes)
             const currentAuxPrefixes = prev.filter(p => isAuxPrefix(p));
-            
+
             // If the incoming ID is a main prefix and it's already selected in prev, newMainPrefixes is empty (toggle off).
             // Otherwise, it's just the new ID.
             const newMainPrefixes = prev.includes(newMainId) ? [] : [newMainId];
@@ -666,12 +704,11 @@ function CylinderFinder() {
         }
     });
   }, [setSelectedDevicePrefixes]);
-  // --- END FIX ---
 
   const handleCylinderPrefixChange = useCallback((prefixId) => {
     setSelectedCylinderPrefix((prev) => (prev === prefixId ? null : prefixId));
   }, [setSelectedCylinderPrefix]);
-  
+
   const handleNext = () => { if (currentStep === "deviceOptions") setCurrentStep("cylinderOptions"); };
 
   const handleReset = useCallback(() => {
@@ -680,7 +717,7 @@ function CylinderFinder() {
     setSelectedModel("");
     setSelectedDevicePrefixes([]);
     setSelectedCylinderPrefix(null);
-    setSelectedDoorThickness("1-3-4\"");
+    setSelectedDoorThickness("1-3/4\"");
     setSelectedTrimType("SECTIONAL");
     setGlobalSearchTerm("");
     setSearchResults([]);
@@ -694,16 +731,36 @@ function CylinderFinder() {
     if (currentStep === "results") {
       const hasCylinderOptions = activeModelData?.baseCylinder || activeModelData?.prefixes.some(p => p.addsCylinder);
       if (hasCylinderOptions) setCurrentStep("cylinderOptions");
-      else handleReset();
+      else {
+        // Go back to model selection step
+        setSelectedModel(""); 
+        setSelectedSeriesName(selectedCategory === "Mullions" ? "Mullion Models" : "");
+        setCurrentStep("deviceSelection");
+      }
     } else if (currentStep === "cylinderOptions") {
       const isMullion = selectedCategory === "Mullions";
       const hasDeviceOptions = !isMullion && deviceTiedPrefixes.length > 0;
       if (hasDeviceOptions) setCurrentStep("deviceOptions");
-      else handleReset();
+      else {
+        // Go back to model selection step
+        setSelectedModel(""); 
+        setSelectedSeriesName(selectedCategory === "Mullions" ? "Mullion Models" : selectedSeriesName);
+        setCurrentStep("deviceSelection");
+      }
     } else if (currentStep === "deviceOptions") {
-      handleReset();
+      // Go back to model selection step
+      setSelectedModel(""); 
+      setSelectedSeriesName(selectedCategory === "Mullions" ? "Mullion Models" : selectedSeriesName);
+      setCurrentStep("deviceSelection");
+    } else if (currentStep === "deviceSelection" && (selectedModel || selectedSeriesName)) {
+        // Go back to series selection
+        setSelectedModel("");
+        setSelectedSeriesName("");
+    } else if (currentStep === "deviceSelection" && selectedCategory) {
+        // Go back to category selection
+        setSelectedCategory("");
     }
-  }, [currentStep, deviceTiedPrefixes, selectedCategory, activeModelData, handleReset]);
+  }, [currentStep, deviceTiedPrefixes, selectedCategory, activeModelData, selectedSeriesName, selectedModel]); 
 
   const handleFindCylinder = () => setCurrentStep("results");
 
@@ -735,7 +792,7 @@ function CylinderFinder() {
   }, [activeModelData]);
 
   const hasAvailableCylinderPrefixes = useMemo(() => availableCylinderPrefixCategories.some(c => c.prefixes.length > 0), [availableCylinderPrefixCategories]);
-  
+
   const isInitialState = !globalSearchTerm;
 
   const renderStep = () => {
@@ -743,8 +800,8 @@ function CylinderFinder() {
 
     if (isInitialState) {
       switch (currentStep) {
-        case "deviceSelection": 
-          
+        case "deviceSelection":
+
           const isMullion = selectedCategory === "Mullions";
           const needsSeriesSelection = selectedCategory && !isMullion && !selectedSeriesName;
           const isModelSelectReady = isMullion || selectedSeriesName;
@@ -753,12 +810,12 @@ function CylinderFinder() {
             <>
               <p className="finder-intro">Select a hardware **Category**, then select the **Model** to find the correct cylinder.</p>
               <div className="hardware-selectors">
-                
+
                 {/* STEP 1: CATEGORY SELECTION */}
                 <div ref={categoryRef} className="selection-stage-container">
                     <ButtonSelector title="1. Select Hardware Category" options={categoryButtonOptions} selected={selectedCategory} onSelect={handleCategoryChange} />
                 </div>
-                
+
                 {/* PERSISTENT SUMMARY CARDS */}
                 {selectedCategory && (
                     <div className="selection-summary-card category-summary-card">
@@ -774,18 +831,18 @@ function CylinderFinder() {
                         {seriesGroupedOptions.map(group => (
                             <div key={group.title}>
                                 <h4 className="series-group-title">{group.title}</h4>
-                                <ButtonSelector 
+                                <ButtonSelector
                                     options={group.options}
-                                    selected={selectedSeriesName} 
+                                    selected={selectedSeriesName}
                                     onSelect={handleSeriesButtonChange}
-                                    hasImages={true}
+                                    hasImages={false}
                                     title=""
                                 />
                             </div>
                         ))}
                     </div>
                 )}
-                
+
                 {/* STEP 2B / STEP 3: MODEL SELECTION (Visible when ready) */}
                 {isModelSelectReady && (
                     <div ref={modelRef} className="selection-stage-container model-selection-group">
@@ -794,10 +851,10 @@ function CylinderFinder() {
                                 <p className="selection-summary-item">Series: <strong>{selectedSeriesName.replace(" Series", "")}</strong></p>
                             </div>
                         )}
-                        <HardwareSelector 
-                            label="3. Select Model / Function" 
-                            options={finalModelOptions} 
-                            value={selectedModel} 
+                        <HardwareSelector
+                            label="3. Select Model / Function"
+                            options={finalModelOptions}
+                            value={selectedModel}
                             onChange={handleModelChange}
                         />
                     </div>
