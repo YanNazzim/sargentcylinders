@@ -10,8 +10,13 @@ export const images = {
   ETCollar: require("./ETCollar.png"), // <-- ADDED
   Rosette97: require("./97Rosette.png"), // <-- ADDED (Renamed for code clarity)
   Collar1KB: require("./1KBCOllar.png"), // <-- ADDED
-
-
+  Collar1KA: require("./1KACollar.png"), // <-- ADDED
+  Collar1SB: require("./1SBCollar.png"), // <-- ADDED
+  Ring90: require("./90Ring.png"), // <-- ADDED (Renamed for code clarity)
+  // --- Mullion Placeholders (NEW) ---
+  MullionL980A: require("./Sargent Logo.jpg"), // Placeholder
+  MullionSMEL980: require("./Sargent Logo.jpg"), // Placeholder
+  // --- END Mullion Placeholders ---
 
   RimExit80: require("./8800 Rim Exit.png"),
   RimExitPE80: require("./PE8800 Rim Exit.png"),
