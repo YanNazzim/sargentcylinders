@@ -808,7 +808,7 @@ function CylinderFinder() {
 
           return (
             <>
-              <p className="finder-intro">Select a hardware **Category**, then select the **Model** to find the correct cylinder.</p>
+              <p className="finder-intro">Select a hardware Category, then select the Model to find the correct cylinder.</p>
               <div className="hardware-selectors">
 
                 {/* STEP 1: CATEGORY SELECTION */}

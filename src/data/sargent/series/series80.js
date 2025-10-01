@@ -718,7 +718,7 @@ export const series8900 = {
       modelNumber: "8904",
       collars: CollarInfo04,
       description: "Key Retracts Latch",
-      baseCylinder: { partNumber: "#41", type: "Mortise Cylinder" },
+      baseCylinder: { partNumber: "#46", type: "Mortise Cylinder" },
       prefixes: [...devicePrefixes80Series, ...allCylinderPrefixes],
     },
     {

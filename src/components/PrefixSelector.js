@@ -50,7 +50,7 @@ function PrefixSelector({ prefixes, selectedPrefixes, onChange }) {
         {/* Aux Controls (Stackable/Checkbox Group) - Rendered first/on top */}
         {auxPrefixes.length > 0 && (
             <div className="prefix-group aux-group">
-                <h4 className="prefix-group-title">Auxiliary Controls (Stackable)</h4>
+                <h4 className="prefix-group-title">Auxiliary Controls/Thumbturns</h4>
                 <div className="prefix-selector-options">
                     {auxPrefixes.map((prefix) => (
                         <label 

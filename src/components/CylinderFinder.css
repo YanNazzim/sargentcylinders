@@ -14,10 +14,21 @@
 
 .finder-intro {
     text-align: center;
-    margin-bottom: 2.5rem;
-    color: var(--subtle-text);
-    font-size: 1.1em;
-    line-height: 1.5;
+    /* Make it a prominent banner */
+    background-color: #2a343e; /* A dark blue-gray background for contrast */
+    color: white; /* White text to ensure readability */
+    padding: 1.5rem 1rem;
+    border-radius: 10px;
+    border: 3px solid var(--primary-color); /* Strong primary color border to draw attention */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+    
+    /* Prominent text style */
+    font-size: 1.3em; /* Larger font size */
+    font-weight: 700; /* Ensure text is bold */
+    line-height: 1.4;
+    
+    /* Positioning */
+    margin-bottom: 3rem; /* Increased separation from the selection buttons */
     max-width: 800px;
     margin-left: auto;
     margin-right: auto;
