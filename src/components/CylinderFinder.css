@@ -464,3 +464,52 @@
         /* 2 buttons per row on small screens */
     }
 }
+
+/* NEW STYLES FOR THE 3-STEP FLOW */
+.series-selection-group {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    background-color: var(--background-color);
+    margin-top: 1.5rem;
+}
+
+.series-group-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin: 0.5rem 0;
+    text-align: center;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 0.5rem;
+}
+
+.selection-summary-card {
+    background-color: #1a1a1a; /* Slightly darker to stand out */
+    padding: 1rem;
+    border-radius: 8px;
+    border: 1px solid var(--primary-color);
+    text-align: center;
+    font-size: 1.1em;
+    font-weight: 500;
+    margin-top: 1.5rem;
+}
+
+.selection-summary-card p {
+    margin: 0;
+}
+
+.selection-summary-card strong {
+    color: #fff;
+    font-weight: 700;
+}
+
+.model-selection-group {
+    /* Container for the summary card and the HardwareSelector */
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}

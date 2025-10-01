@@ -3,6 +3,10 @@ export const images = {
   sargentlogo: require("./Sargent Logo.jpg"),
   KILCyls: require("./BoredCylinders.png"),
   RimCyls: require("./RimCylinders.png"),
+  SFICRim: require("./SFICRim.png"),
+  SFICMortise: require("./SFICMortise.png"),
+  LFICRim: require("./LFICRim.png"),
+  LFICMortise: require("./LFICMortise.png"),
   MortiseCyls: require("./MortiseCylinders.png"),
   DegreeCyls: require("./DegreeCylinders.png"),
   XCcyls: require("./XCCylinders.png"),
@@ -14,9 +18,18 @@ export const images = {
   Collar1SB: require("./1SBCollar.png"), // <-- ADDED
   Ring90: require("./90Ring.png"), // <-- ADDED (Renamed for code clarity)
   // --- Mullion Placeholders (NEW) ---
-  MullionL980A: require("./Sargent Logo.jpg"), // Placeholder
-  MullionSMEL980: require("./Sargent Logo.jpg"), // Placeholder
+  MullionL980A: require("./L980.png"), // L980/L980A Aluminum Mullion
+  MullionL980S: require("./L980S.png"), // L980S Steel Mullion
+  MullionHCL980S: require("./HCL980S.png"), // HCL980S Hurricane Mullion
+  MullionEL980: require("./EL980.png"), // EL980 Electrified Mullion
+  MullionSMEL980S: require("./SML980S.png"), // SML980S Split Mullion
   // --- END Mullion Placeholders ---
+  // --- NEW DG IMAGES ADDED HERE ---
+  DGMortise: require("./DGMortise.png"),
+  DGRim: require("./DGRim.png"),
+  DGLFICMortise: require("./DGLFICMortise.png"),
+  DGLFICRim: require("./DGLFICRim.png"),
+  // --- END NEW DG IMAGES ---
 
   RimExit80: require("./8800 Rim Exit.png"),
   RimExitPE80: require("./PE8800 Rim Exit.png"),

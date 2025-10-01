@@ -35,6 +35,7 @@ const cylinderKit980C1 = {
 const get980C2Model = (modelNumber, description) => ({
     modelNumber,
     description,
+    imageUrl: images.MullionEL980, // Default to EL980 image for Electric versions
     baseCylinder: { partNumber: "#46", type: "Mortise Cylinder" }, // Forces #46 cylinder
     collars: CollarInfo97, // Forces 97 Rosette
     prefixes: [
@@ -53,11 +54,12 @@ const get980C2Model = (modelNumber, description) => ({
 // 1. REGULAR MULLIONS: Aluminum Lockable Mullions (L980*/L980A*)
 export const seriesL980Aluminum = {
   name: "L980 / L980A (Aluminum)",
-  imageUrl: images.sargentlogo,
+  imageUrl: images.MullionL980A, // <--- UPDATED Series image
   models: [
     {
       modelNumber: "L980*/L980A*",
       description: "Removable, Lockable Aluminum Mullion",
+      imageUrl: images.MullionL980A, // <--- UPDATED Model image
       baseCylinder: null,
       prefixes: [
         cylinderKit980C1,
@@ -70,11 +72,12 @@ export const seriesL980Aluminum = {
 // 2. REGULAR MULLIONS: Steel Lockable Mullions (Standard, EL, & Hurricane)
 export const seriesLockableSteel = { 
   name: "Lockable Steel Mullions (Standard, EL, & Hurricane)",
-  imageUrl: images.sargentlogo,
+  imageUrl: images.MullionL980S, // <--- UPDATED Series image
   models: [
     {
       modelNumber: "L980S*/12-L980",
       description: "Lockable Steel Mullion (Fire-Rated Option)",
+      imageUrl: images.MullionL980S, // <--- UPDATED Model image
       baseCylinder: null,
       prefixes: [
         cylinderKit980C1,
@@ -82,11 +85,15 @@ export const seriesLockableSteel = {
       ],
     },
     // EL980 using the new 980C2 logic (Fixed #46)
-    get980C2Model("EL980", "Electrified Lockable Steel Mullion (980C2 Kit/Fixed #46)"), 
+    { 
+        ...get980C2Model("EL980", "Electrified Lockable Steel Mullion (980C2 Kit/Fixed #46)"),
+        imageUrl: images.MullionEL980, // <--- Assigned EL980 image
+    },
     
     {
       modelNumber: "HCL980*/12-HCL980",
       description: "Lockable, Hurricane Rated Steel Mullion",
+      imageUrl: images.MullionHCL980S, // <--- Assigned HCL980S image
       baseCylinder: null,
       prefixes: [
         cylinderKit980C1,
@@ -100,11 +107,12 @@ export const seriesLockableSteel = {
 // 3. SPLIT MULLIONS
 export const seriesSplitMullions = {
   name: "SM Split Mullions (Steel)",
-  imageUrl: images.sargentlogo,
+  imageUrl: images.MullionSMEL980S, // <--- UPDATED Series image
   models: [
     {
         modelNumber: "SML980S",
         description: "Lockable Split Steel Mullion (980C1 Kit)",
+        imageUrl: images.MullionSMEL980S, // <--- Assigned SML980S image
         baseCylinder: null,
         prefixes: [
           cylinderKit980C1, 
@@ -113,7 +121,10 @@ export const seriesSplitMullions = {
         excludedPrefixes: [], 
     },
     // SMEL980 using the new 980C2 logic (Fixed #46)
-    get980C2Model("SMEL980", "Electrical Lockable Split Steel Mullion (980C2 Kit/Fixed #46)"),
+    {
+        ...get980C2Model("SMEL980", "Electrical Lockable Split Steel Mullion (980C2 Kit/Fixed #46)"),
+        imageUrl: images.MullionSMEL980S, // <--- Assigned SML980S image
+    },
   ].sort((a, b) => a.modelNumber.localeCompare(b.modelNumber)), 
 };
 

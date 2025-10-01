@@ -16,7 +16,7 @@ import { isLficForCollar, isSficForCollar, getMortiseCollarPartNumber, getProjec
 const getCylinderLengthDescription = (partNumber) => {
     const lengths = {
       41: '1-1/8"',
-      42: '1-1/4"',
+      42: '1-1-4"',
       43: '1-3/8"',
       44: '1-1/2"',
       46: '1-3/4"',
@@ -46,7 +46,7 @@ function CylinderFinder() {
   
   const doorThicknessOptions = useMemo(() => [
     { label: "1-3/8\"", value: "1-3/8\"" },
-    { label: "1-3/4\"", value: "1-3/4\"" },
+    { label: "1-3/4\"", value: "1-3-4\"" },
     { label: "2\"", value: "2\"" },
     { label: "2-1/4\"", value: "2-1/4\"" },
   ], []); 
@@ -124,69 +124,103 @@ function CylinderFinder() {
         case "Exit Devices": imageUrl = images.RimExit80; break;
         case "Mortise Locks": imageUrl = images.Mortise8200; break;
         case "Bored Locks": imageUrl = images.Bored10XLine; break;
+        case "Mullions": imageUrl = images.MullionL980S; break; 
         default: imageUrl = images.sargentlogo;
       }
       return { id: h.category, name: h.category, imageUrl };
     });
   }, []);
 
-  const groupedSeriesOptions = useMemo(() => {
-      if (!selectedCategory || selectedCategory === "Mullions") return [];
-      
-      const data = sargentData.hardware.find(h => h.category === selectedCategory)?.series || [];
-      const grouped = {};
+  // NEW: Grouped options for the intermediate Series selection step (uses button selector)
+  const seriesGroupedOptions = useMemo(() => {
+    if (!selectedCategory || selectedCategory === "Mullions") return [];
 
-      data.forEach(series => {
-          const name = series.name;
-          let groupKey = 'Other';
-          if (selectedCategory === "Exit Devices") {
-              if (name.startsWith("PE8")) groupKey = "PE80 Series";
-              else if (name.startsWith("8") && !name.startsWith("82")) groupKey = "80 Series";
-              else if (name.startsWith("9")) groupKey = "90 Series";
-              else if (name.startsWith("2") || name.startsWith("3")) groupKey = "20/30 Series";
-          } else {
-              groupKey = selectedCategory;
-          }
-          if (!grouped[groupKey]) grouped[groupKey] = [];
-          grouped[groupKey].push(series);
-      });
+    const data = sargentData.hardware.find(h => h.category === selectedCategory)?.series || [];
+    const groups = {
+        PE80: { title: "PE80 Series", options: [], order: 1 },
+        "80": { title: "80 Series", options: [], order: 2 },
+        "90": { title: "90 Series", options: [], order: 3 },
+        Other: { title: "Select Series", options: [], order: 4 }, // Fallback for Mortise/Bored
+    };
 
-      return Object.keys(grouped).map(groupName => ({
-          label: groupName,
-          options: grouped[groupName].map(series => ({
-              label: series.name,
-              value: series.name,
-              imageUrl: series.imageUrl || images.sargentlogo,
-          }))
-      }));
+    data.forEach(series => {
+        // Clean up name for button text
+        const nameCleaned = series.name
+            .replace(" Series", "")
+            .replace("Narrow Mortise", "N. Mortise")
+            .replace("Wide Mortise", "W. Mortise")
+            .replace("Wide Rim", "W. Rim")
+            .replace("Narrow CVR", "N. CVR")
+            .replace("Wide SVR", "W. SVR")
+            .replace("Narrow Rim", "N. Rim");
+
+        const option = {
+            id: series.name, 
+            name: nameCleaned, 
+            imageUrl: series.imageUrl || images.sargentlogo,
+        };
+        
+        if (selectedCategory === "Exit Devices") {
+            if (series.name.startsWith("PE8")) {
+                groups.PE80.options.push(option);
+            } else if (series.name.startsWith("8") && !series.name.startsWith("82")) {
+                groups["80"].options.push(option);
+            } else if (series.name.startsWith("9")) {
+                groups["90"].options.push(option);
+            }
+        } else {
+            // Group Mortise and Bored locks under a single 'Other' group
+            groups.Other.options.push(option);
+        }
+    });
+
+    // Filter out empty groups, sort by custom order, and return options
+    return Object.values(groups)
+        .filter(group => group.options.length > 0)
+        .sort((a, b) => a.order - b.order);
   }, [selectedCategory]);
-  
-  const groupedModelOptions = useMemo(() => {
+
+  // New centralized logic for the final Model dropdown options
+  const finalModelOptions = useMemo(() => {
     if (!selectedCategory) return [];
+
     const categoryData = sargentData.hardware.find((h) => h.category === selectedCategory);
     if (!categoryData) return [];
 
+    let modelsToGroup = [];
+    let groupingLabel = "Available Models";
+
     if (selectedCategory === "Mullions") {
-        const allMullionModels = categoryData.series.flatMap(series => 
-            series.models.map(model => ({
-                label: `${model.modelNumber} - ${model.description}`,
-                value: model.modelNumber,
-                imageUrl: model.imageUrl || series.imageUrl || images.sargentlogo,
-            }))
-        );
-        return [{ label: "Lockable Mullion Models", options: allMullionModels }];
+        // For Mullions, group all models from all series into one list (Series name is a dummy value "Mullion Models")
+        modelsToGroup = categoryData.series.flatMap(series => series.models.map(model => ({
+            ...model,
+            seriesName: series.name,
+            seriesImageUrl: series.imageUrl
+        })));
+        groupingLabel = "Mullion Models";
+    } else if (selectedSeriesName) {
+        // For other categories, use the explicitly selected series
+        const seriesData = categoryData.series.find((s) => s.name === selectedSeriesName);
+        if (!seriesData) return [];
+        modelsToGroup = seriesData.models.map(model => ({
+            ...model,
+            seriesName: seriesData.name,
+            seriesImageUrl: seriesData.imageUrl
+        }));
+        groupingLabel = selectedSeriesName;
+    } else {
+        return []; // No series selected yet for multi-series categories
     }
-    
-    if (!selectedSeriesName) return [];
-    const seriesData = categoryData?.series.find((s) => s.name === selectedSeriesName);
-    if (!seriesData) return [];
+
+    // Format for HardwareSelector component
     return [{
-      label: selectedSeriesName,
-      options: seriesData.models.map((model) => ({
-        label: `${model.modelNumber} - ${model.description}`,
-        value: model.modelNumber,
-        imageUrl: model.imageUrl || seriesData.imageUrl || images.sargentlogo,
-      })),
+        label: groupingLabel,
+        options: modelsToGroup.map((model) => ({
+            label: `${model.modelNumber} - ${model.description}`,
+            value: model.modelNumber,
+            // Use model-specific image if available, otherwise series image
+            imageUrl: model.imageUrl || model.seriesImageUrl || images.sargentlogo, 
+        })),
     }];
   }, [selectedCategory, selectedSeriesName]);
 
@@ -205,6 +239,11 @@ function CylinderFinder() {
     // Core prefixes for displaying core part numbers and descriptions
     const isLficCore = selectedCylinderPrefix && (selectedCylinderPrefix.includes("60-") || selectedCylinderPrefix.includes("63-") || selectedCylinderPrefix.includes("64-"));
     const isSficCore = selectedCylinderPrefix && (selectedCylinderPrefix.includes("70-") || selectedCylinderPrefix.includes("72-") || selectedCylinderPrefix.includes("73-"));
+
+    // --- START DG LOGIC FLAGS ---
+    const isDgPrefix = selectedCylinderPrefix && selectedCylinderPrefix.startsWith("DG");
+    const isDgLfic = isDgPrefix && isLficCore;
+    // --- END DG LOGIC FLAGS ---
 
 
     const rawCylinderList = [];
@@ -267,7 +306,27 @@ function CylinderFinder() {
 
     return finalCylindersArray.map((cyl) => {
       let basePartNumber = cyl.partNumber.replace("#", ""); 
-      const kesoLengths = { "F1-71":'1-1/8"', "F1-72":'1-1/4"', "F1-73":'1-3/8"', "F1-74":'1-1/2"', "F1-76":'1-3/4"', "F1-64":'1-3/4" to 3-1/8"' };
+      
+      // --- START NEW BASE SIZE ADJUSTMENT LOGIC (For LFIC/SFIC Housings) ---
+      // Ensures that if a conventional cylinder part number (#41, #44) is used, 
+      // the base size is correctly adjusted to the corresponding LFIC (#42) or SFIC (#43) housing size for part number and collar logic.
+      const isBaseMortiseOrRimCylinder = cyl.type.includes("Mortise Cylinder") || cyl.type.includes("Rim Cylinder");
+      
+      if (selectedCylinderPrefix && isBaseMortiseOrRimCylinder) {
+          if (isLficCore) {
+              if (basePartNumber === '41' || basePartNumber === '44') {
+                  basePartNumber = '42'; // LFIC housing size for #41 and #44 is #42
+              }
+          } else if (isSficCore) {
+              if (basePartNumber === '41' || basePartNumber === '44') {
+                  basePartNumber = '43'; // SFIC housing size for #41 and #44 is #43
+              }
+          }
+          // Rim cylinder size #34 should remain #34 (e.g., 63-34 or 73-34)
+      }
+      // --- END NEW BASE SIZE ADJUSTMENT LOGIC ---
+
+      const kesoLengths = { "F1-71":'1-1/8"', "F1-72":'1-1/4"', "F1-73":'1-3/8"', "F1-74":'1-1/2"', "F1-76":'1-3-4"', "F1-64":'1-3-4" to 3-1-8"' };
       let lengthDesc = hasKesoPrefix ? kesoLengths[basePartNumber] || "" : getCylinderLengthDescription(basePartNumber);
       
       let finalPartNumber = `${basePartNumber} x Keying Details x Finish`; // Default
@@ -278,6 +337,54 @@ function CylinderFinder() {
       let calculatedNotes = cyl.notes;
       let calculatedDescription = `${lengthDesc} ${cyl.type}`;
 
+      // --- START NEW IMAGE LOGIC ---
+      let cylinderImageUrl = images.sargentlogo; // Default fallback
+      
+      // 1. Key System Prefix Overrides (High Priority)
+      if (selectedCylinderPrefix) {
+          // A. DG Family (Highest Priority)
+          if (isDgPrefix) {
+              if (cyl.type.includes("Mortise")) {
+                  cylinderImageUrl = isDgLfic ? images.DGLFICMortise : images.DGMortise;
+              } else if (cyl.type.includes("Rim")) {
+                  cylinderImageUrl = isDgLfic ? images.DGLFICRim : images.DGRim;
+              } else {
+                  // Fallback for KIL/Knob. Use generic KIL/Knob image.
+                  if (cyl.type.includes("Key-in-Lever") || cyl.type.includes("Key-in-Knob")) {
+                      cylinderImageUrl = images.KILCyls;
+                  } else {
+                      // Default to Mortise style if type is unknown
+                      cylinderImageUrl = isDgLfic ? images.DGLFICMortise : images.DGMortise; 
+                  }
+              }
+          // B. XC Family
+          } else if (selectedCylinderPrefix.startsWith("11-")) {
+              cylinderImageUrl = images.XCcyls;
+          // C. KESO Family
+          } else if (selectedCylinderPrefix.includes("81-") || selectedCylinderPrefix.includes("82-") || selectedCylinderPrefix.includes("83-") || selectedCylinderPrefix.includes("84-") || selectedCylinderPrefix.startsWith("F1-82-") || selectedCylinderPrefix.startsWith("F1-83-")) {
+              cylinderImageUrl = images.KESOcyls;
+          // D. Standard LFIC/SFIC (Not DG/XC/KESO)
+          } else if (isLficCore) {
+              if (cyl.type.includes("Mortise")) cylinderImageUrl = images.LFICMortise;
+              else if (cyl.type.includes("Rim")) cylinderImageUrl = images.LFICRim;
+          } else if (isSficCore) {
+              if (cyl.type.includes("Mortise")) cylinderImageUrl = images.SFICMortise;
+              else if (cyl.type.includes("Rim")) cylinderImageUrl = images.SFICRim;
+          }
+      } 
+      
+      // 2. Default Cylinder Type Fallback (If no special prefix was selected)
+      if (cylinderImageUrl === images.sargentlogo) {
+          if (cyl.type.includes("Key-in-Lever") || cyl.type.includes("Key-in-Knob")) {
+              cylinderImageUrl = images.KILCyls;
+          } else if (cyl.type.includes("Rim Cylinder")) {
+              cylinderImageUrl = images.RimCyls;
+          } else if (cyl.type.includes("Mortise Cylinder")) {
+              cylinderImageUrl = images.MortiseCyls;
+          }
+      }
+      // --- END NEW IMAGE LOGIC ---
+      
       // --- START MULLION 980C2 FIXED #46 LOGIC (Forces #46) ---
       if (isMullion980C2 && selectedCylinderPrefix) {
           // All fixed mullion outputs use the prefix followed by the size '46'
@@ -287,10 +394,12 @@ function CylinderFinder() {
               cyl.type = "LFIC Core (for Housing)"; 
               cyl.description = `LFIC Core for #46 Housing: ${prefixDesc}`;
               cyl.notes = "Core for fixed #46 Housing (Housing comes with mullion).";
+              cylinderImageUrl = images.MortiseCyls; // Override if core is selected, still looks like a mortise cylinder
           } else if (isSficCore) {
               cyl.type = "SFIC Core (for Housing)"; 
               cyl.description = `SFIC Core for #46 Housing: ${prefixDesc}`; 
               cyl.notes = "Core for fixed #46 Housing (Housing comes with mullion).";
+              cylinderImageUrl = images.MortiseCyls; // Override if core is selected, still looks like a mortise cylinder
           } else {
               // Conventional/Other prefix selected with 980C2 logic
               cyl.notes = "Cylinder for fixed #46 Housing (Housing comes with mullion).";
@@ -323,6 +432,7 @@ function CylinderFinder() {
           else if (basePartNumber === "46") finalPartNumber = "F1-76 x Keying Details x Finish";
           else if (basePartNumber === "34") finalPartNumber = "F1-64 x Keying Details x Finish";
       } else if (selectedCylinderPrefix) {
+          // This line uses the potentially modified basePartNumber (41->42/43 fix)
           finalPartNumber = `${selectedCylinderPrefix}${basePartNumber} x Keying Details x Finish`;
           calculatedDescription += ` ${prefixDesc}`;
       } else {
@@ -341,6 +451,7 @@ function CylinderFinder() {
       const collarSource = cyl.sourcePrefix?.collars || activeModelData.collars;
       
       if (isMortiseLock) {
+          // basePartNumber is now correctly set to 42 or 43 for LFIC/SFIC here
           const mortiseCollar = getMortiseCollarPartNumber(basePartNumber, selectedCylinderPrefix, selectedDoorThickness, selectedTrimType, cylCount);
           if (mortiseCollar) {
               let collarImage = images.Collar1KB;
@@ -385,13 +496,20 @@ function CylinderFinder() {
           else if (defaultCollar) cylinderCollars.push({...defaultCollar, imageUrl: defaultCollar.imageUrl || images.sargentlogo});
       }
       
-      return { ...cyl, partNumber: finalPartNumber, description: calculatedDescription.trim(), notes: calculatedNotes, collars: cylinderCollars, imageUrl: images.sargentlogo };
+      return { 
+        ...cyl, 
+        partNumber: finalPartNumber, 
+        description: calculatedDescription.trim(), 
+        notes: calculatedNotes, 
+        collars: cylinderCollars, 
+        imageUrl: cylinderImageUrl // <-- UPDATED to use the determined image
+      };
     });
   }, [activeModelData, selectedDevicePrefixes, selectedCylinderPrefix, selectedDoorThickness, selectedTrimType]);
 
   useEffect(() => {
     if (currentStep === "deviceOptions" && deviceOptionsRef.current) deviceOptionsRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
-    if (currentStep === "cylinderOptions" && cylinderOptionsRef.current) cylinderOptionsRef.current.scrollIntoView({ behavior: "smooth", block: "start" }); // FIX: Corrected variable name from cylinderOptions to cylinderOptionsRef
+    if (currentStep === "cylinderOptions" && cylinderOptionsRef.current) cylinderOptionsRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
     if (currentStep === "results" && resultsRef.current) resultsRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
     if (globalSearchTerm.length > 0 && searchResultsRef.current) searchResultsRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
   }, [currentStep, globalSearchTerm]);
@@ -457,49 +575,53 @@ function CylinderFinder() {
     setSelectedModel("");
     setSelectedDevicePrefixes([]);
     setSelectedCylinderPrefix(null);
-    setSelectedDoorThickness("1-3/4\""); 
+    setSelectedDoorThickness("1-3-4\""); 
     setSelectedTrimType("SECTIONAL"); 
     setGlobalSearchTerm("");
     setSearchResults([]);
     setCurrentStep("deviceSelection");
+    
+    // Auto-set selectedSeriesName for Mullions to bypass Series selection step and proceed to Model dropdown
     if (categoryId === "Mullions") {
-        const mullionCategory = sargentData.hardware.find(h => h.category === "Mullions");
-        if (mullionCategory && mullionCategory.series.length > 0) setSelectedSeriesName(mullionCategory.series[0].name); 
+        setSelectedSeriesName("Mullion Models"); 
     }
   };
 
-  const handleSeriesChange = (seriesName) => {
-    setSelectedSeriesName(seriesName);
-    setSelectedModel("");
-    setSelectedDevicePrefixes([]);
-    setSelectedCylinderPrefix(null);
-    setSelectedDoorThickness("1-3/4\""); 
-    setSelectedTrimType("SECTIONAL"); 
-    setGlobalSearchTerm("");
-    setSearchResults([]);
+  // NEW: Handler for the intermediate Series selection using buttons
+  const handleSeriesButtonChange = (seriesName) => {
+      setSelectedSeriesName(seriesName);
+      setSelectedModel(""); // Reset model when series changes
   };
+
 
   const handleModelChange = (modelId) => {
     setSelectedModel(modelId);
     setSelectedDevicePrefixes([]);
     setSelectedCylinderPrefix(null);
-    setSelectedDoorThickness("1-3/4\""); 
+    setSelectedDoorThickness("1-3-4\""); 
     setSelectedTrimType("SECTIONAL"); 
-    if (selectedCategory === "Mullions") {
-        const categoryData = sargentData.hardware.find(h => h.category === "Mullions");
-        const series = categoryData.series.find(s => s.models.some(m => m.modelNumber === modelId));
-        if(series) setSelectedSeriesName(series.name);
+    
+    // Find the correct series name based on the chosen modelId to populate activeModelData
+    const categoryData = sargentData.hardware.find(h => h.category === selectedCategory);
+    const series = categoryData?.series.find(s => s.models.some(m => m.modelNumber === modelId));
+    if(series) {
+        setSelectedSeriesName(series.name);
+    } else {
+        // Fallback or for mullions
+        setSelectedSeriesName(categoryData?.series[0]?.name || "");
     }
   };
 
-  const handleDevicePrefixChange = (prefixId) => {
+  // --- FIX: Use useCallback for handlers passed to child components ---
+  const handleDevicePrefixChange = useCallback((prefixId) => {
     setSelectedDevicePrefixes((prev) => prev.includes(prefixId) ? prev.filter((p) => p !== prefixId) : [...prev, prefixId]);
-  };
+  }, [setSelectedDevicePrefixes]);
 
-  const handleCylinderPrefixChange = (prefixId) => {
+  const handleCylinderPrefixChange = useCallback((prefixId) => {
     setSelectedCylinderPrefix((prev) => (prev === prefixId ? null : prefixId));
-  };
-
+  }, [setSelectedCylinderPrefix]);
+  // --- END FIX ---
+  
   const handleNext = () => { if (currentStep === "deviceOptions") setCurrentStep("cylinderOptions"); };
 
   const handleReset = useCallback(() => {
@@ -508,7 +630,7 @@ function CylinderFinder() {
     setSelectedModel("");
     setSelectedDevicePrefixes([]);
     setSelectedCylinderPrefix(null);
-    setSelectedDoorThickness("1-3/4\"");
+    setSelectedDoorThickness("1-3-4\"");
     setSelectedTrimType("SECTIONAL");
     setGlobalSearchTerm("");
     setSearchResults([]);
@@ -568,70 +690,128 @@ function CylinderFinder() {
 
   const renderStep = () => {
     const isMortiseLockSelected = selectedCategory === "Mortise Locks";
-    const isMullionSelected = selectedCategory === "Mullions";
 
     if (isInitialState) {
       switch (currentStep) {
-        case "deviceSelection": return (
-          <>
-            <p className="finder-intro">Select a hardware category, series, and model to get started.</p>
-            <div className="hardware-selectors">
-              <ButtonSelector title="Select Hardware Category" options={categoryButtonOptions} selected={selectedCategory} onSelect={handleCategoryChange} />
-              {selectedCategory && !isMullionSelected && <HardwareSelector label="Series" options={groupedSeriesOptions} value={selectedSeriesName} onChange={handleSeriesChange} disabled={!selectedCategory} />}
-              {(selectedSeriesName || isMullionSelected) && <HardwareSelector label="Model" options={groupedModelOptions} value={selectedModel} onChange={handleModelChange} disabled={!selectedCategory || (!isMullionSelected && !selectedSeriesName)} />}
-            </div>
-            <div className="wizard-controls">
-              <button onClick={handleProceedFromDeviceSelection} className="wizard-find-button" disabled={!selectedModel}>Next</button>
-              <button onClick={handleReset} className="wizard-find-button reset-button">Reset</button>
-            </div>
-          </>
-        );
+        case "deviceSelection": 
+          
+          const isMullion = selectedCategory === "Mullions";
+          const needsSeriesSelection = selectedCategory && !isMullion && !selectedSeriesName;
+          const isModelSelectReady = isMullion || selectedSeriesName;
+
+          return (
+            <>
+              <p className="finder-intro">Select a hardware **Category**, then select the **Model** to find the correct cylinder.</p>
+              <div className="hardware-selectors">
+                
+                {/* STEP 1: CATEGORY SELECTION (Always visible and shows chosen selection) */}
+                <ButtonSelector title="1. Select Hardware Category" options={categoryButtonOptions} selected={selectedCategory} onSelect={handleCategoryChange} />
+                
+                {selectedCategory && (
+                    <div className="selection-summary-card">
+                        <p className="selection-summary-item">Category Chosen: <strong>{selectedCategory}</strong></p>
+                    </div>
+                )}
+
+
+                {/* STEP 2A: SERIES SELECTION (Only for Exit/Mortise/Bored after Category is picked) */}
+                {needsSeriesSelection && (
+                    <div className="series-selection-group">
+                        <h3 className="button-selector-title">2. Select Device Series</h3>
+                        {seriesGroupedOptions.map(group => (
+                            <div key={group.title}>
+                                <h4 className="series-group-title">{group.title}</h4>
+                                <ButtonSelector 
+                                    options={group.options}
+                                    selected={selectedSeriesName} 
+                                    onSelect={handleSeriesButtonChange}
+                                    hasImages={false} // <-- No images for series buttons
+                                    title=""
+                                />
+                            </div>
+                        ))}
+                    </div>
+                )}
+                
+                {/* STEP 2B / STEP 3: MODEL SELECTION (Visible when ready) */}
+                {isModelSelectReady && (
+                    <div className="model-selection-group">
+                        <div className="selection-summary-card">
+                            <p className="selection-summary-item">Series Chosen: <strong>{selectedSeriesName}</strong></p>
+                        </div>
+
+                        <HardwareSelector 
+                            label="3. Select Model / Function" 
+                            options={finalModelOptions} // This is the final dropdown with grouped models
+                            value={selectedModel} 
+                            onChange={handleModelChange}
+                        />
+                    </div>
+                )}
+              </div>
+              <div className="wizard-controls">
+                {/* Button is only enabled when a model is selected */}
+                <button onClick={handleProceedFromDeviceSelection} className="wizard-find-button" disabled={!selectedModel}>Next</button>
+                <button onClick={handleReset} className="wizard-find-button reset-button">Reset</button>
+              </div>
+            </>
+          );
         case "deviceOptions": return (
-          <div ref={deviceOptionsRef} className="wizard-step active">
-            <div className="prefix-section">
-              <h3 className="prefix-section-title">Select Keyed Device Options</h3>
-              <PrefixSelector prefixes={deviceTiedPrefixes} selectedPrefixes={selectedDevicePrefixes} onChange={handleDevicePrefixChange} />
-            </div>
-            <div className="wizard-controls">
-              <button onClick={handleBack} className="wizard-back-button">Back</button>
-              <button onClick={handleNext} className="wizard-find-button">Next</button>
-              <button onClick={handleReset} className="wizard-find-button reset-button">Reset</button>
-            </div>
-          </div>
-        );
-        case "cylinderOptions": return (
-          <div ref={cylinderOptionsRef} className="wizard-step active">
-            <h3 className="prefix-section-title">Select Cylinder Options</h3>
-            {isMortiseLockSelected && (
-              <div className="prefix-section mortise-options-section" style={{marginBottom: '1.5rem'}}>
-                <h4 className="prefix-section-title mortise-collar-title">Mortise Collar Options</h4>
-                <div className="mortise-options-group">
-                  <label className="mortise-option-label">Door Thickness</label>
-                  <div className="mortise-option-selector thickness-selector">
-                    {doorThicknessOptions.map(option => <button key={option.value} className={`mortise-option-button ${selectedDoorThickness === option.value ? 'active' : ''}`} onClick={() => setSelectedDoorThickness(option.value)}>{option.label}</button>)}
-                  </div>
-                </div>
-                <div className="mortise-options-group">
-                  <label className="mortise-option-label">Trim Type</label>
-                  <div className="mortise-option-selector trim-selector">
-                    {trimTypeOptions.map(option => <button key={option.value} className={`mortise-option-button ${selectedTrimType === option.value ? 'active' : ''}`} onClick={() => setSelectedTrimType(option.value)}>{option.label}</button>)}
-                  </div>
-                </div>
+            <div ref={deviceOptionsRef} className="wizard-step active">
+              {/* Add summary of Category and Model here for context */}
+              <div className="selection-summary-card">
+                  <p className="selection-summary-item">Category: <strong>{selectedCategory}</strong></p>
+                  <p className="selection-summary-item">Model: <strong>{selectedModel}</strong></p>
               </div>
-            )}
-            {hasAvailableCylinderPrefixes ? (
               <div className="prefix-section">
-                <h4 className="prefix-section-title" style={isMortiseLockSelected ? {border: 'none', marginBottom: '1rem'} : {}}>Select Key System</h4>
-                <CategorizedPrefixSelector categories={availableCylinderPrefixCategories} selectedPrefixes={selectedCylinderPrefix ? [selectedCylinderPrefix] : []} onChange={handleCylinderPrefixChange} />
+                <h3 className="prefix-section-title">Select Keyed Device Options</h3>
+                <PrefixSelector prefixes={deviceTiedPrefixes} selectedPrefixes={selectedDevicePrefixes} onChange={handleDevicePrefixChange} />
               </div>
-            ) : <div className="no-options-message">No key system options available for this device.</div>}
-            <div className="wizard-controls">
-              <button onClick={handleBack} className="wizard-back-button">Back</button>
-              <button onClick={handleFindCylinder} className="wizard-find-button">Find Cylinder</button>
-              <button onClick={handleReset} className="wizard-find-button reset-button">Reset</button>
+              <div className="wizard-controls">
+                <button onClick={handleBack} className="wizard-back-button">Back</button>
+                <button onClick={handleNext} className="wizard-find-button">Next</button>
+                <button onClick={handleReset} className="wizard-find-button reset-button">Reset</button>
+              </div>
             </div>
-          </div>
-        );
+          );
+          case "cylinderOptions": return (
+            <div ref={cylinderOptionsRef} className="wizard-step active">
+              {/* Add summary of Category and Model here for context */}
+              <div className="selection-summary-card">
+                  <p className="selection-summary-item">Category: <strong>{selectedCategory}</strong></p>
+                  <p className="selection-summary-item">Model: <strong>{selectedModel}</strong></p>
+              </div>
+              <h3 className="prefix-section-title">Select Cylinder Options</h3>
+              {isMortiseLockSelected && (
+                <div className="prefix-section mortise-options-section" style={{marginBottom: '1.5rem'}}>
+                  <h4 className="prefix-section-title mortise-collar-title">Mortise Collar Options</h4>
+                  <div className="mortise-options-group">
+                    <label className="mortise-option-label">Door Thickness</label>
+                    <div className="mortise-option-selector thickness-selector">
+                      {doorThicknessOptions.map(option => <button key={option.value} className={`mortise-option-button ${selectedDoorThickness === option.value ? 'active' : ''}`} onClick={() => setSelectedDoorThickness(option.value)}>{option.label}</button>)}
+                    </div>
+                  </div>
+                  <div className="mortise-options-group">
+                    <label className="mortise-option-label">Trim Type</label>
+                    <div className="mortise-option-selector trim-selector">
+                      {trimTypeOptions.map(option => <button key={option.value} className={`mortise-option-button ${selectedTrimType === option.value ? 'active' : ''}`} onClick={() => setSelectedTrimType(option.value)}>{option.label}</button>)}
+                    </div>
+                  </div>
+                </div>
+              )}
+              {hasAvailableCylinderPrefixes ? (
+                <div className="prefix-section">
+                  <h4 className="prefix-section-title" style={isMortiseLockSelected ? {border: 'none', marginBottom: '1rem'} : {}}>Select Key System</h4>
+                  <CategorizedPrefixSelector categories={availableCylinderPrefixCategories} selectedPrefixes={selectedCylinderPrefix ? [selectedCylinderPrefix] : []} onChange={handleCylinderPrefixChange} />
+                </div>
+              ) : <div className="no-options-message">No key system options available for this device.</div>}
+              <div className="wizard-controls">
+                <button onClick={handleBack} className="wizard-back-button">Back</button>
+                <button onClick={handleFindCylinder} className="wizard-find-button">Find Cylinder</button>
+                <button onClick={handleReset} className="wizard-find-button reset-button">Reset</button>
+              </div>
+            </div>
+          );
         case "results": return (
           <div ref={resultsRef} className="wizard-step active">
             <div className="selected-hardware-note">
