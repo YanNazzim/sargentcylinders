@@ -12,6 +12,10 @@ const NavButton = ({ toolId, label, icon, activeTool, setActiveTool }) => (
     <button
         onClick={() => setActiveTool(toolId)}
         className={`nav-button ${activeTool === toolId ? 'active' : ''}`}
+        // ADDED ARIA ATTRIBUTES for ADA Compliance
+        role="tab"
+        aria-selected={activeTool === toolId}
+        aria-controls={`panel-${toolId}`}
     >
         {icon}
         {label}
@@ -37,23 +41,35 @@ export default function App() {
 
   return (
     <>
+      {/* NEW FIXED HEADER / NAVBAR */}
+      <header className="app-header-fixed">
+        <div className="header-content-wrapper">
+            <div className="app-branding">
+                <img className="logo" src={images.sargentlogo} alt='Sargent Logo'/>
+                <div className="title-group">
+                    <h1 className="app-title">Sargent Cylinders</h1>
+                    <h2 className="app-subtitle">Cylinder Selection & Information Tool</h2>
+                </div>
+            </div>
+            
+            {/* NAVIGATION IS MOVED HERE */}
+            <nav className="app-navigation" role="tablist">
+                <NavButton toolId="finder" label="Cylinder Finder" icon={<LockIcon />} activeTool={activeTool} setActiveTool={setActiveTool} />
+                <NavButton toolId="parts" label="Parts Glossary" icon={<WrenchIcon />} activeTool={activeTool} setActiveTool={setActiveTool} />
+                <NavButton toolId="faq" label="Cylinders FAQ" icon={<QuestionMarkIcon />} activeTool={activeTool} setActiveTool={setActiveTool} />
+            </nav>
+        </div>
+      </header>
+
       <div className="app-container">
-        <header className="app-header">
-          <img className="logo" src={images.sargentlogo} alt='logo'/>
-          <h1 className="app-title">Sargent Cylinders</h1>
-          <h2 className="app-subtitle">Cylinder Selection & Information Tool</h2>
-        </header>
-
-        <nav className="app-navigation">
-          <NavButton toolId="finder" label="Cylinder Finder" icon={<LockIcon />} activeTool={activeTool} setActiveTool={setActiveTool} />
-          <NavButton toolId="parts" label="Parts Glossary" icon={<WrenchIcon />} activeTool={activeTool} setActiveTool={setActiveTool} />
-          <NavButton toolId="faq" label="Cylinders FAQ" icon={<QuestionMarkIcon />} activeTool={activeTool} setActiveTool={setActiveTool} />
-        </nav>
-
+        {/* REMOVED: Old `app-header` content is now in the fixed bar */}
+        
         <main className="app-main">
-          <Suspense fallback={<div>Loading...</div>}>
-            {renderTool()}
-          </Suspense>
+            <div role="tabpanel" id={`panel-${activeTool}`}>
+              <Suspense fallback={<div>Loading...</div>}>
+                {renderTool()}
+              </Suspense>
+            </div>
         </main>
       </div>
 

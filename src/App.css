@@ -1,15 +1,20 @@
+/* src/App.css */
 :root {
     font-size: 16px;
-    --primary-color: #005f9e; /* A strong, professional blue */
+    /* Improved colors for better contrast and professional look */
+    --primary-color: #005f9e; /* Strong Blue for Action/Focus */
     --primary-dark: #004c7f;
-    --secondary-color: #6c757d; /* A neutral gray for secondary elements */
-    --background-color: #121212; /* A very dark background for the body */
-    --card-background: #1e1e1e; /* A slightly lighter dark for cards */
-    --text-color: #e0e0e0; /* Light gray text for contrast */
-    --subtle-text: #b0b0b0; /* A slightly darker gray for subtle text */
-    --border-color: #444444; /* Darker border color */
-    --focus-ring: #80bdff; /* A clear blue for focus indication */
+    --secondary-color: #8c8c8c; /* Neutral Gray */
+    --background-color: #121212; /* Deep Black for Body */
+    --card-background: #1e1e1e; /* Slightly lighter dark for Cards/Sections */
+    --text-color: #ffffff; /* Pure White for Max Readability (High Contrast) */
+    --subtle-text: #b0b0b0; /* Light Gray for Descriptions */
+    --border-color: #333333; /* Darker border for structure */
+    --focus-ring: #80bdff; /* Clear blue for focus/ADA compliance */
     --danger-color: #dc3545;
+    /* NEW: Header/Nav specific colors */
+    --header-background: #0d0d0d; /* Even darker, almost black for the fixed header */
+    --nav-active-color: #005f9e;
 }
 
 *, *::before, *::after {
@@ -17,7 +22,7 @@
 }
 
 body {
-    padding-top: 80px;
+    padding-top: 0; /* Remove old padding */
     margin: 0;
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
     background-color: var(--background-color);
@@ -29,170 +34,227 @@ body {
     font-size: 1.1rem;
 }
 
-.logo {
-    padding: 5px;
-    border-radius: 15px;
-    border: 4px solid var(--primary-color);
-    max-width: 250px;
-    height: auto;
-    margin-bottom: 1.5rem;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.logo:hover {
-    transform: scale(1.05);
-    box-shadow: 0 0 20px rgba(0, 95, 158, 0.4);
-}
-
-.app-container {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 1.5rem;
-}
-
-@media (min-width: 640px) {
-    .app-container {
-        padding: 3rem;
-    }
-}
-
-.app-header {
+/* --- NEW FIXED HEADER / NAV BAR --- */
+.app-header-fixed {
+    position: fixed;
+    top: 0;
+    left: 0;
     width: 100%;
-    max-width: 1000px;
-    margin: 0 auto 3rem;
-    text-align: center;
+    background-color: var(--header-background);
+    z-index: 100;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4); /* Strong shadow for separation */
+    border-bottom: 4px solid var(--primary-color); /* Prominent primary color line */
+}
+
+.header-content-wrapper {
+    max-width: 1300px; /* Wider content area for traditional site feel */
+    margin: 0 auto;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 2rem;
+}
+
+.app-branding {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    flex-shrink: 0; /* Prevent branding from shrinking */
+}
+
+.title-group {
+    text-align: left;
 }
 
 .app-title {
-    font-size: clamp(2.5rem, 6vw, 4rem);
+    font-size: clamp(1.5rem, 3vw, 2.2rem); /* Smaller header title */
     font-weight: 900;
     color: var(--primary-color);
-    margin-bottom: 0.5rem;
+    margin: 0;
     letter-spacing: -0.05em;
     text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
 }
 
 .app-subtitle {
-    font-size: 1.25rem;
+    font-size: clamp(0.9rem, 2vw, 1.1rem);
     font-weight: 500;
     color: var(--subtle-text);
-    margin-top: 0;
-    margin-bottom: 1.5rem;
+    margin: 0;
     letter-spacing: 0.02em;
 }
 
+.logo {
+    padding: 5px;
+    border-radius: 8px; /* Slightly smaller radius */
+    border: 3px solid var(--primary-color); /* Slightly thinner border */
+    max-width: 80px; /* Smaller logo for fixed header */
+    height: auto;
+    margin-bottom: 0;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.logo:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 15px rgba(0, 95, 158, 0.5);
+}
+
+/* --- MAIN CONTENT CONTAINER --- */
+.app-container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 130px; /* Space for the fixed header */
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    padding-bottom: 3rem; 
+}
+
+@media (min-width: 1024px) {
+    .app-container {
+        padding-top: 130px;
+    }
+}
+
+.app-header {
+    display: none; /* Hide the old header div */
+}
+
+/* --- NAVIGATION / NAVBAR LINKS (PART OF FIXED HEADER) --- */
 .app-navigation {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 1rem;
-    margin-bottom: 3rem;
-    padding: 1rem;
-    background-color: var(--card-background);
-    border-radius: 12px;
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
-    border: 1px solid var(--border-color);
-    max-width: 1000px;
-    width: 100%;
+    flex-wrap: nowrap;
+    justify-content: flex-end; 
+    gap: 0.5rem; 
+    margin-bottom: 0; 
+    padding: 0;
+    background-color: transparent; 
+    border-radius: 0;
+    box-shadow: none;
+    border: none;
+    max-width: unset;
+    width: auto;
 }
 
 .nav-button {
-    flex: 1 1 auto;
-    min-width: 150px;
+    flex: 0 1 auto; 
+    min-width: unset;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 1rem 1.5rem;
+    padding: 0.75rem 1.25rem; 
     font-size: 1rem;
     font-weight: 600;
-    border-radius: 8px;
+    border-radius: 6px; 
+    border: 2px solid transparent; 
+    background-color: transparent; 
+    color: var(--subtle-text);
+    outline: 2px solid transparent; /* Base for ADA focus */
+    outline-offset: 2px;
     transition: all 0.3s ease-in-out;
-    border: none;
     cursor: pointer;
-    background-color: var(--border-color);
-    color: var(--text-color);
-    position: relative;
-    overflow: hidden;
     text-transform: uppercase;
     letter-spacing: 0.05em;
 }
 
 .nav-button:hover {
-    background-color: #333333;
-    transform: translateY(-3px) scale(1.02);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+    background-color: rgba(255, 255, 255, 0.08); 
+    transform: none; 
+    box-shadow: none;
+    color: var(--text-color);
 }
 
 .nav-button.active {
-    background-color: var(--primary-color);
+    background-color: var(--nav-active-color);
     color: #fff;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    transform: translateY(0);
+    box-shadow: none;
+    transform: none;
+}
+
+.nav-button:focus {
+    outline: 2px solid var(--focus-ring); /* High-contrast ADA focus indicator */
+    outline-offset: 2px;
+}
+
+.nav-button.active:focus {
+    box-shadow: 0 0 0 3px rgba(0, 95, 158, 0.4); 
 }
 
 .nav-button svg {
-    margin-right: 0.75rem;
-    height: 1.5rem;
-    width: 1.5rem;
+    margin-right: 0.5rem;
+    height: 1.25rem;
+    width: 1.25rem;
     transition: transform 0.2s ease-in-out;
-}
-
-.nav-button:hover svg {
-    transform: scale(1.1);
 }
 
 .app-main {
     width: 100%;
-    max-width: 1000px;
-    padding-bottom: 6rem;
+    max-width: 1300px; 
+    padding-bottom: 3rem; 
 }
 
+/* --- GLOBAL CYLINDER NOTE STYLES --- */
+.app-page-note {
+    width: 100%;
+    max-width: 100%; /* Spans full content width */
+    margin: 1.5rem auto 1.5rem auto; 
+    padding: 1.25rem 1.5rem;
+    background-color: #2e5939; 
+    border-radius: 8px;
+    border: 3px solid #4a905a; 
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+    text-align: center;
+}
+
+.app-page-note p {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #ffffff;
+    line-height: 1.5;
+}
+
+.app-page-note strong {
+    color: #ffe082; 
+}
+/* --- END GLOBAL CYLINDER NOTE STYLES --- */
+
+/* --- FOOTER/FEEDBACK BUTTON (No change needed) --- */
 .app-footer {
     position: relative;
     width: 100%;
 }
+/* ... rest of existing footer styles ... */
 
-.footer-feedback-button {
-    position: fixed;
-    bottom: 30px;
-    right: 30px;
-    width: 65px;
-    height: 65px;
-    background-color: var(--primary-color);
-    color: #fff;
-    border: none;
-    border-radius: 50%;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 999;
-    transition: transform 0.2s ease-in-out, background-color 0.2s ease-in-out;
-}
-
-.footer-feedback-button:hover {
-    background-color: var(--primary-dark);
-    transform: scale(1.1) translateY(-3px);
-}
-
-.footer-feedback-button svg {
-    width: 30px;
-    height: 30px;
-    margin: 0;
-}
-
-@media (max-width: 600px) {
-    .nav-button {
-        padding: 0.75rem 1rem;
-        min-width: unset;
-        font-size: 0.9rem;
+/* --- RESPONSIVE MEDIA QUERIES --- */
+@media (max-width: 1024px) {
+    .header-content-wrapper {
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+        padding: 1rem;
     }
-    .nav-button svg {
-        margin-right: 0.25rem;
-        height: 1.2rem;
-        width: 1.2rem;
+    .app-branding {
+        justify-content: center;
+        width: 100%;
+    }
+    .app-navigation {
+        width: 100%;
+        justify-content: center;
+        gap: 0.5rem;
+    }
+    .nav-button {
+        flex-grow: 1; 
+        padding: 0.75rem 1rem;
+    }
+    .app-container {
+        padding-top: 200px; /* Adjusted padding for the taller header */
+    }
+}
+@media (max-width: 600px) {
+    .app-container {
+        padding-left: 1rem;
+        padding-right: 1rem;
     }
 }

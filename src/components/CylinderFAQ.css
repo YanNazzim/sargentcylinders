@@ -1,28 +1,28 @@
 /* src/components/CylinderFAQ.css */
 .faq-container {
     background-color: var(--card-background);
-    padding: 2.5rem;
-    border-radius: 12px;
+    padding: 1.5rem; /* Reduced padding */
+    border-radius: 10px;
     box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
     max-width: 1000px;
-    margin: 2rem auto;
+    margin: 1rem auto; /* Reduced external margin */
     color: var(--text-color);
     border: 1px solid var(--border-color);
 }
 
 .faq-title {
-    font-size: clamp(2rem, 4vw, 2.5rem);
+    font-size: clamp(2rem, 4vw, 2.2rem);
     font-weight: bold;
     margin-bottom: 1.5rem;
     text-align: center;
     border-bottom: 2px solid var(--primary-color);
-    padding-bottom: 1rem;
+    padding-bottom: 0.75rem;
 }
 
 .faq-intro {
     font-size: clamp(1rem, 2.5vw, 1.15rem);
     color: var(--subtle-text);
-    margin-bottom: 2.5rem;
+    margin-bottom: 1.5rem;
     text-align: center;
     line-height: 1.5;
 }
@@ -31,27 +31,27 @@
     position: relative;
     display: flex;
     align-items: center;
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
 }
 
 .search-bar-wrapper svg {
     position: absolute;
-    left: 1.25rem;
+    left: 1rem;
     color: var(--subtle-text);
-    width: 1.5rem;
-    height: 1.5rem;
+    width: 1.25rem;
+    height: 1.25rem;
 }
 
 .faq-search-input {
     width: 100%;
-    padding: 1rem 1.5rem;
-    font-size: 1.1rem;
-    border-radius: 10px;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    border-radius: 8px;
     border: 2px solid var(--border-color);
     background-color: var(--background-color);
     color: var(--text-color);
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
-    padding-left: 3.5rem;
+    padding-left: 3.25rem;
 }
 
 .faq-search-input:focus {
@@ -62,7 +62,7 @@
 
 .clear-search-button {
     position: absolute;
-    right: 1.25rem;
+    right: 1rem;
     background: none;
     border: none;
     cursor: pointer;
@@ -79,14 +79,14 @@
 }
 
 .clear-search-button svg {
-    width: 1.5rem;
-    height: 1.5rem;
+    width: 1.25rem;
+    height: 1.25rem;
 }
 
 .faq-item {
     border-bottom: 1px solid var(--border-color);
-    margin-bottom: 1.5rem;
-    padding-bottom: 1.5rem;
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
 }
 
 .faq-item:last-child {
@@ -98,11 +98,11 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1.5rem 0;
+    padding: 0.75rem 0;
     background: none;
     border: none;
     color: var(--text-color);
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     font-weight: 600;
     text-align: left;
     cursor: pointer;
@@ -114,7 +114,7 @@
 }
 
 .faq-toggle {
-    font-size: 2rem;
+    font-size: 1.5rem;
     color: var(--primary-color);
     transition: transform 0.3s ease-in-out;
     line-height: 1;
@@ -152,7 +152,7 @@
     max-width: 100%;
     background: #000;
     border-radius: 8px;
-    margin-top: 1.5rem;
+    margin-top: 1rem;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
@@ -165,10 +165,10 @@
 }
 
 .image-container {
-    margin-top: 1.5rem;
+    margin-top: 1rem;
     text-align: center;
     background-color: #2a2a2a;
-    padding: 1.5rem;
+    padding: 1rem;
     border-radius: 8px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     border: 1px solid var(--border-color);
@@ -182,7 +182,7 @@
 }
 
 .keyway-table-container {
-    margin-top: 1.5rem;
+    margin-top: 1rem;
     overflow-x: auto;
     border: 1px solid var(--border-color);
     border-radius: 8px;
@@ -199,7 +199,7 @@
 
 .keyway-table th,
 .keyway-table td {
-    padding: 1rem 1.25rem;
+    padding: 0.75rem 1rem;
     text-align: left;
     border-bottom: 1px solid var(--border-color);
     vertical-align: top;
@@ -232,7 +232,7 @@
     }
     .keyway-table tr {
         display: block;
-        margin-bottom: 1.5rem;
+        margin-bottom: 1rem;
         border: 1px solid var(--border-color);
         border-radius: 8px;
         overflow: hidden;
@@ -240,6 +240,7 @@
     .keyway-table td {
         display: block;
         text-align: right;
+        border: none;
         border-bottom: 1px dotted var(--border-color);
         position: relative;
         padding-left: 50%;
@@ -250,8 +251,8 @@
     .keyway-table td::before {
         content: attr(data-label);
         position: absolute;
-        left: 1.25rem;
-        width: calc(50% - 1.25rem);
+        left: 1rem;
+        width: calc(50% - 1rem);
         padding-right: 0.75rem;
         font-weight: 600;
         text-align: left;
