@@ -61,7 +61,6 @@ export const images = {
 
   Mortise8200: require("./8200Mortise.png"),
   Mortise7800: require("./7800.png"),
-  Mortise7900: require("./7900.png"),
   Mortise9200: require("./9200.png"),
 
   Bored10XLine: require("./10X.png"),
@@ -155,4 +154,9 @@ export const images = {
   Func10XU93: require("./10XU93.png"),
   Func10XU94_2: require("./10XU94-2.png"),
   Func10XU94: require("./10XU94.png"),
+    // --- NEW CORE IMAGE MAPPINGS FOR BORED LOCKS ---
+  CoreLFIC6300: require("./LFICMortise.png"), // LFIC Permanent Core / Housing
+  CoreLFIC6400: require("./LFICMortise.png"), // LFIC Construction Core
+  CoreSFIC7300: require("./SFICMortise.png"), // SFIC Permanent Core / Housing
+  CoreSFIC7200: require("./SFICMortise.png"), // SFIC Construction Core
 };

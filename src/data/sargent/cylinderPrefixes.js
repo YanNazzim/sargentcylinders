@@ -4,7 +4,7 @@ export const cylinderPrefixCategories = [
   {
     name: "Degree Key System Level 1",
     prefixes: [
-      { id: "DG1-", description: "SARGENT Degree Key System Level 1 (bump resistant with patented keys)", keywords: ["Conventional", "Standard", "Not Removable"] },
+      { id: "DG1-", description: "SARGENT Degree Key System Level 1 (bump resistant with patented keys)", keywords: ["Patented", "Not Removable", "Conventional"] },
       { id: "DG1-21-", description: "Degree Level 1 Construction Master Keying", keywords: ["Lost Ball", "Construction", "Master", "Keying", "Key"] },
       { id: "DG1-60-", description: "Degree Level 1 Removable Disposable Construction Core", keywords: ["LFIC", "Large Format Interchangeable Core", "removable core"] },
       { id: "DG1-63-", description: "Degree Level 1 Removable Core", keywords: ["LFIC", "Large Format Interchangeable Core", "removable core"] },
@@ -15,18 +15,18 @@ export const cylinderPrefixCategories = [
   {
     name: "Degree Key System Level 2",
     prefixes: [
-      { id: "DG2-", description: "SARGENT Degree Key System Level 2 (geographically exclusive; bump and pick resistant)", keywords: ["Conventional", "Standard", "Not Removable"] },
+      { id: "DG2-", description: "SARGENT Degree Key System Level 2 (geographically exclusive; bump and pick resistant)", keywords: ["Patented", "Not Removable", "Conventional"] },
       { id: "DG2-21-", description: "Degree Level 2 Construction Master Keying", keywords: ["Lost Ball", "Construction", "Master", "Keying", "Key"] },
       { id: "DG2-60-", description: "Degree Level 2 Removable Disposable Construction Core", keywords: ["LFIC", "Large Format Interchangeable Core", "removable core"] },
       { id: "DG2-63-", description: "Degree Level 2 Removable Core", keywords: ["LFIC", "Large Format Interchangeable Core", "removable core"] },
       { id: "DG2-64-", description: "Degree Level 2 Removable Construction Keyed LFIC", keywords: ["LFIC", "Large Format Interchangeable Core", "removable core"] },
-      { id: "DG2-65-", description: "Degree Level 2 Unassembled/uncombinated Core", keywords: ["LFIC", "Large Format Interchangeable Core", "removable core"] },
+      { id: "DG2-65", description: "Degree Level 2 Unassembled/uncombinated Core", keywords: ["LFIC", "Large Format Interchangeable Core", "removable core"] },
     ]
   },
   {
     name: "Degree Key System Level 3",
     prefixes: [
-      { id: "DG3-", description: "SARGENT Degree Key System Level 3 (geographically exclusive; UL437 certified; bump and pick resistant)", keywords: ["Conventional", "Standard", "Not Removable"] },
+      { id: "DG3-", description: "SARGENT Degree Key System Level 3 (geographically exclusive; UL437 certified; bump and pick resistant)", keywords: ["Patented", "High Security", "Not Removable", "Conventional"] },
       { id: "DG3-21-", description: "Degree Level 3 Construction Master Keying", keywords: ["Lost Ball", "Construction", "Master", "Keying", "Key"] },
       { id: "DG3-60-", description: "Degree Level 3 Removable Disposable Construction Core", keywords: ["LFIC", "Large Format Interchangeable Core", "removable core"] },
       { id: "DG3-63-", description: "Degree Level 3 Removable Core", keywords: ["LFIC", "Large Format Interchangeable Core", "removable core"] },
@@ -64,8 +64,8 @@ export const cylinderPrefixCategories = [
   {
     name: "XC-Key System",
     prefixes: [
-      { id: "11-", description: "XC Key System (Not available with other Key systems unless specified)", keywords: [] },
-      { id: "11-21-", description: "XC-Construction Key System (Lost Ball)", keywords: [] },
+      { id: "11-", description: "XC Key System (Not available with other Key systems unless specified)", keywords: ["Patented"] },
+      { id: "11-21-", description: "XC-Construction Key System (Lost Ball)", keywords: ["Lost Ball"] },
       { id: "11-60-", description: "Device to accept XC- Permanent Large Format Interchangeable Core, Disposable plastic Core- provided", keywords: ["LFIC", "Large Format Interchangeable Core", "removable core"] },
       { id: "11-63-", description: "Device provided with XC-Large Format Interchangeable Core Cylinder - (Includes masterkeying, grand masterkeying)", keywords: ["LFIC", "Large Format Interchangeable Core", "removable core"] },
       { id: "11-64-", description: "Device provided with Keyed construction core to accept XC- Permanent Large Format Interchangeable Core (ordered separately)", keywords: ["LFIC", "Large Format Interchangeable Core", "removable core"] },
@@ -83,7 +83,7 @@ export const cylinderPrefixCategories = [
   {
     name: "Construction Key Systems (Lost Ball)",
     prefixes: [
-      { id: "21-", description: "SARGENT Lost Ball Construction Keying for Conventional, XC and Signature Series (N/A with 63- or 73-)", keywords: ["Lost Ball"] },
+      { id: "21-", description: "SARGENT Lost Ball Construction Keying for Conventional, XC and Signature Series (N/A with 63- or 73-)", keywords: ["Lost Ball", "Conventional"] },
     ]
   },
   {
@@ -107,9 +107,9 @@ export const cylinderPrefixCategories = [
   {
     name: "Added Security & Keyway Options",
     prefixes: [
-      { id: "BR-", description: "Bump Resistant Cylinder (Available with Conventional & Conventional XC Cylinders Only)", keywords: ["Bump Resistant"] },
-      { id: "SC-", description: "Schlage C keyway cylinder, 0 bitted", keywords: ["Schlage", "keyway"] },
-      { id: "SE-", description: "Schlage E keyway cylinder, 0 bitted", keywords: ["Schlage", "keyway"] },
+      { id: "BR-", description: "Bump Resistant Cylinder (Available with Conventional & Conventional XC Cylinders Only)", keywords: ["Bump Resistant", "Conventional"] },
+      { id: "SC-", description: "Schlage C keyway cylinder, 0 bitted", keywords: ["Schlage", "keyway", "Conventional"] },
+      { id: "SE-", description: "Schlage E keyway cylinder, 0 bitted", keywords: ["Schlage", "keyway", "Conventional"] },
     ]
   }
 ];

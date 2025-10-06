@@ -1,4 +1,4 @@
-/* src/components/CategorizedPrefixSelector.css */
+// src/components/CategorizedPrefixSelector.css
 .new-prefix-selector-container {
     width: 100%;
     font-family: 'Inter', sans-serif;
@@ -33,50 +33,97 @@
     margin-top: 1rem;
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: 0.5rem; /* Reduced gap between categories */
 }
 
 .prefix-category-group {
     background-color: var(--background-color);
     border: 1px solid var(--border-color);
     border-radius: 8px;
-    padding: 1.5rem;
+    overflow: hidden;
+    transition: all 0.3s ease-out;
+}
+
+/* --- NEW ACCORDION STYLES --- */
+.prefix-category-toggle {
+    width: 100%;
+    background-color: var(--card-background);
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 1.5rem; /* Tighter padding for smaller look */
+    transition: background-color 0.2s ease-in-out;
+}
+
+.prefix-category-toggle:hover:not(:disabled) {
+    background-color: #1a1a1a;
+}
+
+.prefix-category-toggle:disabled {
+    cursor: default; /* Keep original pointer when disabled (searching) */
+    opacity: 1;
 }
 
 .prefix-category-header {
-    font-size: 1.25rem;
+    font-size: 1.1rem; /* Smaller font size */
     font-weight: 700;
-    color: var(--primary-color);
-    margin-top: 0;
-    margin-bottom: 1rem;
-    border-bottom: 2px solid var(--border-color);
-    padding-bottom: 0.5rem;
+    color: var(--text-color);
+    margin: 0;
+    border-bottom: none; /* Removed underline from header text */
+    padding-bottom: 0;
+    flex-grow: 1;
 }
+
+.prefix-category-group.open .prefix-category-header {
+    color: var(--primary-color);
+}
+
+.toggle-icon {
+    font-size: 1.25rem;
+    color: var(--primary-color);
+    transition: transform 0.3s ease-in-out;
+    margin-left: 1rem;
+}
+
+.prefix-category-group.open .toggle-icon {
+    transform: rotate(180deg);
+}
+
+.prefix-content {
+    padding: 0.5rem 1.5rem 1.5rem 1.5rem; /* Padding applied here for visible content */
+    border-top: 1px solid var(--border-color);
+}
+/* --- END NEW ACCORDION STYLES --- */
+
 
 .prefix-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 1rem;
+    /* Tighter grid for more items on screen */
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 0.75rem; /* Reduced gap */
 }
 
 .prefix-item-label {
     background-color: var(--card-background);
     border: 1px solid var(--border-color);
-    border-radius: 8px;
-    padding: 1rem;
+    border-radius: 6px; /* Smaller radius */
+    padding: 0.75rem; /* Reduced padding */
     cursor: pointer;
     transition: all 0.2s ease-in-out;
     display: flex;
     align-items: flex-start;
-    gap: 1rem;
+    gap: 0.75rem; /* Reduced gap */
     position: relative;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
 }
 
 .prefix-item-label:hover {
     background-color: #1a1a1a;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    transform: translateY(-1px); /* Less dramatic lift */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
 }
 
 .prefix-item-label.selected {
@@ -88,7 +135,7 @@
 .prefix-item-radio {
     margin: 0;
     flex-shrink: 0;
-    margin-top: 0.25rem;
+    margin-top: 0.15rem;
 }
 
 .prefix-item-content {
@@ -99,13 +146,13 @@
 .prefix-item-id {
     font-weight: 600;
     color: var(--text-color);
-    font-size: 1rem;
+    font-size: 0.95rem; /* Smaller font size */
     line-height: 1.2;
 }
 
 .prefix-item-description {
     color: var(--subtle-text);
-    font-size: 0.9rem;
+    font-size: 0.85rem; /* Smaller font size */
     margin: 0;
     line-height: 1.4;
     padding-top: 0.25rem;

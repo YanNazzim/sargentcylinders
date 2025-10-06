@@ -4,6 +4,11 @@ import './CategorizedPrefixSelector.css';
 
 function CategorizedPrefixSelector({ categories, selectedPrefixes, onChange }) {
   const [searchTerm, setSearchTerm] = useState('');
+  const [openCategoryId, setOpenCategoryId] = useState(null); 
+
+  const handleToggle = (id) => {
+    setOpenCategoryId(prevId => (prevId === id ? null : id));
+  }
 
   const filteredCategories = useMemo(() => {
     if (!searchTerm) {
@@ -46,31 +51,54 @@ function CategorizedPrefixSelector({ categories, selectedPrefixes, onChange }) {
 
       <div className="prefix-list-wrapper">
         {filteredCategories.length > 0 ? (
-          filteredCategories.map((category) => (
-            <div key={category.name} className="prefix-category-group">
-              <h4 className="prefix-category-header">{category.name}</h4>
-              <div className="prefix-grid">
-                {category.prefixes.map((prefix) => (
-                  <label
-                    key={prefix.id}
-                    className={`prefix-item-label ${selectedPrefixes.includes(prefix.id) ? 'selected' : ''}`}
+          filteredCategories.map((category) => {
+            // Logic change: Only open if explicitly toggled (openCategoryId matches)
+            const isCategoryOpen = openCategoryId === category.name; 
+
+            return (
+              // Only display group if there are results or no search term
+              <div key={category.name} className={`prefix-category-group ${isCategoryOpen ? 'open' : ''}`}>
+                <button 
+                  className="prefix-category-toggle"
+                  onClick={() => handleToggle(category.name)}
+                  aria-expanded={isCategoryOpen}
+                  aria-controls={`prefix-content-${category.name.replace(/\s/g, '-')}`}
+                >
+                  <h4 className="prefix-category-header">{category.name} ({category.prefixes.length})</h4>
+                  <span className="toggle-icon">{isCategoryOpen ? '▲' : '▼'}</span>
+                </button>
+                
+                {/* Content only visible when explicitly open */}
+                {isCategoryOpen && ( 
+                  <div 
+                    className="prefix-content"
+                    id={`prefix-content-${category.name.replace(/\s/g, '-')}`}
                   >
-                    <input
-                      type="radio"
-                      name="cylinderPrefix"
-                      checked={selectedPrefixes.includes(prefix.id)}
-                      onChange={() => onChange(prefix.id)}
-                      className="prefix-item-radio"
-                    />
-                    <div className="prefix-item-content">
-                      <span className="prefix-item-id">{prefix.id}</span>
-                      <p className="prefix-item-description">{prefix.description}</p>
+                    <div className="prefix-grid">
+                      {category.prefixes.map((prefix) => (
+                        <label
+                          key={prefix.id}
+                          className={`prefix-item-label ${selectedPrefixes.includes(prefix.id) ? 'selected' : ''}`}
+                        >
+                          <input
+                            type="radio"
+                            name="cylinderPrefix"
+                            checked={selectedPrefixes.includes(prefix.id)}
+                            onChange={() => onChange(prefix.id)}
+                            className="prefix-item-radio"
+                          />
+                          <div className="prefix-item-content">
+                            <span className="prefix-item-id">{prefix.id}</span>
+                            <p className="prefix-item-description">{prefix.description}</p>
+                          </div>
+                        </label>
+                      ))}
                     </div>
-                  </label>
-                ))}
+                  </div>
+                )}
               </div>
-            </div>
-          ))
+            );
+          })
         ) : (
           <div className="no-options-message">No prefixes found for your search.</div>
         )}
