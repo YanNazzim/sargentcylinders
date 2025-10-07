@@ -43,7 +43,7 @@ const allFaqs = [
     {
         question: "How does a pin tumbler lock (Cylinder) work?",
         answer: "A pin tumbler lock uses a series of pins of varying lengths to prevent the lock from opening without the correct key. The key lifts the pins to a specific height, creating a shear line that allows the plug to rotate. Watch this video for a detailed visual explanation.",
-        videoUrl: "https://www.youtube.com/embed/smIdInCQ-kU?si=0PAGhApuKeX8O2CB&start=8"
+        videoUrl: "https://www.youtube.com/embed/eOi5HGpzY70?si=1LhQhcSgoulcuzmA"
     },
     {
         question: "What are the different levels of security SARGENT offers?",
