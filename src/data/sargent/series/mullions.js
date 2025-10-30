@@ -6,16 +6,16 @@ const allCylinderPrefixes = cylinderPrefixCategories.flatMap(
   (category) => category.prefixes
 );
 
-// --- Custom Collars ---
-// Collar for 980C2 Mullions (forces #46 cylinder and 97 Rosette/Collar)
-const CollarInfo97 = {
-  default: {
-    partNumber: "97 x Finish",
-    description: "Standard Rosette for Mullion (Mandatory for 980C2)",
-    imageUrl: images.Rosette97,
-    projection: '9/32"',
-  },
+// --- FIX: NEW COLLAR FOR EL980 / SMEL980 (980C2 Kit) ---
+const CollarInfo980C2 = {
+    default: {
+        partNumber: "1KB-1 x Finish",
+        description: "Collar for 980C2 (EL980 / SMEL980) Mullion",
+        imageUrl: images.Collar1KB,
+        projection: '5/16"', // Matches the correct projection for 1KB-1
+    }
 };
+// ------------------------------------------
 
 // --- Custom Prefix for Mullion Logic (980C1*) - For standard lockable mullions ---
 const cylinderKit980C1 = {
@@ -37,11 +37,12 @@ const get980C2Model = (modelNumber, description) => ({
     description,
     imageUrl: images.MullionEL980, // Default to EL980 image for Electric versions
     baseCylinder: { partNumber: "#46", type: "Mortise Cylinder" }, // Forces #46 cylinder
-    collars: CollarInfo97, // Forces 97 Rosette
+    // FIX: Assign the new correct collar object
+    collars: CollarInfo980C2, // <-- CHANGED to CollarInfo980C2
     prefixes: [
         { 
             id: "980C2", 
-            description: "980C2 Cylinder Kit (Fixed #46 Mortise w/ 97 Rosette)", 
+            description: "980C2 Cylinder Kit (Fixed #46 Mortise w/ 1KB-1 Collar)", // Updated description for clarity
             addsCylinder: {partNumber: "#46", type: "Mortise Cylinder"}, 
             isDeviceSpecific: true, 
             keywords: ["Mullion", "980C2"] 
