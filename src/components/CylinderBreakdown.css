@@ -21,7 +21,8 @@
 
 .parts-list {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    /* FIX: Replaced 'repeat(auto-fit, minmax(300px, 1fr))' with a simple two-column max width to avoid Css Minimizer error */
+    grid-template-columns: repeat(auto-fit, minmax(300px, 50%));
     gap: 1.5rem;
 }
 
@@ -181,6 +182,6 @@
 /* Force single column stack on mobile screens */
 @media screen and (max-width: 500px) {
     .parts-list {
-        grid-template-columns: 1fr;
+        grid-template-columns: 100%; /* FIX: Replaced '1fr' with '100%' */
     }
 }
