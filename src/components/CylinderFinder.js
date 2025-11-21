@@ -294,7 +294,7 @@ function CylinderFinder() {
           if (kitPrefix?.addsCylinder) {
             rawCylinderList.push({ ...kitPrefix.addsCylinder, role: "Mullion Cylinder", notes: kitPrefix.description, sourcePrefix: kitPrefix, });
           }
-        } else if (activeModelData.baseCylinder) {
+        } else if (activeModelData.baseCylinder && !isMullion980C2) { // <--- MODIFIED CONDITION: Added !isMullion980C2 to exclude base cylinder for EL980/SMEL980
           rawCylinderList.push({
             ...activeModelData.baseCylinder,
             role: isBoredLock ? "Keyed Cylinder" : "Outside Cylinder", 
@@ -331,7 +331,8 @@ function CylinderFinder() {
     });
 
     // 5. Mullion 980C2 kit description
-    if (isMullion980C2 && !selectedCylinderPrefix) {
+    // This logic ensures the dedicated Mullion cylinder is always added for EL980/SMEL980
+    if (isMullion980C2 && !selectedCylinderPrefix) { 
       const kitPrefix = activeModelData.prefixes?.find((p) => p.id === "980C2");
       if (kitPrefix?.addsCylinder) {
         rawCylinderList.push({
