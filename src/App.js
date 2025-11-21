@@ -3,6 +3,7 @@ import React, { useState, Suspense, lazy } from 'react';
 import FeedbackModal from './components/FeedbackModal';
 import { LockIcon, WrenchIcon, QuestionMarkIcon, ChatIcon } from './components/Icons';
 import './App.css';
+import TechSupportHubBanner from './components/TechSupportHubBanner'; // IMPORT NEW COMPONENT
 import { images } from './images/images';
 const CylinderFinder = lazy(() => import('./components/CylinderFinder'));
 const CylinderGlossary = lazy(() => import('./components/CylinderGlossary'));
@@ -82,6 +83,7 @@ export default function App() {
           <ChatIcon />
         </button>
       </footer>
+        <TechSupportHubBanner />
 
       <FeedbackModal 
         isOpen={isFeedbackModalOpen} 
