@@ -43,7 +43,7 @@
 }
 
 .results-display-item.has-collar {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 50% 50%; /* FIX: Changed '1fr 1fr' to '50% 50%' to resolve CSS Minimizer error. */
 }
 
 
