@@ -1,20 +1,27 @@
 /* src/App.css */
 :root {
     font-size: 16px;
-    /* Improved colors for better contrast and professional look */
-    --primary-color: #005f9e; /* Strong Blue for Action/Focus */
-    --primary-dark: #004c7f;
-    --secondary-color: #8c8c8c; /* Neutral Gray */
-    --background-color: #121212; /* Deep Black for Body */
-    --card-background: #1e1e1e; /* Slightly lighter dark for Cards/Sections */
-    --text-color: #ffffff; /* Pure White for Max Readability (High Contrast) */
-    --subtle-text: #b0b0b0; /* Light Gray for Descriptions */
-    --border-color: #333333; /* Darker border for structure */
-    --focus-ring: #80bdff; /* Clear blue for focus/ADA compliance */
-    --danger-color: #dc3545;
-    /* NEW: Header/Nav specific colors */
-    --header-background: #0d0d0d; /* Even darker, almost black for the fixed header */
-    --nav-active-color: #005f9e;
+    /* --- Professional Dark Palette --- */
+    --background-color: #0f1115;
+    --card-background: #181b21;
+    --surface-color: #22262e;
+    
+    /* Accents */
+    --primary-color: #3b82f6;
+    --primary-gradient: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    --primary-dark: #1d4ed8;
+
+    /* Text */
+    --text-color: #ffffff;
+    --text-secondary: #9ca3af;
+    --text-muted: #6b7280;
+
+    /* Borders & UI */
+    --border-color: #2e333d;
+    
+    /* Shadows */
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.15);
+    --shadow-glow: 0 0 15px rgba(59, 130, 246, 0.2);
 }
 
 *, *::before, *::after {
@@ -22,239 +29,182 @@
 }
 
 body {
-    padding-top: 0; /* Remove old padding */
     margin: 0;
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     background-color: var(--background-color);
     color: var(--text-color);
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    overflow-x: hidden;
-    font-size: 1.1rem;
 }
 
-/* --- NEW FIXED HEADER / NAV BAR --- */
+/* --- FIXED HEADER --- */
 .app-header-fixed {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
-    background-color: var(--header-background);
+    background: rgba(24, 27, 33, 0.95);
+    backdrop-filter: blur(10px);
     z-index: 100;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4); /* Strong shadow for separation */
-    border-bottom: 4px solid var(--primary-color); /* Prominent primary color line */
+    border-bottom: 1px solid var(--border-color);
 }
 
 .header-content-wrapper {
-    max-width: 1300px; /* Wider content area for traditional site feel */
+    max-width: 1440px;
     margin: 0 auto;
-    padding: 1rem 2rem;
+    padding: 0.75rem 2rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 2rem;
 }
 
 .app-branding {
     display: flex;
     align-items: center;
-    gap: 1.5rem;
-    flex-shrink: 0; /* Prevent branding from shrinking */
-}
-
-.title-group {
-    text-align: left;
-}
-
-.app-title {
-    font-size: clamp(1.5rem, 3vw, 2.2rem); /* Smaller header title */
-    font-weight: 900;
-    color: var(--primary-color);
-    margin: 0;
-    letter-spacing: -0.05em;
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
-}
-
-.app-subtitle {
-    font-size: clamp(0.9rem, 2vw, 1.1rem);
-    font-weight: 500;
-    color: var(--subtle-text);
-    margin: 0;
-    letter-spacing: 0.02em;
+    gap: 1rem;
 }
 
 .logo {
-    padding: 5px;
-    border-radius: 8px; /* Slightly smaller radius */
-    border: 3px solid var(--primary-color); /* Slightly thinner border */
-    max-width: 80px; /* Smaller logo for fixed header */
-    height: auto;
-    margin-bottom: 0;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.logo:hover {
-    transform: scale(1.05);
-    box-shadow: 0 0 15px rgba(0, 95, 158, 0.5);
-}
-
-/* --- MAIN CONTENT CONTAINER --- */
-.app-container {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding-top: 130px; /* Space for the fixed header */
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
-    padding-bottom: 3rem; 
-}
-
-@media (min-width: 1024px) {
-    .app-container {
-        padding-top: 130px;
-    }
-}
-
-.app-header {
-    display: none; /* Hide the old header div */
-}
-
-/* --- NAVIGATION / NAVBAR LINKS (PART OF FIXED HEADER) --- */
-.app-navigation {
-    display: flex;
-    flex-wrap: nowrap;
-    justify-content: flex-end; 
-    gap: 0.5rem; 
-    margin-bottom: 0; 
-    padding: 0;
-    background-color: transparent; 
-    border-radius: 0;
-    box-shadow: none;
-    border: none;
-    max-width: unset;
+    height: 40px;
     width: auto;
 }
 
-.nav-button {
-    flex: 0 1 auto; 
-    min-width: unset;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0.75rem 1.25rem; 
-    font-size: 1rem;
-    font-weight: 600;
-    border-radius: 6px; 
-    border: 2px solid transparent; 
-    background-color: transparent; 
-    color: var(--subtle-text);
-    outline: 2px solid transparent; /* Base for ADA focus */
-    outline-offset: 2px;
-    transition: all 0.3s ease-in-out;
-    cursor: pointer;
+.app-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-color);
+    margin: 0;
+}
+
+.app-subtitle {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 0.05em;
+    margin: 0;
+}
+
+/* --- NAVIGATION --- */
+.app-navigation {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.nav-button {
+    background: transparent;
+    border: 1px solid transparent;
+    color: var(--text-secondary);
+    padding: 0.6rem 1rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
 }
 
 .nav-button:hover {
-    background-color: rgba(255, 255, 255, 0.08); 
-    transform: none; 
-    box-shadow: none;
+    background-color: rgba(255, 255, 255, 0.05);
     color: var(--text-color);
 }
 
 .nav-button.active {
-    background-color: var(--nav-active-color);
-    color: #fff;
-    box-shadow: none;
-    transform: none;
+    background-color: rgba(59, 130, 246, 0.1);
+    color: var(--primary-color);
+    border-color: rgba(59, 130, 246, 0.2);
 }
 
-.nav-button:focus {
-    outline: 2px solid var(--focus-ring); /* High-contrast ADA focus indicator */
-    outline-offset: 2px;
-}
-
-.nav-button.active:focus {
-    box-shadow: 0 0 0 3px rgba(0, 95, 158, 0.4); 
-}
-
-.nav-button svg {
-    margin-right: 0.5rem;
-    height: 1.25rem;
-    width: 1.25rem;
-    transition: transform 0.2s ease-in-out;
+/* --- LAYOUT CENTERING --- */
+.app-container {
+    padding-top: 100px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: radial-gradient(circle at top center, #1f242d 0%, var(--background-color) 60%);
 }
 
 .app-main {
     width: 100%;
-    max-width: 1300px; 
-    padding-bottom: 3rem; 
+    max-width: 1440px; 
+    padding: 0 1.5rem 3rem;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
 }
 
-/* --- GLOBAL CYLINDER NOTE STYLES --- */
+/* --- GLOBAL NOTE CENTERING FIX --- */
 .app-page-note {
-    width: 100%;
-    max-width: 100%; /* Spans full content width */
-    margin: 1.5rem auto 1.5rem auto; 
-    padding: 1.25rem 1.5rem;
-    background-color: #2e5939; 
+    background: rgba(59, 130, 246, 0.1);
+    border: 1px solid rgba(59, 130, 246, 0.2);
     border-radius: 8px;
-    border: 3px solid #4a905a; 
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
-    text-align: center;
+    padding: 1rem;
+    margin-bottom: 2rem;
+    /* Remove text-align: center from here, let children control it */
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    width: 100%;
+    max-width: 1000px; 
+    margin-left: auto; 
+    margin-right: auto;
 }
 
 .app-page-note p {
+    text-align: center; /* Explicitly centers the paragraph text */
     margin: 0;
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: #ffffff;
-    line-height: 1.5;
 }
 
 .app-page-note strong {
-    color: #ffe082; 
+    color: var(--primary-color);
 }
-/* --- END GLOBAL CYLINDER NOTE STYLES --- */
 
-/* --- FOOTER/FEEDBACK BUTTON (No change needed) --- */
+/* --- FOOTER --- */
 .app-footer {
-    position: relative;
-    width: 100%;
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    z-index: 99;
 }
-/* ... rest of existing footer styles ... */
 
-/* --- RESPONSIVE MEDIA QUERIES --- */
-@media (max-width: 1024px) {
+.footer-feedback-button {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: var(--primary-gradient);
+    border: none;
+    color: white;
+    box-shadow: var(--shadow-lg), var(--shadow-glow);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.footer-feedback-button:hover {
+    transform: scale(1.1);
+}
+
+@media (max-width: 768px) {
     .header-content-wrapper {
         flex-direction: column;
-        align-items: center;
+        align-items: flex-start;
         gap: 1rem;
-        padding: 1rem;
-    }
-    .app-branding {
-        justify-content: center;
-        width: 100%;
     }
     .app-navigation {
         width: 100%;
-        justify-content: center;
-        gap: 0.5rem;
+        overflow-x: auto;
+        padding-bottom: 5px;
     }
     .nav-button {
-        flex-grow: 1; 
-        padding: 0.75rem 1rem;
+        white-space: nowrap;
+        font-size: 0.8rem;
     }
     .app-container {
-        padding-top: 200px; /* Adjusted padding for the taller header */
-    }
-}
-@media (max-width: 600px) {
-    .app-container {
-        padding-left: 1rem;
-        padding-right: 1rem;
+        padding-top: 140px;
     }
 }

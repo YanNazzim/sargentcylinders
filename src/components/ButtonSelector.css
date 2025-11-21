@@ -1,88 +1,97 @@
 /* src/components/ButtonSelector.css */
 .button-selector-container {
     width: 100%;
-    margin-top: 2rem;
+    margin-top: 0.5rem;
 }
 
 .button-selector-title {
-    font-size: clamp(1.2rem, 3vw, 1.8rem);
+    font-size: 1.1rem;
     font-weight: 700;
     color: var(--text-color);
-    text-align: center;
+    text-align: center; /* Centered title */
     margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border-color);
 }
 
 .button-grid {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    /* KEY FIX: auto-fit stretches items to fill the width */
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); 
+    gap: 1.5rem; /* Increased gap */
     justify-content: center;
-    gap: 1.5rem;
+    width: 100%;
 }
 
+/* Variant: Text Only (e.g., Series) */
 .button-selector-container.no-images .button-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 0.75rem;
+    /* Same fix for text-only buttons */
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
 }
 
 .selection-button {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    width: fit-content;
-    height: fit-content;
-    background-color: var(--card-background);
-    border: 2px solid var(--border-color);
-    border-radius: 0.75rem;
+    justify-content: center; /* Ensures vertical centering */
+    width: 100%;
+    background-color: var(--surface-color);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
     cursor: pointer;
-    transition: all 0.3s ease-in-out;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     text-align: center;
-    padding: 1rem;
+    padding: 1.5rem 1rem; /* Larger touch area */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    height: 100%; /* Ensure uniform height in grid */
+    min-height: 160px; /* Consistent sizing */
     position: relative;
-    overflow: hidden;
 }
 
 .button-selector-container.no-images .selection-button {
-    padding: 0.75rem 1rem;
-    height: auto;
-    width: 100%;
+    padding: 1rem;
     flex-direction: row;
-    border-radius: 0.5rem;
-    font-size: 1rem;
+    min-height: auto; /* Allow text buttons to be shorter */
+    background-color: var(--surface-color);
 }
 
 .selection-button:hover:not(.active) {
-    background-color: #1a1a1a;
-    transform: translateY(-5px) scale(1.05);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    background-color: #2c3038;
+    border-color: var(--text-secondary);
+    transform: translateY(-4px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
 }
 
 .selection-button.text-only:hover:not(.active) {
-    transform: translateY(-2px) scale(1.02);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
 }
 
+/* ACTIVE STATE */
 .selection-button.active {
-    background-color: var(--primary-color);
-    border-color: var(--primary-dark);
-    box-shadow: 0 0 0 4px rgba(0, 95, 158, 0.25);
-    transform: scale(1.05);
+    background-color: rgba(59, 130, 246, 0.1);
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px var(--primary-color), 0 0 15px rgba(59, 130, 246, 0.3);
+    transform: none;
 }
 
 .selection-button.text-only.active {
-    transform: scale(1.02);
-    box-shadow: 0 0 0 3px rgba(0, 95, 158, 0.25);
+    background-color: var(--primary-color);
+    color: #fff;
+    border-color: var(--primary-dark);
 }
 
 .selection-button-image {
-    max-width: 150px;
-    max-height: 100px;
-    margin-bottom: 0.5rem;
-    background-color: var(--background-color);
+    max-width: 80px; /* Slightly larger */
+    max-height: 60px;
+    margin-bottom: 1rem;
+    background-color: #fff;
     padding: 0.5rem;
-    border-radius: 0.375rem;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    object-fit: contain;
+    transition: filter 0.2s;
 }
 
 .selection-button.text-only .selection-button-image {
@@ -90,34 +99,22 @@
 }
 
 .selection-button-label {
-    color: var(--text-color);
-    font-weight: 500;
-    font-size: 1.5rem;
+    color: var(--text-secondary);
+    font-weight: 600;
+    font-size: 1rem;
+    line-height: 1.4;
+    transition: color 0.2s;
 }
 
-.selection-button.text-only .selection-button-label {
-    font-size: 1rem;
+.selection-button:hover .selection-button-label {
+    color: var(--text-color);
 }
 
 .selection-button.active .selection-button-label {
-    color: #fff;
-    font-weight: bold;
+    color: var(--primary-color);
+    font-weight: 700;
 }
 
-@media (max-width: 600px) {
-    .selection-button {
-        width: 140px;
-        height: 140px;
-    }
-    .selection-button-image {
-        max-width: 70px;
-        max-height: 70px;
-    }
-    .selection-button-label {
-        font-size: 0.9rem;
-    }
-
-    .button-selector-container.no-images .button-grid {
-        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-    }
+.button-selector-container.no-images .selection-button.active .selection-button-label {
+    color: #ffffff;
 }

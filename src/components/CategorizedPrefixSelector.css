@@ -1,181 +1,129 @@
+/* src/components/CategorizedPrefixSelector.css */
 .new-prefix-selector-container {
     width: 100%;
-    font-family: 'Inter', sans-serif;
 }
 
 .prefix-search-wrapper {
-    position: sticky;
-    top: 0;
-    background-color: var(--card-background);
-    padding: 0 0 1rem 0;
-    z-index: 20;
-    border-bottom: 2px solid var(--border-color);
+    margin-bottom: 1.5rem;
 }
 
 .prefix-search-bar {
     width: 100%;
-    padding: 0.75rem 1rem;
-    font-size: 1rem;
-    border-radius: 8px;
+    background-color: var(--surface-color);
     border: 1px solid var(--border-color);
-    background-color: var(--background-color);
+    padding: 0.8rem 1rem;
+    border-radius: 8px;
     color: var(--text-color);
+    font-size: 0.95rem;
+    transition: border-color 0.2s;
 }
 
 .prefix-search-bar:focus {
     outline: none;
     border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px rgba(0, 95, 158, 0.25);
-}
-
-.prefix-list-wrapper {
-    margin-top: 1rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem; /* Reduced gap between categories */
 }
 
 .prefix-category-group {
-    background-color: var(--background-color);
-    border: 1px solid var(--border-color);
+    margin-bottom: 0.75rem;
+    background-color: var(--surface-color);
+    border: 1px solid transparent;
     border-radius: 8px;
     overflow: hidden;
-    transition: all 0.3s ease-out;
+    transition: all 0.2s;
 }
 
-/* --- NEW ACCORDION STYLES --- */
+.prefix-category-group.open {
+    border-color: var(--border-color);
+    box-shadow: var(--shadow-md);
+}
+
 .prefix-category-toggle {
     width: 100%;
-    background-color: var(--card-background);
-    border: none;
-    cursor: pointer;
-    text-align: left;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0.75rem 1.5rem; /* Tighter padding for smaller look */
-    transition: background-color 0.2s ease-in-out;
+    padding: 1rem 1.25rem;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: var(--text-color);
+    transition: background 0.2s;
 }
 
-.prefix-category-toggle:hover:not(:disabled) {
-    background-color: #1a1a1a;
-}
-
-.prefix-category-toggle:disabled {
-    cursor: default; /* Keep original pointer when disabled (searching) */
-    opacity: 1;
+.prefix-category-toggle:hover {
+    background-color: rgba(255,255,255,0.03);
 }
 
 .prefix-category-header {
-    font-size: 1.1rem; /* Smaller font size */
-    font-weight: 700;
-    color: var(--text-color);
+    font-size: 1rem;
+    font-weight: 600;
     margin: 0;
-    border-bottom: none; /* Removed underline from header text */
-    padding-bottom: 0;
-    flex-grow: 1;
-}
-
-.prefix-category-group.open .prefix-category-header {
-    color: var(--primary-color);
 }
 
 .toggle-icon {
-    font-size: 1.25rem;
-    color: var(--primary-color);
-    transition: transform 0.3s ease-in-out;
-    margin-left: 1rem;
-}
-
-.prefix-category-group.open .toggle-icon {
-    transform: rotate(180deg);
+    color: var(--text-muted);
+    font-size: 0.8rem;
 }
 
 .prefix-content {
-    padding: 0.5rem 1.5rem 1.5rem 1.5rem; /* Padding applied here for visible content */
+    padding: 1rem 1.25rem 1.5rem;
     border-top: 1px solid var(--border-color);
+    background-color: rgba(0,0,0,0.1);
 }
-/* --- END NEW ACCORDION STYLES --- */
-
 
 .prefix-grid {
     display: grid;
-    /* FIX: Replaced 'repeat(auto-fit, minmax(200px, 1fr))' with a percentage-based layout to avoid Css Minimizer error */
-    grid-template-columns: repeat(auto-fit, minmax(200px, 33%)); 
-    gap: 0.75rem; /* Reduced gap */
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 0.75rem;
 }
 
+/* INDIVIDUAL PREFIX ITEMS */
 .prefix-item-label {
-    background-color: var(--card-background);
-    border: 1px solid var(--border-color);
-    border-radius: 6px; /* Smaller radius */
-    padding: 0.75rem; /* Reduced padding */
-    cursor: pointer;
-    transition: all 0.2s ease-in-out;
     display: flex;
     align-items: flex-start;
-    gap: 0.75rem; /* Reduced gap */
-    position: relative;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    padding: 0.75rem;
+    background-color: var(--card-background);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
 }
 
 .prefix-item-label:hover {
-    background-color: #1a1a1a;
-    transform: translateY(-1px); /* Less dramatic lift */
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    border-color: var(--text-secondary);
+    transform: translateY(-1px);
 }
 
 .prefix-item-label.selected {
     border-color: var(--primary-color);
-    background-color: #1a2a3a;
-    box-shadow: 0 0 0 3px rgba(0, 95, 158, 0.25);
+    background-color: rgba(59, 130, 246, 0.08);
 }
 
 .prefix-item-radio {
-    margin: 0;
-    flex-shrink: 0;
-    margin-top: 0.15rem;
+    margin-top: 4px;
+    accent-color: var(--primary-color);
+    transform: scale(1.2);
 }
 
 .prefix-item-content {
-    display: flex;
-    flex-direction: column;
+    margin-left: 0.75rem;
 }
 
 .prefix-item-id {
-    font-weight: 600;
+    display: block;
+    font-weight: 700;
     color: var(--text-color);
-    font-size: 0.95rem; /* Smaller font size */
-    line-height: 1.2;
-}
-
-.prefix-item-description {
-    color: var(--subtle-text);
-    font-size: 0.85rem; /* Smaller font size */
-    margin: 0;
-    line-height: 1.4;
-    padding-top: 0.25rem;
+    font-size: 0.9rem;
+    margin-bottom: 0.2rem;
 }
 
 .prefix-item-label.selected .prefix-item-id {
-    color: #fff;
+    color: var(--primary-color);
 }
 
-.prefix-item-label.selected .prefix-item-description {
-    color: var(--text-color);
-}
-
-.no-options-message {
-    text-align: center;
-    color: var(--subtle-text);
-    padding: 2rem;
-    border: 1px dashed var(--border-color);
-    border-radius: 8px;
-    grid-column: 1 / -1;
-}
-
-@media (max-width: 600px) {
-    .prefix-grid {
-        grid-template-columns: 100%; /* FIX: Replaced '1fr' with '100%' */
-    }
+.prefix-item-description {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    line-height: 1.4;
+    margin: 0;
 }

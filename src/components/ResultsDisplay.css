@@ -1,118 +1,226 @@
 /* src/components/ResultsDisplay.css */
+
 .results-display-container {
     width: 100%;
-    margin-top: 2rem;
+    /* Center content, but allow it to be wide enough to breathe */
+    max-width: 1000px; 
+    margin: 3rem auto 0 auto;
+    animation: slideUp 0.4s ease-out;
 }
 
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- Heading --- */
 .results-display-heading {
-    font-size: clamp(1.1rem, 3vw, 1.4rem);
-    font-weight: 700;
+    font-size: 2rem; /* Big, bold heading */
+    font-weight: 800;
     color: var(--text-color);
-    margin-bottom: 1rem;
-    border-bottom: 2px solid var(--primary-color);
-    padding-bottom: 0.75rem;
+    margin-bottom: 2rem;
     text-align: center;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+    border-bottom: none;
+    display: block;
 }
 
-.results-display-empty-message {
-    color: var(--subtle-text);
-    text-align: center;
-    padding: 2rem;
-    border: 1px dashed var(--border-color);
-    border-radius: 0.5rem;
-    font-style: italic;
-    background-color: var(--background-color);
-}
-
+/* --- List Layout --- */
 .results-display-list {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 2.5rem; /* Spacious gap between items */
 }
 
+/* --- Main Result Card --- */
 .results-display-item {
-    background-color: var(--background-color);
-    padding: 1.25rem;
-    border-radius: 0.6rem;
+    background-color: var(--surface-color);
+    padding: 3rem; /* Large padding for "Zoomed In" feel */
+    border-radius: 16px;
     border: 1px solid var(--border-color);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
+    box-shadow: var(--shadow-lg);
     display: grid;
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
+    grid-template-columns: 1fr; /* Stack by default */
+    gap: 2.5rem;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
-
-.results-display-item.has-collar {
-    grid-template-columns: 50% 50%; /* FIX: Changed '1fr 1fr' to '50% 50%' to resolve Css Minimizer error. */
-}
-
 
 .results-display-item:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-glow);
+    border-color: var(--primary-color);
 }
 
-.cylinder-info, .collar-item {
+/* Desktop: Side-by-side only if wide enough */
+@media (min-width: 900px) {
+    .results-display-item.has-collar {
+        grid-template-columns: 1.2fr 0.8fr; 
+        gap: 3rem;
+    }
+    .cylinder-info {
+        border-right: 1px dashed var(--border-color);
+        padding-right: 3rem;
+    }
+}
+
+/* --- Cylinder Info Section --- */
+.cylinder-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center align content */
+    text-align: center;  /* Center align text */
+}
+
+/* ROLE LABEL (e.g. "Outside Cylinder") */
+.results-display-item-role-label {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 1.5rem;
+    background: rgba(59, 130, 246, 0.1);
+    padding: 0.6rem 1.2rem;
+    border-radius: 9999px;
+    display: inline-block;
+}
+
+/* IMAGE */
+.item-image {
+    max-width: 240px; /* Large image */
+    width: 100%;
+    height: auto;
+    margin-bottom: 1.5rem;
+    border-radius: 12px;
+    background-color: #fff;
+    padding: 1.5rem;
+    border: 1px solid #ddd;
+    box-shadow: var(--shadow-md);
+}
+
+/* PART NUMBER */
+.results-display-item-part-number {
+    font-size: 2rem; /* Huge font for clarity */
+    font-weight: 800;
+    color: var(--text-color);
+    margin: 0.5rem 0;
+    line-height: 1.2;
+}
+
+.results-display-item-quantity {
+    font-size: 1.2rem;
+    color: var(--text-muted);
+    font-weight: 400;
+    margin-left: 0.5rem;
+}
+
+/* DESCRIPTION */
+.results-display-item-description {
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+    margin-top: 0.5rem;
+    max-width: 90%;
+}
+
+/* NOTES */
+.results-display-item-notes {
+    margin-top: 2rem;
+    font-size: 1rem;
+    color: #fbbf24; 
+    background: rgba(251, 191, 36, 0.1);
+    padding: 1rem 1.5rem;
+    border-radius: 10px;
+    border: 1px solid rgba(251, 191, 36, 0.2);
+    line-height: 1.5;
+}
+
+/* --- Collar Info Section --- */
+.collar-info {
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
+    justify-content: center;
 }
 
-.item-image {
-    max-width: 150px;
-    height: auto;
-    margin-bottom: 1rem;
-    border-radius: 8px;
-    background-color: #fff;
-    padding: 0.5rem;
+.collar-sub-heading {
+    font-size: 1rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    margin-bottom: 2rem;
+    letter-spacing: 0.05em;
+    font-weight: 700;
 }
 
-.results-display-item-part-number {
-    font-size: clamp(1rem, 2.5vw, 1.125rem);
-    font-weight: 600;
-    color: var(--primary-color);
-    margin-bottom: 0.5rem;
+.collar-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
 }
 
-.results-display-item-quantity {
+/* Warning notes specifically for collars */
+.warning-note {
+    font-size: 0.9rem;
+    color: var(--danger-color);
+    margin-top: 1rem;
     font-style: italic;
-    color: #28a745;
-    font-weight: bold;
-    margin-left: 0.5rem;
+    max-width: 80%;
 }
 
-.results-display-item-description {
-    font-size: clamp(0.9rem, 2vw, 1rem);
-    font-weight: 400;
+/* --- Core Details Box --- */
+.core-details-box {
+    margin-top: 2rem;
+    width: 100%;
+    padding: 1.5rem;
+    border-radius: 12px;
+    text-align: left;
+}
+
+.core-included {
+    background-color: rgba(16, 185, 129, 0.1); 
+    border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.core-warning {
+    background-color: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.core-title {
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: var(--text-muted);
+}
+
+.core-part-number-text {
+    font-size: 1.3rem;
+    font-weight: 700;
     color: var(--text-color);
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.25rem;
 }
 
-.results-display-item-notes {
-    color: var(--subtle-text);
-    margin-top: 0.5rem;
-    font-size: clamp(0.8rem, 2vw, 0.875rem);
-    line-height: 1.5;
-    font-style: italic;
+.core-description-text {
+    font-size: 1rem;
+    color: var(--text-secondary);
 }
 
-.collar-info {
-    border-left: 3px solid var(--primary-color);
-    padding-left: 1.5rem;
-}
-
-/* Responsive adjustments for smaller screens */
-@media (max-width: 768px) {
+/* --- Mobile Adjustments --- */
+@media (max-width: 900px) {
     .results-display-item.has-collar {
-        grid-template-columns: 1fr; /* Stack on smaller screens */
+        grid-template-columns: 1fr;
+        gap: 3rem;
     }
-
-    .collar-info {
-        border-left: none;
-        border-top: 2px solid var(--primary-color);
-        padding-left: 0;
-        padding-top: 1.5rem;
-        margin-top: 1.5rem;
+    .cylinder-info {
+        border-right: none;
+        padding-right: 0;
+        border-bottom: 1px solid var(--border-color);
+        padding-bottom: 3rem;
+    }
+    .results-display-item {
+        padding: 2rem 1.5rem;
     }
 }

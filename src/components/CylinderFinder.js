@@ -10,10 +10,11 @@ import ButtonSelector from "./ButtonSelector";
 import "./CylinderFinder.css";
 import { images } from "../images/images";
 import { SearchIcon, ClearIcon } from "./Icons";
-import { isLficForCollar, isSficForCollar } from "../utils/collarLogic";
 
 // Import refactored utility logic
 import { processFinalCylinders, isAuxPrefix, getCoreDetails } from "../utils/cylinderUtils";
+import { isLficForCollar, isSficForCollar } from "../utils/collarLogic";
+
 
 function CylinderFinder() {
   const [selectedCategory, setSelectedCategory] = useState("");
@@ -67,7 +68,7 @@ function CylinderFinder() {
   const seriesRef = useRef(null);
   const modelRef = useRef(null);
 
-  // --- DATA ACCESSORS ---
+  // --- DATA ACCESSORS (omitted for brevity) ---
   const allModels = useMemo(() => {
     const models = [];
     sargentData.hardware.forEach((category) => {
@@ -294,7 +295,7 @@ function CylinderFinder() {
           if (kitPrefix?.addsCylinder) {
             rawCylinderList.push({ ...kitPrefix.addsCylinder, role: "Mullion Cylinder", notes: kitPrefix.description, sourcePrefix: kitPrefix, });
           }
-        } else if (activeModelData.baseCylinder && !isMullion980C2) { // <--- MODIFIED CONDITION: Added !isMullion980C2 to exclude base cylinder for EL980/SMEL980
+        } else if (activeModelData.baseCylinder && !isMullion980C2) {
           rawCylinderList.push({
             ...activeModelData.baseCylinder,
             role: isBoredLock ? "Keyed Cylinder" : "Outside Cylinder", 
@@ -331,7 +332,6 @@ function CylinderFinder() {
     });
 
     // 5. Mullion 980C2 kit description
-    // This logic ensures the dedicated Mullion cylinder is always added for EL980/SMEL980
     if (isMullion980C2 && !selectedCylinderPrefix) { 
       const kitPrefix = activeModelData.prefixes?.find((p) => p.id === "980C2");
       if (kitPrefix?.addsCylinder) {
@@ -363,7 +363,7 @@ function CylinderFinder() {
   ]);
   
   
-  // --- HANDLER DEFINITIONS (FIXES NO-UNDEF ERROR) ---
+  // --- HANDLER DEFINITIONS (omitted for brevity) ---
   const handleSearchClick = useCallback((result) => {
     setSelectedCategory(result.category);
     setSelectedSeriesName(result.seriesName);
@@ -440,7 +440,7 @@ function CylinderFinder() {
     isModelSelectReady,
   ]);
 
-  // --- SEARCH RESULTS FILTERING ---
+  // --- SEARCH RESULTS FILTERING (omitted for brevity) ---
   useEffect(() => {
     if (globalSearchTerm.trim().length < 2) {
       setSearchResults([]);
@@ -668,6 +668,45 @@ function CylinderFinder() {
 
   const isInitialState = !globalSearchTerm;
 
+
+    // --- NEW SUMMARY RENDERER (Compact Bar) ---
+    const renderSummaryChoices = () => {
+        const choices = [];
+        if (selectedCategory) {
+            choices.push({ label: 'Category', value: selectedCategory });
+        }
+        if (selectedSeriesName && selectedCategory !== "Mullions") {
+            choices.push({ label: 'Series', value: selectedSeriesName.replace(" Series", "") });
+        }
+        if (selectedModel) {
+            choices.push({ label: 'Model', value: selectedModel });
+        }
+        if (selectedCategory === "Mortise Locks") {
+            choices.push({ label: 'Door Thickness', value: selectedDoorThickness });
+            choices.push({ label: 'Trim Type', value: selectedTrimLabel.replace("Trim", "").trim() });
+        }
+        if (selectedCylinderPrefix) {
+            choices.push({ label: 'Key System', value: selectedCylinderPrefix.replace(/-/g, "") });
+        }
+        if (selectedDevicePrefixes.length > 0) {
+            choices.push({ label: 'Accessories', value: selectedDevicePrefixes.map(p => p.split(' ')[0]).join(', ') });
+        }
+
+        if (choices.length === 0) return null;
+
+        return (
+            <div className="selection-summary-container">
+                {choices.map((choice, index) => (
+                    <div key={index} className="selection-summary-item">
+                        {choice.label}: <strong>{choice.value}</strong>
+                    </div>
+                ))}
+            </div>
+        );
+    };
+    // --- END NEW SUMMARY RENDERER ---
+
+
   const renderStep = () => {
     const isMortiseLockSelected = selectedCategory === "Mortise Locks";
 
@@ -675,85 +714,56 @@ function CylinderFinder() {
       switch (currentStep) {
         case "deviceSelection":
           const isMullion = selectedCategory === "Mullions";
-          const needsSeriesSelection =
-            selectedCategory && !isMullion && !selectedSeriesName;
+          const needsSeriesSelection = selectedCategory && !isMullion && !selectedSeriesName;
           const isModelSelectReady = isMullion || selectedSeriesName;
 
           return (
             <>
-              <p className="finder-intro">
-                Select a hardware Category, then select the Model to find the
-                correct cylinder.
-              </p>
-              <div className="hardware-selectors">
-                {/* STEP 1: CATEGORY SELECTION */}
-                <div ref={categoryRef} className="selection-stage-container">
-                  <ButtonSelector
-                    title="1. Select Hardware Category"
+              <div ref={categoryRef} className="selection-stage-container">
+                <h3 className="prefix-section-title">
+                    1. Select Hardware Category
+                </h3>
+                <ButtonSelector
                     options={categoryButtonOptions}
                     selected={selectedCategory}
                     onSelect={handleCategoryChange}
+                />
+              </div>
+
+              {renderSummaryChoices()}
+
+              {/* STEP 2A: SERIES SELECTION */}
+              {needsSeriesSelection && (
+                <div ref={seriesRef} className="selection-stage-container series-selection-group">
+                  <h3 className="prefix-section-title">2. Select Device Series</h3>
+                  {seriesGroupedOptions.map((group) => (
+                    <div key={group.title}>
+                      <h4 className="series-group-title">{group.title}</h4>
+                      <ButtonSelector
+                        options={group.options}
+                        selected={selectedSeriesName}
+                        onSelect={handleSeriesButtonChange}
+                        hasImages={false}
+                        title=""
+                      />
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* STEP 2B / STEP 3: MODEL SELECTION */}
+              {isModelSelectReady && (
+                <div ref={modelRef} className="selection-stage-container model-selection-group">
+                  <h3 className="prefix-section-title">3. Select Model / Function</h3>
+                  <HardwareSelector
+                    label="Model"
+                    options={finalModelOptions}
+                    value={selectedModel}
+                    onChange={handleModelChange}
                   />
                 </div>
+              )}
 
-                {/* PERSISTENT SUMMARY CARDS */}
-                {selectedCategory && (
-                  <div className="selection-summary-card category-summary-card">
-                    <p className="selection-summary-item">
-                      Category: <strong>{selectedCategory}</strong>
-                    </p>
-                  </div>
-                )}
-
-                {/* STEP 2A: SERIES SELECTION */}
-                {needsSeriesSelection && (
-                  <div
-                    ref={seriesRef}
-                    className="selection-stage-container series-selection-group"
-                  >
-                    <h3 className="button-selector-title">
-                      2. Select Device Series
-                    </h3>
-                    {seriesGroupedOptions.map((group) => (
-                      <div key={group.title}>
-                        <h4 className="series-group-title">{group.title}</h4>
-                        <ButtonSelector
-                          options={group.options}
-                          selected={selectedSeriesName}
-                          onSelect={handleSeriesButtonChange}
-                          hasImages={false}
-                          title=""
-                        />
-                      </div>
-                    ))}
-                  </div>
-                )}
-
-                {/* STEP 2B / STEP 3: MODEL SELECTION */}
-                {isModelSelectReady && (
-                  <div
-                    ref={modelRef}
-                    className="selection-stage-container model-selection-group"
-                  >
-                    {selectedSeriesName && !isMullion && (
-                      <div className="selection-summary-card series-summary-card">
-                        <p className="selection-summary-item">
-                          Series:{" "}
-                          <strong>
-                            {selectedSeriesName.replace(" Series", "")}
-                          </strong>
-                        </p>
-                      </div>
-                    )}
-                    <HardwareSelector
-                      label="3. Select Model / Function"
-                      options={finalModelOptions}
-                      value={selectedModel}
-                      onChange={handleModelChange}
-                    />
-                  </div>
-                )}
-              </div>
               <div className="wizard-controls">
                 <button
                   onClick={handleProceedFromDeviceSelection}
@@ -774,17 +784,8 @@ function CylinderFinder() {
         case "deviceOptions":
           return (
             <div ref={deviceOptionsRef} className="wizard-step active">
-              <div className="selection-summary-card">
-                <p className="selection-summary-item">
-                  Selected: <strong>{selectedModel}</strong> (
-                  {activeModelData.description})
-                </p>
-                <p className="selection-summary-item sub-item">
-                  Type: <strong>{selectedCategory}</strong> (
-                  {selectedSeriesName.replace(" Series", "")})
-                </p>
-              </div>
-              <div className="prefix-section">
+              {renderSummaryChoices()}
+              <div className="selection-stage-container">
                 <h3 className="prefix-section-title">
                   Step 2: Select Device Accessories/Functions (Optional)
                 </h3>
@@ -813,21 +814,12 @@ function CylinderFinder() {
         case "cylinderOptions":
           return (
             <div ref={cylinderOptionsRef} className="wizard-step active">
-              <div className="selection-summary-card">
-                <p className="selection-summary-item">
-                  Selected: <strong>{selectedModel}</strong> (
-                  {activeModelData.description})
-                </p>
-                <p className="selection-summary-item sub-item">
-                  Type: <strong>{selectedCategory}</strong> (
-                  {selectedSeriesName.replace(" Series", "")})
-                </p>
-              </div>
+              {renderSummaryChoices()}
               <h3 className="prefix-section-title">
                 Step 3: Choose Key System & Final Details
               </h3>
               {isMortiseLockSelected && (
-                <div className="prefix-section mortise-options-section">
+                <div className="selection-stage-container mortise-options-section">
                   <h4 className="prefix-section-title mortise-collar-title">
                     Mortise Collar Options (Required for Mortise Locks)
                   </h4>
@@ -870,7 +862,7 @@ function CylinderFinder() {
                 </div>
               )}
               {hasAvailableCylinderPrefixes ? (
-                <div className="prefix-section">
+                <div className="selection-stage-container">
                   <h4
                     className="prefix-section-title"
                     style={
@@ -916,6 +908,7 @@ function CylinderFinder() {
         case "results":
           return (
             <div ref={resultsRef} className="wizard-step active">
+              {renderSummaryChoices()}
               <div className="selected-hardware-note">
                 <div className="selected-hardware-image-wrapper">
                   <a

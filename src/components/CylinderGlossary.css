@@ -1,62 +1,72 @@
 /* src/components/CylinderGlossary.css */
+
 .glossary-container {
-    background-color: var(--card-background);
-    padding: 1.5rem; /* Reduced padding */
-    border-radius: 10px;
-    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+    width: 100%;
     max-width: 1200px;
-    margin: 1rem auto; /* Reduced external margin */
-    color: var(--text-color);
-    border: 1px solid var(--border-color);
+    margin: 0 auto;
+    padding: 2rem 1.5rem;
+    animation: fadeIn 0.4s ease-out;
 }
 
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- TITLE --- */
 .glossary-title {
-    font-size: clamp(2rem, 4vw, 2.2rem); 
-    font-weight: bold;
-    margin-bottom: 1.5rem; 
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-bottom: 2rem; 
     color: var(--text-color);
     text-align: center;
-    border-bottom: 2px solid var(--primary-color);
-    padding-bottom: 0.75rem;
+    letter-spacing: -0.02em;
 }
 
+/* --- CONTROLS SECTION --- */
 .glossary-controls {
-    margin-bottom: 1.5rem; 
+    margin-bottom: 3rem; 
     display: flex;
     flex-direction: column;
-    gap: 1rem; /* Reduced gap */
+    gap: 1.5rem;
+    align-items: center;
+    width: 100%;
 }
 
 .search-bar-wrapper {
     position: relative;
     display: flex;
     align-items: center;
+    width: 100%;
+    max-width: 600px; /* Constrain search width */
 }
 
 .search-bar-wrapper svg {
     position: absolute;
-    left: 1rem;
-    color: var(--subtle-text);
-    width: 1.25rem;
-    height: 1.25rem;
+    left: 1.25rem;
+    color: var(--text-muted);
+    width: 1.2rem;
+    height: 1.2rem;
+    pointer-events: none;
 }
 
 .glossary-search-bar {
     width: 100%;
-    padding: 0.75rem 1.5rem; 
-    font-size: 1rem;
-    border-radius: 8px;
-    border: 2px solid var(--border-color);
-    background-color: var(--background-color);
+    padding: 1rem 1rem 1rem 3.5rem; 
+    font-size: 1.1rem;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    background-color: var(--card-background);
     color: var(--text-color);
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
-    padding-left: 3.25rem;
+    transition: all 0.2s ease;
+    box-shadow: var(--shadow-sm);
 }
 
 .glossary-search-bar:focus {
     outline: none;
-    border-color: var(--focus-ring);
-    box-shadow: 0 0 0 4px rgba(0, 95, 158, 0.25);
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
+    background-color: #2c3038;
 }
 
 .clear-search-button {
@@ -65,92 +75,104 @@
     background: none;
     border: none;
     cursor: pointer;
-    padding: 0.5rem;
+    padding: 0.4rem;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--subtle-text);
+    color: var(--text-muted);
     transition: color 0.2s ease-in-out;
+    border-radius: 50%;
 }
 
 .clear-search-button:hover {
+    background-color: rgba(255,255,255,0.1);
     color: var(--text-color);
 }
 
-.clear-search-button svg {
-    width: 1.25rem;
-    height: 1.25rem;
-}
-
+/* --- FILTER BUTTONS --- */
 .glossary-filter-buttons {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.75rem; /* Reduced gap */
+    gap: 0.75rem;
     justify-content: center;
 }
 
 .glossary-filter-buttons button {
-    padding: 0.5rem 1rem; 
+    padding: 0.6rem 1.2rem; 
     font-size: 0.9rem; 
     font-weight: 600;
-    border: none;
-    border-radius: 6px;
+    border: 1px solid var(--border-color);
+    border-radius: 50px; /* Pill shape */
     cursor: pointer;
-    background-color: var(--border-color);
-    color: var(--text-color);
+    background-color: var(--card-background);
+    color: var(--text-secondary);
     transition: all 0.2s ease-in-out;
     text-transform: uppercase;
+    letter-spacing: 0.05em;
 }
 
 .glossary-filter-buttons button:hover {
-    background-color: #3a3a3a;
+    background-color: var(--surface-color);
     color: var(--text-color);
-}
-
-.glossary-filter-buttons button.active {
-    background-color: var(--primary-color);
-    color: #fff;
-    box-shadow: 0 4px 10px rgba(0, 95, 158, 0.2);
+    border-color: var(--text-muted);
     transform: translateY(-2px);
 }
 
+.glossary-filter-buttons button.active {
+    background: var(--primary-gradient);
+    color: #fff;
+    border-color: transparent;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+    transform: translateY(-1px);
+}
+
+/* --- CYLINDER SECTION CARDS --- */
 .cylinder-section {
-    margin-bottom: 1rem; 
+    margin-bottom: 1.5rem; 
     border: 1px solid var(--border-color);
-    border-radius: 8px; 
-    background-color: var(--background-color);
+    border-radius: 16px; 
+    background-color: var(--card-background);
     overflow: hidden;
+    transition: all 0.3s ease;
+    box-shadow: var(--shadow-md);
+}
+
+.cylinder-section.open {
+    box-shadow: var(--shadow-lg), 0 0 0 1px var(--border-color);
+    background-color: #1a1d23;
 }
 
 .cylinder-section-header {
     display: flex;
     align-items: center;
-    gap: 1rem; 
+    gap: 1.5rem; 
     width: 100%;
-    padding: 1rem; 
-    background-color: var(--card-background);
+    padding: 1.25rem 2rem; 
+    background-color: transparent;
     border: none;
     cursor: pointer;
     text-align: left;
     color: var(--text-color);
-    transition: background-color 0.2s ease-in-out;
+    transition: background-color 0.2s ease;
 }
 
 .cylinder-section-header:hover {
-    background-color: #1a1a1a;
+    background-color: rgba(255,255,255,0.03);
 }
 
 .header-image {
-    width: 80px; 
-    height: auto;
-    border-radius: 6px;
-    background-color: #2a2a2a;
+    width: 80px;
+    height: 60px;
+    object-fit: contain;
+    border-radius: 8px;
+    background-color: #fff;
     padding: 0.5rem;
-    border: 1px solid var(--border-color);
+    border: 1px solid #ddd;
+    flex-shrink: 0;
 }
 
 .cylinder-section-title {
-    font-size: 1.3rem; 
+    font-size: 1.25rem; 
     font-weight: 700;
     color: var(--text-color);
     margin: 0;
@@ -158,35 +180,38 @@
 }
 
 .toggle-icon {
-    font-size: 1.25rem;
-    color: var(--primary-color);
-    transition: transform 0.3s ease-in-out;
+    font-size: 1.5rem;
+    color: var(--text-muted);
+    font-weight: 300;
+    transition: transform 0.3s ease;
 }
 
 .cylinder-section.open .toggle-icon {
     transform: rotate(180deg);
+    color: var(--primary-color);
 }
 
 .cylinder-section-parts {
-    padding: 1rem; 
+    padding: 0 2rem 2rem 2rem; 
     border-top: 1px solid var(--border-color);
+    animation: slideDown 0.3s ease-out;
+    background-color: rgba(0,0,0,0.1); /* Slightly darker inside */
 }
 
-.no-results-message {
-    text-align: center;
-    font-size: 1.1rem;
-    color: var(--subtle-text);
-    padding: 2rem; 
-    border: 2px dashed var(--border-color);
-    border-radius: 8px;
+@keyframes slideDown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
-.glossary-initial-view {
+/* --- EMPTY STATE --- */
+.glossary-initial-view, .no-results-message {
     text-align: center;
-    padding: 2rem 1rem; 
-    border: 2px dashed var(--border-color);
-    border-radius: 8px;
-    color: var(--subtle-text);
+    padding: 4rem 2rem; 
+    border: 1px dashed var(--border-color);
+    border-radius: 16px;
+    color: var(--text-secondary);
+    background-color: var(--card-background);
+    margin-top: 2rem;
 }
 
 .glossary-initial-view svg {
@@ -194,27 +219,20 @@
     height: 3rem;
     margin-bottom: 1rem; 
     color: var(--primary-color);
+    opacity: 0.8;
 }
 
 .glossary-initial-view h3 {
     font-size: 1.5rem;
     color: var(--text-color);
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.75rem;
 }
 
 @media (max-width: 600px) {
-    .glossary-filter-buttons {
-        gap: 0.5rem;
-    }
-    .glossary-filter-buttons button {
-        padding: 0.5rem 0.75rem;
-        font-size: 0.8em;
-    }
-    .cylinder-section-header {
-        flex-wrap: wrap;
-    }
-    .header-image {
-        width: 100%;
-        max-width: 100px;
-    }
+    .glossary-title { font-size: 2rem; }
+    .glossary-search-bar { font-size: 1rem; }
+    .cylinder-section-header { padding: 1rem; gap: 1rem; }
+    .header-image { width: 60px; height: 50px; }
+    .cylinder-section-parts { padding: 0 1rem 1.5rem 1rem; }
+    .cylinder-section-title { font-size: 1rem; }
 }
