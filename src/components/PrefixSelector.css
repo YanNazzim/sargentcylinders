@@ -1,89 +1,58 @@
 /* src/components/PrefixSelector.css */
-.prefix-group {
-    margin-bottom: 2rem;
+.prefix-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+    width: 100%;
 }
 
-.prefix-group-title {
-    font-size: 0.9rem;
-    text-transform: uppercase;
-    color: var(--text-muted);
-    letter-spacing: 0.05em;
-    margin-bottom: 0.75rem;
-    border-bottom: 1px solid var(--border-color);
-    padding-bottom: 0.5rem;
-}
-
-.prefix-selector-options {
+.prefix-card {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: 12px;
+    padding: 1.2rem;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
+    position: relative;
+    color: var(--text-secondary);
 }
 
-.prefix-selector-option-label {
+.prefix-card:hover {
+    border-color: var(--primary-color);
+    background-color: var(--bg-element);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.prefix-card.active {
+    background-color: rgba(59, 130, 246, 0.1);
+    border-color: var(--primary-color);
+    color: var(--text-main);
+    box-shadow: 0 0 0 1px var(--primary-color);
+}
+
+.prefix-header {
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    padding: 1rem;
-    background-color: var(--surface-color);
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.2s;
 }
 
-.prefix-selector-option-label:hover {
-    border-color: var(--text-secondary);
+.prefix-code {
+    font-weight: 800;
+    font-size: 1.1rem;
+    color: var(--primary-color);
 }
 
-.prefix-selector-option-label.selected {
-    background-color: rgba(59, 130, 246, 0.08);
-    border-color: var(--primary-color);
+.prefix-check {
+    color: var(--primary-color);
+    font-weight: bold;
 }
 
-.prefix-selector-checkbox {
-    appearance: none;
-    width: 20px;
-    height: 20px;
-    border: 2px solid var(--text-muted);
-    border-radius: 4px; /* Round for radio, square for checkbox if desired */
-    margin-right: 1rem;
-    display: grid;
-    place-content: center;
-    transition: all 0.2s;
-}
-
-/* Radio specific style if using type="radio" */
-input[type="radio"].prefix-selector-checkbox {
-    border-radius: 50%;
-}
-
-.prefix-selector-checkbox::before {
-    content: "";
-    width: 10px;
-    height: 10px;
-    transform: scale(0);
-    transition: 0.1s transform ease-in-out;
-    box-shadow: inset 1em 1em white;
-    transform-origin: center;
-    clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
-}
-
-/* Radio check dot */
-input[type="radio"].prefix-selector-checkbox::before {
-    border-radius: 50%;
-    clip-path: none;
-    background-color: white;
-}
-
-.prefix-selector-checkbox:checked {
-    background-color: var(--primary-color);
-    border-color: var(--primary-color);
-}
-
-.prefix-selector-checkbox:checked::before {
-    transform: scale(1);
-}
-
-.prefix-selector-option-id {
-    font-weight: 600;
-    color: var(--text-color);
+.prefix-description {
+    font-size: 0.9rem;
+    line-height: 1.4;
 }

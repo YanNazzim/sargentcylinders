@@ -10,9 +10,7 @@ import ButtonSelector from "./ButtonSelector";
 import "./CylinderFinder.css";
 import { images } from "../images/images";
 import { SearchIcon, ClearIcon } from "./Icons";
-
-// Import refactored utility logic
-import { processFinalCylinders, isAuxPrefix, getCoreDetails } from "../utils/cylinderUtils";
+import { processFinalCylinders, isAuxPrefix } from "../utils/cylinderUtils";
 import { isLficForCollar, isSficForCollar } from "../utils/collarLogic";
 
 
@@ -68,7 +66,7 @@ function CylinderFinder() {
   const seriesRef = useRef(null);
   const modelRef = useRef(null);
 
-  // --- DATA ACCESSORS (omitted for brevity) ---
+  // --- DATA ACCESSORS ---
   const allModels = useMemo(() => {
     const models = [];
     sargentData.hardware.forEach((category) => {
@@ -215,7 +213,6 @@ function CylinderFinder() {
     if (!categoryData) return [];
 
     let modelsToGroup = [];
-    let groupingLabel = "Available Models";
 
     if (selectedCategory === "Mullions") {
       modelsToGroup = categoryData.series.flatMap((series) =>
@@ -225,7 +222,6 @@ function CylinderFinder() {
           seriesImageUrl: series.imageUrl,
         }))
       );
-      groupingLabel = "Mullion Models";
     } else if (selectedSeriesName) {
       const seriesData = categoryData.series.find(
         (s) => s.name === selectedSeriesName
@@ -236,22 +232,16 @@ function CylinderFinder() {
         seriesName: seriesData.name,
         seriesImageUrl: seriesData.imageUrl,
       }));
-      groupingLabel = selectedSeriesName;
     } else {
       return [];
     }
-
-    return [
-      {
-        label: groupingLabel,
-        options: modelsToGroup.map((model) => ({
-          label: `${model.modelNumber} - ${model.description}`,
-          value: model.modelNumber,
-          imageUrl:
-            model.imageUrl || model.seriesImageUrl || images.sargentlogo,
-        })),
-      },
-    ];
+    
+    return modelsToGroup.map((model) => ({
+      label: `${model.modelNumber} - ${model.description}`,
+      value: model.modelNumber,
+      description: model.description,
+      imageUrl: model.imageUrl || model.seriesImageUrl || images.sargentlogo,
+    }));
   }, [selectedCategory, selectedSeriesName]);
 
   const finalCylinders = useMemo(() => {
@@ -274,22 +264,14 @@ function CylinderFinder() {
     const rawCylinderList = [];
     const isBoredLockCoreSystem = isBoredLFICOrSFICPrefix;
 
-    // 1. Core/Housing replacement for Bored Locks (LFIC/SFIC)
     if (isBoredLockCoreSystem) {
-        // Use logic from utils to get core details
-        const coreDetailsForDisplay = getCoreDetails(selectedCylinderPrefix, true);
-
         rawCylinderList.push({
-            partNumber: coreDetailsForDisplay.partNumber, 
-            type: coreDetailsForDisplay.coreModel.includes("6") || coreDetailsForDisplay.coreModel.includes("60") ? "LFIC Core" : "SFIC Core",
+            partNumber: "CORE-SYSTEM", 
             role: "Bored Lock Core System", 
-            notes: coreDetailsForDisplay.description,
+            notes: "Core system for Bored Lock",
             sourcePrefix: activeModelData.baseCylinder,
-            coreDetails: coreDetailsForDisplay, 
         });
-        
     } else { 
-        // 2. Base Cylinder (Mullions, Mortise, Exit, and non-LFIC/SFIC Bored Locks)
         if (isMullion980C1) {
           const kitPrefix = activeModelData.prefixes?.find((p) => p.id === "980C1");
           if (kitPrefix?.addsCylinder) {
@@ -305,7 +287,6 @@ function CylinderFinder() {
         }
     }
     
-    // 3. Inside Cylinder (if applicable, only for double-cyl functions)
     const insideCylData = activeModelData.prefixes?.find(
       (p) => p.id === "Inside Cyl" && p.addsCylinder
     );
@@ -318,7 +299,6 @@ function CylinderFinder() {
       });
     }
 
-    // 4. Device Prefixes (e.g., 127 Thumbturn)
     selectedDevicePrefixes.forEach((prefixId) => {
       const prefixData = activeModelData.prefixes?.find((p) => p.id === prefixId);
       if (prefixData?.addsCylinder) {
@@ -331,7 +311,6 @@ function CylinderFinder() {
       }
     });
 
-    // 5. Mullion 980C2 kit description
     if (isMullion980C2 && !selectedCylinderPrefix) { 
       const kitPrefix = activeModelData.prefixes?.find((p) => p.id === "980C2");
       if (kitPrefix?.addsCylinder) {
@@ -344,13 +323,22 @@ function CylinderFinder() {
       }
     }
 
-    // 6. Final Processing and Cleanup
     const isDoubleCylinderMortise = isMortiseLock && activeModelData?.prefixes?.some((p) => p.id === "Inside Cyl");
     const cylCount = isDoubleCylinderMortise ? "DOUBLE_CYLINDER" : "SINGLE_CYLINDER";
     
     const finalProcessingOptions = {
-        selectedCylinderPrefix, activeModelData, selectedDoorThickness, selectedTrimType, cylCount, 
-        isBoredLock, isMortiseLock, isMullion980C2, isMullion980C1, isLficCore, isSficCore
+        selectedCylinderPrefix, 
+        selectedDevicePrefixes, 
+        activeModelData, 
+        selectedDoorThickness, 
+        selectedTrimType, 
+        cylCount, 
+        isBoredLock, 
+        isMortiseLock, 
+        isMullion980C2, 
+        isMullion980C1, 
+        isLficCore, 
+        isSficCore
     };
 
     return processFinalCylinders(rawCylinderList, finalProcessingOptions, cylinderPrefixCategories);
@@ -362,8 +350,6 @@ function CylinderFinder() {
     selectedTrimType,
   ]);
   
-  
-  // --- HANDLER DEFINITIONS (omitted for brevity) ---
   const handleSearchClick = useCallback((result) => {
     setSelectedCategory(result.category);
     setSelectedSeriesName(result.seriesName);
@@ -381,14 +367,17 @@ function CylinderFinder() {
       ?.series.find((s) => s.name === result.seriesName)
       ?.models.find((m) => m.modelNumber === result.modelNumber);
     const isMullion = result.category === "Mullions";
+    
+    // SAFETY FIX: Optional chaining on prefixes array access
     const hasDeviceOptions =
       !isMullion &&
-      fullModelData?.prefixes.filter(
+      (fullModelData?.prefixes || []).filter(
         (p) => p.isDeviceSpecific && p.id !== "Inside Cyl" && p.id !== "980C2"
       ).length > 0;
+      
     const hasCylinderOptions =
       fullModelData?.baseCylinder ||
-      fullModelData?.prefixes.some((p) => p.addsCylinder) ||
+      (fullModelData?.prefixes || []).some((p) => p.addsCylinder) ||
       isMullion;
 
     if (!hasCylinderOptions) setCurrentStep("results");
@@ -404,14 +393,13 @@ function CylinderFinder() {
       else if (searchResults.length > 1) setShowMultipleMatchesWarning(true);
     }
   };
-  // --- END HANDLER DEFINITIONS ---
-
 
   const isModelSelectReady = useMemo(() => {
     const isMullion = selectedCategory === "Mullions";
     return isMullion || !!selectedSeriesName;
   }, [selectedCategory, selectedSeriesName]);
 
+  // Handle auto-scroll
   useEffect(() => {
     let targetRef = null;
 
@@ -427,10 +415,19 @@ function CylinderFinder() {
       targetRef = deviceOptionsRef;
     } else if (currentStep === "cylinderOptions") {
       targetRef = cylinderOptionsRef;
+    } else if (currentStep === "results") {
+        targetRef = resultsRef;
     }
 
     if (targetRef && targetRef.current) {
-      targetRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+        const headerOffset = 100;
+        const elementPosition = targetRef.current.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+      
+        window.scrollTo({
+            top: offsetPosition,
+            behavior: "smooth"
+        });
     }
   }, [
     currentStep,
@@ -440,7 +437,6 @@ function CylinderFinder() {
     isModelSelectReady,
   ]);
 
-  // --- SEARCH RESULTS FILTERING (omitted for brevity) ---
   useEffect(() => {
     if (globalSearchTerm.trim().length < 2) {
       setSearchResults([]);
@@ -608,46 +604,10 @@ function CylinderFinder() {
     selectedModel,
   ]);
 
-  const handleFindCylinder = () => setCurrentStep("results");
-
-  const isMullion980C2 = ["EL980", "SMEL980"].includes(selectedModel);
-
-  const chosenPrefixes = useMemo(() => {
-    const prefixes = [];
-    if (selectedCylinderPrefix) {
-      const prefixData = cylinderPrefixCategories
-        .flatMap((c) => c.prefixes)
-        .find((p) => p.id === selectedCylinderPrefix);
-      if (prefixData)
-        prefixes.push({
-          id: prefixData.id,
-          description: prefixData.description,
-        });
-    }
-    selectedDevicePrefixes.forEach((prefixId) => {
-      const prefixData = activeModelData?.prefixes?.find(
-        (p) => p.id === prefixId
-      );
-      if (prefixData)
-        prefixes.push({
-          id: prefixData.id,
-          description: prefixData.description,
-        });
-    });
-    if (isMullion980C2 && !selectedCylinderPrefix) {
-      const kitPrefix = activeModelData?.prefixes?.find(
-        (p) => p.id === "980C2"
-      );
-      if (kitPrefix)
-        prefixes.push({ id: kitPrefix.id, description: kitPrefix.description });
-    }
-    return prefixes;
-  }, [
-    selectedCylinderPrefix,
-    selectedDevicePrefixes,
-    activeModelData,
-    isMullion980C2,
-  ]);
+  const handleFindCylinder = () => {
+      setCurrentStep("results");
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   const availableCylinderPrefixCategories = useMemo(() => {
     return cylinderPrefixCategories.map((category) => ({
@@ -668,8 +628,6 @@ function CylinderFinder() {
 
   const isInitialState = !globalSearchTerm;
 
-
-    // --- NEW SUMMARY RENDERER (Compact Bar) ---
     const renderSummaryChoices = () => {
         const choices = [];
         if (selectedCategory) {
@@ -704,8 +662,6 @@ function CylinderFinder() {
             </div>
         );
     };
-    // --- END NEW SUMMARY RENDERER ---
-
 
   const renderStep = () => {
     const isMortiseLockSelected = selectedCategory === "Mortise Locks";
@@ -721,7 +677,7 @@ function CylinderFinder() {
             <>
               <div ref={categoryRef} className="selection-stage-container">
                 <h3 className="prefix-section-title">
-                    1. Select Hardware Category
+                    Hardware Category
                 </h3>
                 <ButtonSelector
                     options={categoryButtonOptions}
@@ -732,10 +688,9 @@ function CylinderFinder() {
 
               {renderSummaryChoices()}
 
-              {/* STEP 2A: SERIES SELECTION */}
               {needsSeriesSelection && (
                 <div ref={seriesRef} className="selection-stage-container series-selection-group">
-                  <h3 className="prefix-section-title">2. Select Device Series</h3>
+                  <h3 className="prefix-section-title">Series</h3>
                   {seriesGroupedOptions.map((group) => (
                     <div key={group.title}>
                       <h4 className="series-group-title">{group.title}</h4>
@@ -751,12 +706,12 @@ function CylinderFinder() {
                 </div>
               )}
 
-              {/* STEP 2B / STEP 3: MODEL SELECTION */}
               {isModelSelectReady && (
                 <div ref={modelRef} className="selection-stage-container model-selection-group">
-                  <h3 className="prefix-section-title">3. Select Model / Function</h3>
+                  <h3 className="prefix-section-title">Model / Function</h3>
+                  {/* REPLACED DROPDOWN WITH NEW GRID SELECTOR */}
                   <HardwareSelector
-                    label="Model"
+                    label="Select Model"
                     options={finalModelOptions}
                     value={selectedModel}
                     onChange={handleModelChange}
@@ -770,24 +725,25 @@ function CylinderFinder() {
                   className="wizard-find-button"
                   disabled={!selectedModel}
                 >
-                  Continue
+                  Continue Configuration
                 </button>
                 <button
                   onClick={handleReset}
                   className="wizard-find-button reset-button"
                 >
-                  Start Over
+                  Reset
                 </button>
               </div>
             </>
           );
+        // ... (Other cases remain unchanged)
         case "deviceOptions":
           return (
             <div ref={deviceOptionsRef} className="wizard-step active">
               {renderSummaryChoices()}
               <div className="selection-stage-container">
                 <h3 className="prefix-section-title">
-                  Step 2: Select Device Accessories/Functions (Optional)
+                  Device Functions
                 </h3>
                 <PrefixSelector
                   prefixes={deviceTiedPrefixes}
@@ -800,13 +756,13 @@ function CylinderFinder() {
                   Back
                 </button>
                 <button onClick={handleNext} className="wizard-find-button">
-                  Next: Select Key System
+                  Next: Key System
                 </button>
                 <button
                   onClick={handleReset}
                   className="wizard-find-button reset-button"
                 >
-                  Start Over
+                  Reset
                 </button>
               </div>
             </div>
@@ -816,12 +772,12 @@ function CylinderFinder() {
             <div ref={cylinderOptionsRef} className="wizard-step active">
               {renderSummaryChoices()}
               <h3 className="prefix-section-title">
-                Step 3: Choose Key System & Final Details
+                Key System & Details
               </h3>
               {isMortiseLockSelected && (
                 <div className="selection-stage-container mortise-options-section">
-                  <h4 className="prefix-section-title mortise-collar-title">
-                    Mortise Collar Options (Required for Mortise Locks)
+                  <h4 className="prefix-section-title mortise-collar-title" style={{fontSize: '1.2rem', marginBottom: '1rem'}}>
+                    Mortise Requirements
                   </h4>
                   <div className="mortise-options-group">
                     <label className="mortise-option-label">
@@ -865,13 +821,9 @@ function CylinderFinder() {
                 <div className="selection-stage-container">
                   <h4
                     className="prefix-section-title"
-                    style={
-                      isMortiseLockSelected
-                        ? { border: "none", marginBottom: "1rem" }
-                        : {}
-                    }
+                    style={{ fontSize: '1.2rem' }}
                   >
-                    Select Key System Prefix (Choose One)
+                    Select Cylinder Option
                   </h4>
                   <CategorizedPrefixSelector
                     categories={availableCylinderPrefixCategories}
@@ -894,13 +846,13 @@ function CylinderFinder() {
                   onClick={handleFindCylinder}
                   className="wizard-find-button"
                 >
-                  View Cylinder Results
+                  Generate Results
                 </button>
                 <button
                   onClick={handleReset}
                   className="wizard-find-button reset-button"
                 >
-                  Start Over
+                  Reset
                 </button>
               </div>
             </div>
@@ -911,61 +863,25 @@ function CylinderFinder() {
               {renderSummaryChoices()}
               <div className="selected-hardware-note">
                 <div className="selected-hardware-image-wrapper">
-                  <a
-                    href={activeModelData?.imageUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <img
-                      src={activeModelData?.imageUrl || images.sargentlogo}
-                      alt={activeModelData?.modelNumber}
-                      className="search-result-image"
-                    />
-                  </a>
+                  <img
+                    src={activeModelData?.imageUrl || images.sargentlogo}
+                    alt={activeModelData?.modelNumber}
+                    className="search-result-image"
+                  />
                 </div>
                 <div className="selected-hardware-text">
                   <p>
-                    Selected: <strong>{selectedModel}</strong> (
-                    {activeModelData?.description})
+                    <strong>{selectedModel}</strong>
                   </p>
                   <span className="selected-hardware-desc">
-                    {selectedCategory} -{" "}
-                    {selectedSeriesName.replace(" Series", "")}
+                    {activeModelData?.description}
                   </span>
-                  {isMortiseLockSelected && (
-                    <>
-                      <p className="selected-hardware-mortise-details">
-                        Door Thickness: <strong>{selectedDoorThickness}</strong>
-                      </p>
-                      <p className="selected-hardware-mortise-details">
-                        Trim Style:{" "}
-                        <strong>
-                          {selectedTrimLabel.replace("Trim", "").trim()}
-                        </strong>
-                      </p>
-                    </>
-                  )}
                 </div>
               </div>
-              {chosenPrefixes.length > 0 && (
-                <div className="chosen-prefixes-container">
-                  <h4 className="chosen-prefixes-title">Options Chosen:</h4>
-                  <ul className="chosen-prefixes-list">
-                    {chosenPrefixes.map((prefix) => (
-                      <li key={prefix.id} className="chosen-prefix-item">
-                        <span className="chosen-prefix-id">{prefix.id}</span>
-                        <span className="chosen-prefix-description">
-                          {prefix.description}
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
               <ResultsDisplay cylinders={finalCylinders} />
               <div className="wizard-controls">
                 <button onClick={handleBack} className="wizard-back-button">
-                  Back to Options
+                  Modify Selection
                 </button>
                 <button
                   onClick={handleReset}
@@ -980,6 +896,15 @@ function CylinderFinder() {
           return null;
       }
     }
+    
+    if (globalSearchTerm.length > 0 && searchResults.length === 0) {
+        return (
+            <div className="search-results-list" style={{ textAlign: 'center', padding: '2rem', color: 'var(--text-muted)' }}>
+                 {globalSearchTerm.length < 2 ? "Please type at least 2 characters..." : "No models found matching your search."}
+            </div>
+        );
+    }
+
     return (
       <div ref={searchResultsRef} className="search-results-list">
         {showMultipleMatchesWarning && (
@@ -1011,33 +936,36 @@ function CylinderFinder() {
 
   return (
     <div className="cylinder-finder-card">
+      <div className="global-search-container">
+        {/* WRAPPED INPUT IN A DIV FOR RELATIVE POSITIONING */}
+        <div className="search-bar-wrapper">
+          <SearchIcon />
+          <input
+            type="text"
+            placeholder="Search model (e.g., 8804, storeroom)..."
+            value={globalSearchTerm}
+            onChange={(e) => setGlobalSearchTerm(e.target.value)}
+            onKeyDown={handleSearchKeyDown}
+            className="global-search-input"
+          />
+          {globalSearchTerm && (
+            <button
+              onClick={() => setGlobalSearchTerm("")}
+              className="clear-search-button"
+            >
+              <ClearIcon />
+            </button>
+          )}
+        </div>
+      </div>
       <div className="app-page-note">
         <p>
-          <strong>IMPORTANT NOTE</strong>: Devices ordered as{" "}
+          <strong>NOTE</strong>: Devices ordered as{" "}
           <strong>less cylinder</strong> will always be supplied with the{" "}
           <strong>standard collar</strong> for an <strong>1-1/8”</strong>{" "}
           cylinder or the <strong>standard tailpiece</strong> in cases of{" "}
           <strong>bored locks</strong>.
         </p>
-      </div>
-      <div className="global-search-container">
-        <SearchIcon />
-        <input
-          type="text"
-          placeholder="Search by model, series, or function (e.g., 8804, storeroom)..."
-          value={globalSearchTerm}
-          onChange={(e) => setGlobalSearchTerm(e.target.value)}
-          onKeyDown={handleSearchKeyDown}
-          className="global-search-input"
-        />
-        {globalSearchTerm && (
-          <button
-            onClick={() => setGlobalSearchTerm("")}
-            className="clear-search-button"
-          >
-            <ClearIcon />
-          </button>
-        )}
       </div>
       {renderStep()}
     </div>

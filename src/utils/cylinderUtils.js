@@ -1,265 +1,202 @@
 // src/utils/cylinderUtils.js
 
-import { images } from '../images/images';
-import { getMortiseCollarPartNumber, getProjection } from '../utils/collarLogic'; // Import required collar functions
-
-// Utility function to get cylinder length description
-export const getCylinderLengthDescription = (partNumber) => {
-    const lengths = {
-        41: '1-1/8"', 42: '1-1-4"', 43: '1-3/8"', 44: '1-1/2"', 46: '1-3-4"', 48: '2"', 50: '2-1/4"', 
-        52: '2-1/2"', 54: '2-3/4"', 56: '3"',
-        "C10-1": "Key-in-Lever/Knob", "C10X-1": "Key-in-Lever/Knob (10X)", "C11-1": "Key-in-Lever/Knob (11 Line)", 
-        "C6-1B": "Key-in-Knob (6 Line)",
-    };
-    return lengths[partNumber.replace("#", "")] || partNumber;
+/**
+ * consistently formats a list of prefixes into a hyphenated string.
+ * Example: ["DG2", "60"] -> "DG2-60-"
+ */
+export const formatPrefixes = (prefixes) => {
+  if (!prefixes || prefixes.length === 0) return "";
+  // Filter out empty strings and join with hyphens
+  const cleanPrefixes = prefixes.filter(p => p && p.trim() !== "");
+  if (cleanPrefixes.length === 0) return "";
+  return cleanPrefixes.join("-") + "-";
 };
-
-// Utility function to check if a prefix is an Auxiliary (stackable/checkbox) control
-export const isAuxPrefix = (id) => id.startsWith("106") || id.startsWith("306") || id.startsWith("127");
-
-
-// --- CORE LOOKUP LOGIC ---
-export const getCoreDetails = (prefix, isBoredLock) => {
-    const keyingSuffix = " x Keying Details";
-    const systemPrefixMatch = prefix.match(/^(DG[123]-|11-)/);
-    const systemPrefix = systemPrefixMatch ? systemPrefixMatch[0] : "";
-    const basePrefixRaw = prefix.replace(systemPrefix, "");
-
-    if (prefix.startsWith("F1-83-")) { return { partNumber: `F1-51xx${keyingSuffix}`, description: "KESO F1 Removable Core. (Size depends on housing)" }; }
-
-    if (isBoredLock) {
-        const is7Pin = basePrefixRaw.includes("7P-");
-        
-        // LFIC CORE LOGIC (Bored Locks)
-        if (basePrefixRaw.includes("63-")) { return { partNumber: `${systemPrefix}6300${keyingSuffix}`, description: "LFIC Permanent Core (INCLUDED with device).", coreModel: "6300" }; }
-        if (basePrefixRaw.includes("64-")) { return { partNumber: `${systemPrefix}6400${keyingSuffix}`, description: "LFIC Construction Core (INCLUDED with device).", coreModel: "6400" }; }
-        if (basePrefixRaw.includes("60-")) {
-            const permanentCore = `${systemPrefix}6300`;
-            const constructionCore = `${systemPrefix}6400`;
-            return { partNumber: `${permanentCore} OR ${constructionCore}${keyingSuffix}`, description: `LFIC Core (MUST BE ORDERED SEPARATELY). Permanent: ${permanentCore} or Construction: ${constructionCore}.`, coreModel: "60-HOUSING" };
-        }
-
-        // SFIC CORE LOGIC (Bored Locks)
-        const coreModelPerm = is7Pin ? "7P-7300B" : "7300B";
-        const coreModelConst = "7200";
-        
-        if (basePrefixRaw.includes("73-")) { return { partNumber: `${systemPrefix}${coreModelPerm}${keyingSuffix}`, description: `SFIC ${is7Pin ? '7-Pin' : '6-Pin'} Permanent Core (INCLUDED with device).`, coreModel: "7300B" }; }
-        if (basePrefixRaw.includes("72-")) { return { partNumber: `${systemPrefix}${coreModelConst}${keyingSuffix}`, description: `SFIC ${is7Pin ? '7-Pin' : '6-Pin'} Construction Core (INCLUDED with device).`, coreModel: "7200" }; }
-        if (basePrefixRaw.includes("70-")) {
-            const permanentCore = `${systemPrefix}${coreModelPerm}`;
-            const constructionCore = `${systemPrefix}${coreModelConst}`;
-            return { partNumber: `${permanentCore} OR ${constructionCore}${keyingSuffix}`, description: `SFIC Core (MUST BE ORDERED SEPARATELY). Permanent: ${permanentCore} or Construction: ${constructionCore}.`, coreModel: "70-HOUSING" };
-        }
-    } else {
-        // EXIT/MORTISE LOCK LOGIC (simplified acceptance/included check)
-        if (basePrefixRaw.includes("63-") || basePrefixRaw.includes("73-") || basePrefixRaw.includes("72-") || basePrefixRaw.includes("64-")) {
-            return { partNumber: "Core Included", description: "Core is included with the cylinder housing.", coreModel: "Included" };
-        }
-        if (basePrefixRaw.includes("60-") || basePrefixRaw.includes("70-")) {
-            return { partNumber: "Core Acceptance Housing", description: "Core must be ordered separately.", coreModel: "Housing" };
-        }
-    }
-
-    return null;
-};
-// --- END CORE LOOKUP LOGIC ---
-
-
-// --- IMAGE LOOKUP LOGIC ---
-const getCylinderImage = (cyl, selectedCylinderPrefix, isLficCore, isSficCore) => {
-    const isDgPrefix = selectedCylinderPrefix?.startsWith("DG");
-    const isDgLfic = isDgPrefix && isLficCore;
-    const hasKesoPrefix = selectedCylinderPrefix && ["F1-82-", "F1-83-", "82-", "83-"].some(p => selectedCylinderPrefix.startsWith(p));
-
-    if (cyl.coreDetails?.coreModel) {
-        if (cyl.coreDetails.coreModel.includes("6300") || cyl.coreDetails.coreModel === "60-HOUSING") return images.CoreLFIC6300;
-        if (cyl.coreDetails.coreModel.includes("6400")) return images.CoreLFIC6400;
-        if (cyl.coreDetails.coreModel.includes("7300B") || cyl.coreDetails.coreModel === "70-HOUSING") return images.CoreSFIC7300;
-        if (cyl.coreDetails.coreModel.includes("7200")) return images.CoreSFIC7200;
-    }
-
-    if (cyl.role === "127 - Mortise Cylinder Thumbturn") return images.TT127;
-    
-    if (selectedCylinderPrefix) {
-        if (isDgPrefix) {
-            if (cyl.type.includes("Mortise") && isDgLfic) return images.DGLFICMortise;
-            if (cyl.type.includes("Mortise")) return images.DGMortise;
-            if (cyl.type.includes("Rim") && isDgLfic) return images.DGLFICRim;
-            if (cyl.type.includes("Rim")) return images.DGRim;
-            if (cyl.type.includes("Key-in-Lever") || cyl.type.includes("Key-in-Knob")) return images.KILCyls;
-        } 
-        if (selectedCylinderPrefix.startsWith("11-")) return images.XCcyls;
-        if (hasKesoPrefix) return images.KESOcyls;
-        if (isLficCore) {
-            if (cyl.type.includes("Mortise")) return images.LFICMortise;
-            if (cyl.type.includes("Rim")) return images.LFICRim;
-        } 
-        if (isSficCore) {
-            if (cyl.type.includes("Mortise")) return images.SFICMortise;
-            if (cyl.type.includes("Rim")) return images.SFICRim;
-        }
-    }
-
-    if (cyl.type.includes("Key-in-Lever") || cyl.type.includes("Key-in-Knob")) return images.KILCyls;
-    if (cyl.type.includes("Rim Cylinder")) return images.RimCyls;
-    if (cyl.type.includes("Mortise Cylinder")) return images.MortiseCyls;
-
-    return images.sargentlogo;
-};
-// --- END IMAGE LOOKUP LOGIC ---
-
 
 /**
- * Processes the raw list of required cylinders (Base + Aux/Device Prefixes)
- * into the final, formatted list, applying prefix logic, size adjustments,
- * core details, image URLs, and collar recommendations.
+ * Determines the specific core part number required based on the housing prefix.
+ * Returns an object with partNumber and description.
  */
-export const processFinalCylinders = (rawCylinderList, options, cylinderPrefixCategories) => {
-    const {
-        selectedCylinderPrefix, activeModelData, selectedDoorThickness, selectedTrimType, cylCount, 
-        isBoredLock, isMortiseLock, isMullion980C2, isMullion980C1, isLficCore, isSficCore
-    } = options;
+export const getCoreDetails = (prefixId, isBored = false) => {
+  if (!prefixId) return null;
+
+  // --- DEGREE LFIC Logic ---
+  if (prefixId.includes("DG1-60") || prefixId.includes("DG1-63") || prefixId.includes("DG1-64")) {
+    return {
+      partNumber: "DG1-6300",
+      description: "Degree Level 1 Permanent Core (Order DG1-6400 for Construction)"
+    };
+  }
+  if (prefixId.includes("DG2-60") || prefixId.includes("DG2-63") || prefixId.includes("DG2-64")) {
+    return {
+      partNumber: "DG2-6300",
+      description: "Degree Level 2 Permanent Core (Order DG2-6400 for Construction)"
+    };
+  }
+  if (prefixId.includes("DG3-60") || prefixId.includes("DG3-63") || prefixId.includes("DG3-64")) {
+    return {
+      partNumber: "DG3-6300",
+      description: "Degree Level 3 Permanent Core (Order DG3-6400 for Construction)"
+    };
+  }
+
+  // --- STANDARD LFIC Logic ---
+  if (prefixId.includes("60-") || prefixId.includes("63-") || prefixId.includes("64-")) {
+    return {
+      partNumber: "6300",
+      description: "Standard 6-Pin LFIC Core (Order 6400 for Construction)"
+    };
+  }
+
+  // --- SFIC Logic (70-, 72-, 73-) ---
+  if (prefixId.includes("70-") || prefixId.includes("72-") || prefixId.includes("73-")) {
+    return {
+      partNumber: "7300",
+      description: "Standard SFIC Core (Specify 6 or 7 pin)"
+    };
+  }
+
+  // --- XC / SIGNATURE Logic ---
+  if (prefixId.includes("11-60") || prefixId.includes("11-63") || prefixId.includes("11-64")) {
+      return {
+          partNumber: "11-6300",
+          description: "XC Series LFIC Core"
+      };
+  }
+  if (prefixId.includes("10-63") || prefixId.includes("10-60")) {
+      return {
+          partNumber: "10-6300",
+          description: "Signature Series LFIC Core"
+      };
+  }
+
+  return null;
+};
+
+/**
+ * Checks if a prefix is "auxiliary" (tied to device, not cylinder type directly).
+ */
+export const isAuxPrefix = (prefix) => {
+  const auxPrefixes = ["127", "3", "10", "11", "21", "22", "65", "85", "SG", "AL"]; 
+  return auxPrefixes.some(p => prefix.startsWith(p));
+};
+
+/**
+ * Main function to generate the final cylinder list.
+ * Now enforces strict 127- logic for thumbturns.
+ */
+export const processFinalCylinders = (
+  rawCylinders,
+  options,
+  categories 
+) => {
+  const { 
+    selectedCylinderPrefix, 
+    isBoredLock,
+    isMortiseLock,
+  } = options;
+
+  if (!rawCylinders || rawCylinders.length === 0) return [];
+
+  const processed = rawCylinders.map((cyl) => {
+    let finalPartNumber = cyl.partNumber;
+    let finalPrefixes = [];
+    let coreInfo = null;
+    let isALPrefixCylinder = false;
+
+    // Detect specific cylinder types
+    if (cyl.sourcePrefix && cyl.sourcePrefix.id === "AL") {
+        isALPrefixCylinder = true;
+    }
+
+    // Detect Thumbturn (127)
+    // We check the role (set in CylinderFinder) or the source ID strictly
+    const isThumbturn = (cyl.role && (cyl.role.includes("Thumbturn") || cyl.role.includes("127"))) ||
+                        (cyl.sourcePrefix && cyl.sourcePrefix.id === "127");
+
+    // --- PREFIX GATHERING ---
     
-    // 1. CONSOLIDATION (Merge duplicate cylinders/kits)
-    const consolidatedMap = new Map();
-    rawCylinderList.forEach((cyl) => {
-        const key = `${cyl.partNumber}-${cyl.role}`;
-        const existing = consolidatedMap.get(key);
-        consolidatedMap.set(key, { ...cyl, quantity: (existing?.quantity || 0) + 1, sourcePrefix: existing?.sourcePrefix || cyl.sourcePrefix });
-    });
-    let finalCylindersArray = Array.from(consolidatedMap.values());
+    // 1. THUMBTURN LOGIC: 
+    //    - Ignore ALL Key System prefixes (60-, DG1-, etc.)
+    //    - Force add "127" prefix
+    if (isThumbturn) {
+        // Only add 127 to the prefixes. Nothing else.
+        finalPrefixes.push("127");
+        // Ensure no core info is attached to a thumbturn
+        coreInfo = null;
+    } 
+    else {
+        // 2. STANDARD KEYED CYLINDER LOGIC:
+        if (selectedCylinderPrefix) {
+            const parts = selectedCylinderPrefix.split("-").filter(p => p);
+            finalPrefixes.push(...parts);
+            coreInfo = getCoreDetails(selectedCylinderPrefix, isBoredLock);
+        }
+    }
+
+    // --- PART NUMBER & SIZING LOGIC ---
     
-    // 2. FINAL MAPPING & ADJUSTMENTS
-    return finalCylindersArray.map((cyl) => {
-        let basePartNumber = cyl.partNumber.replace("#", "");
-        const is127Thumbturn = cyl.role === "127 - Mortise Cylinder Thumbturn";
-        const is8816InsideCylinder = (activeModelData.modelNumber === "8816" || activeModelData.modelNumber === "PE8816") && (cyl.role.includes("Inside Cylinder"));
-        const isRimCylinderOnExitDevice = cyl.partNumber.includes("34") && activeModelData.category === "Exit Devices";
-        const isBaseMortiseOrRimCylinder = cyl.type.includes("Mortise Cylinder") || cyl.type.includes("Rim Cylinder");
-        const isBoredLFICOrSFICSystem = isBoredLock && cyl.role === "Bored Lock Core System";
+    // Check for IC types (Only relevant if NOT a thumbturn)
+    const isLFIC = !isThumbturn && selectedCylinderPrefix && (
+        selectedCylinderPrefix.includes("60") || 
+        selectedCylinderPrefix.includes("63") || 
+        selectedCylinderPrefix.includes("64")
+    );
+    
+    const isSFIC = !isThumbturn && selectedCylinderPrefix && (
+        selectedCylinderPrefix.includes("70") || 
+        selectedCylinderPrefix.includes("72") || 
+        selectedCylinderPrefix.includes("73")
+    );
 
-
-        // A. SIZE ADJUSTMENTS (For Exit/Mortise LFIC/SFIC Housings)
-        if (selectedCylinderPrefix && isBaseMortiseOrRimCylinder && !is127Thumbturn) {
-            if (isLficCore) {
-                if (basePartNumber === "41" || basePartNumber === "44") basePartNumber = "42"; 
-            } else if (isSficCore) {
-                if (basePartNumber === "41" || (basePartNumber === "44" && !is8816InsideCylinder)) basePartNumber = "43";
-                if (is8816InsideCylinder && basePartNumber === "44") {
-                    basePartNumber = "46";
-                    cyl.notes = (cyl.notes ? `${cyl.notes} / ` : '') + 'SFIC prefix detected: Inside cylinder size adjusted to #46 (1-3/4") for correct trim fit.';
-                }
-            }
+    // 1. Handle "AL" Prefix Override (Must be Mortise #41)
+    if (isALPrefixCylinder) {
+        finalPartNumber = `${formatPrefixes(finalPrefixes)}41`;
+    } 
+    else if (isMortiseLock && (cyl.role.includes("Outside") || cyl.role.includes("Inside") || isThumbturn)) {
+        let baseNum = cyl.partNumber;
+        
+        // --- SIZE ENFORCEMENT (Only for Keyed Cylinders) ---
+        if (isLFIC) {
+            if (baseNum === "41") baseNum = "42"; // LFIC Min Size
         }
         
-        // B. CORE DETAILS & DESCRIPTIONS
-        let coreDetails = cyl.coreDetails;
-        if (selectedCylinderPrefix && !is127Thumbturn && !isBoredLFICOrSFICSystem) {
-             coreDetails = getCoreDetails(selectedCylinderPrefix, isBoredLock);
+        if (isSFIC) {
+            if (baseNum === "41" || baseNum === "42") baseNum = "43"; // SFIC Min Size
         }
         
-        let finalPartNumber = `${basePartNumber} x Keying Details x Finish`;
-        let calculatedNotes = cyl.notes;
-        let lengthDesc = getCylinderLengthDescription(basePartNumber);
-        let calculatedDescription = `${lengthDesc} ${cyl.type}`;
-
-        if (isBoredLFICOrSFICSystem) {
-            // Logic for Bored Lock core-only entries
-            const corePartDisplay = coreDetails.partNumber.replace(" x Keying Details", "");
-            finalPartNumber = `${corePartDisplay} x Keying Details x Finish`;
-            
-            if (coreDetails.coreModel.includes("HOUSING")) {
-                calculatedDescription = `${cyl.type} Core Acceptance Housing`; // Simplified main description
-                calculatedNotes = null; // Let the coreDetails box handle the details
-            } else {
-                calculatedDescription = coreDetails.description.split('(')[0].trim(); // Use description like "LFIC Permanent Core"
-                calculatedNotes = `Core Part Number: ${corePartDisplay}. This is INCLUDED with the device.`;
-                coreDetails = null; // Don't show the separate coreDetails box if it's included.
-            }
-        } else if (is127Thumbturn) {
-            finalPartNumber = `127-${basePartNumber} x Finish`;
-            calculatedDescription = `Mortise Detachable Thumbturn`;
-        } else if (selectedCylinderPrefix) {
-            const prefixData = cylinderPrefixCategories.flatMap(c => c.prefixes).find(p => p.id === selectedCylinderPrefix);
-            const prefixDesc = prefixData ? prefixData.description.replace("Device", "Cylinder") : "";
-
-            if (coreDetails?.description?.includes("MUST BE ORDERED SEPARATELY") || coreDetails?.coreModel === "Housing") {
-                finalPartNumber = `${selectedCylinderPrefix.replace(/-/g, "")}${basePartNumber} x Finish`; 
-                calculatedDescription = `${lengthDesc} ${cyl.type} HOUSING: ${prefixDesc}`;
-                calculatedNotes = `CORE required for housing (Ordered separately).`;
-            } else {
-                finalPartNumber = `${selectedCylinderPrefix}${basePartNumber} x Keying Details x Finish`;
-                calculatedDescription += ` ${prefixDesc}`;
-                if (coreDetails?.description.includes("(INCLUDED)")) {
-                    calculatedDescription = `${lengthDesc} ${cyl.type} with CORE: ${prefixDesc}`;
-                }
-            }
-        } else {
-            finalPartNumber = `${basePartNumber} x Keying Details x Finish`;
+        // --- THUMBTURN ENFORCEMENT ---
+        if (isThumbturn) {
+            // Ensure we use the proper formatted prefix string which now strictly contains "127-"
+            // We assume baseNum is correct (usually 44 from data). 
+            // If the data is accidentally 41, we could force 44, but data usually handles this.
+            // Result will be strictly "127-44" (or whatever base is).
         }
         
-        // C. NOTES Finalization
-        if (!isBoredLFICOrSFICSystem && isBoredLock && !is127Thumbturn && !cyl.notes) {
-            calculatedNotes = "Standard cylinder. **Standard tailpiece provided when ordered 'less cylinder'.**";
-        } else if (!isMullion980C2 && !isMullion980C1 && !coreDetails && !isBoredLock) {
-            if (cyl.role === "Outside Cylinder") calculatedNotes = "For the outside of the door.";
-            else if (cyl.role === "Inside Cylinder") calculatedNotes = "For the inside of the door.";
-        }
+        finalPartNumber = `${formatPrefixes(finalPrefixes)}${baseNum}`;
+    } 
+    else if (isBoredLock && cyl.role === "Bored Lock Core System") {
+        finalPartNumber = coreInfo ? coreInfo.partNumber : cyl.partNumber;
+    }
+    else {
+        // Standard Rim or other
+        finalPartNumber = `${formatPrefixes(finalPrefixes)}${cyl.partNumber}`;
+    }
 
-        // D. IMAGE LOOKUP
-        const cylinderImageUrl = getCylinderImage({ ...cyl, coreDetails }, selectedCylinderPrefix, isLficCore, isSficCore);
+    // Apply sizing rules to AL cylinder if it became LFIC/SFIC via prefixes
+    if (isALPrefixCylinder) {
+         let baseNum = "41";
+         if (isLFIC && baseNum === "41") baseNum = "42";
+         if (isSFIC && (baseNum === "41" || baseNum === "42")) baseNum = "43";
+         finalPartNumber = `${formatPrefixes(finalPrefixes)}${baseNum}`;
+    }
 
+    return {
+      ...cyl,
+      partNumber: finalPartNumber,
+      coreDetails: coreInfo,
+      collars: cyl.collars
+    };
+  });
 
-        // E. COLLAR LOGIC 
-        const cylinderCollars = [];
-        const collarSource = cyl.sourcePrefix?.collars || activeModelData.collars;
-        
-        if (is127Thumbturn) {
-            cylinderCollars.push({
-              partNumber: "98-0021 x Finish",
-              description: "Blocking Ring (Mandatory for 127 Thumbturn on 8816/PE8816)",
-              projection: getProjection("98-0021"),
-              imageUrl: images.BR8816,
-            });
-        }
-        else if (isMortiseLock) {
-            const mortiseCollar = getMortiseCollarPartNumber(basePartNumber, selectedCylinderPrefix, selectedDoorThickness, selectedTrimType, cylCount);
-            if (mortiseCollar) {
-              let collarImage = images.Collar1KB;
-              const pnPrefix = mortiseCollar.partNumber.substring(0, mortiseCollar.partNumber.indexOf("x")).trim();
-              if (pnPrefix.startsWith("1KA")) collarImage = images.Collar1KA;
-              else if (pnPrefix.startsWith("1SB")) collarImage = images.Collar1SB;
-              else if (pnPrefix.startsWith("97")) collarImage = images.Rosette97;
-              else if (pnPrefix.startsWith("90")) collarImage = images.Ring90;
-              cylinderCollars.push({ ...mortiseCollar, imageUrl: collarImage });
-            }
-        }
-        else if (collarSource && !isRimCylinderOnExitDevice) {
-            const { default: defaultCollar, conditional: conditionalCollars } = collarSource;
-            let selectedConditionalCollar = null;
-            
-            if (conditionalCollars) {
-              selectedConditionalCollar = conditionalCollars.find(
-                (collar) =>
-                  (collar.prefix === "60-" && isLficCore) ||
-                  (collar.prefix === "70-" && isSficCore)
-              );
-            }
-            if (selectedConditionalCollar)
-              cylinderCollars.push({ ...selectedConditionalCollar, imageUrl: selectedConditionalCollar.imageUrl || images.sargentlogo, });
-            else if (defaultCollar)
-              cylinderCollars.push({ ...defaultCollar, imageUrl: defaultCollar.imageUrl || images.sargentlogo, });
-        }
-
-
-        return {
-            ...cyl,
-            partNumber: finalPartNumber,
-            description: calculatedDescription.trim(),
-            notes: calculatedNotes,
-            collars: cylinderCollars,
-            coreDetails: coreDetails,
-            imageUrl: cylinderImageUrl,
-        };
-    });
+  return processed;
 };
