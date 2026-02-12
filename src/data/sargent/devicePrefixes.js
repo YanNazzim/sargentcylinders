@@ -41,14 +41,14 @@ const COLLAR_LOGIC_59 = {
       partNumber: "98-0276 x Finish",
       description: "LFIC Collar for 59- Delayed Egress",
       imageUrl: images.ETCollar,
-      projection: '3/4"'
+      projection: '3/8"'
     },
     {
       prefix: "70-", // SFIC cores (70-, 72-, 73-)
       partNumber: "97-0349 x Finish",
       description: "SFIC Collar for 59- Delayed Egress",
       imageUrl: images.ETCollar,
-      projection: '7/8"'
+      projection: '1/2"'
     },
   ],
 };
